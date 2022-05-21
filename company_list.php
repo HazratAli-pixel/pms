@@ -126,7 +126,7 @@ else{
 										echo json_encode($results);
 										$json = json_encode($results);
 										//var_dump(json_decode($json));
-										var_dump(json_decode($json, true));
+										//var_dump(json_decode($json, true));
 
                                         if($query->rowCount() > 0)
                                         {
