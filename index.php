@@ -127,7 +127,7 @@ if(strlen($_SESSION['alogin'])==0){
 		<div class="container " >
 			<div class="row">
 				<div class="" style="height: 100vh; width:100%" >
-					<div id="LoginModel" class="card" style="width: 450px;">
+					<div id="LoginModel"  class="card col-lg-4 col-md-8 col-sm-10" style="min-width: 250px;" >
 						<div class="card-header">
 							<h1 class="text-center text-bold  text-black ">Pharmacy Management Software</h1>
 						</div>	
@@ -160,7 +160,8 @@ if(strlen($_SESSION['alogin'])==0){
 							</form>
 						</div>
 					</div>
-					<div id="ForgetPassModel" class="card" style="width: 450px;">
+					<!-- this is forget password section -->
+					<div id="ForgetPassModel" class="card col-lg-4 col-md-8 col-sm-10" style="min-width: 250px;" >
 						<div class="card-header">
 							<h1 class="text-center text-bold  text-black ">Pharmacy Management Software</h1>
 						</div>	
