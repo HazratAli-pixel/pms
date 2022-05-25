@@ -1,4 +1,22 @@
 <?php
+$user = [
+	"id"=> 1,
+	"name"=> "Hazrat",
+	"phn"=> 0123654,
+	"roll"=> 120
+];
+[
+	"id"=> 1,
+	"name"=> "ali",
+	"phn"=> 12154,
+	"roll"=> 125
+];
+?>
+
+
+
+
+<?php
 session_start();
 error_reporting(0);
 include('includes/config.php');
@@ -74,6 +92,10 @@ else{
 
 </head>
 <body>
+
+
+
+
 	<?php include('includes/header.php');?>
 	<div class="ts-main-content">
 		<?php include('includes/leftbar.php');?>
@@ -183,6 +205,17 @@ else{
 			</div>
 		</div>
 	</div>
+
+	<script>
+	var names = <?php 
+	echo json_decode(json_encode($json, true));
+	// echo json_encode($user);  
+	
+	?>;
+alert("Result : "+names.name);
+
+</script>
+
 
 	<!-- Loading Scripts -->
 	<script src="js/jquery.min.js"></script>
