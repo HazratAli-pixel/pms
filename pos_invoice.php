@@ -307,7 +307,7 @@ display: none;
 																		<div class="row mb-2">
 																			<label for="" style="font-weight: bold;" class="col-8 col-form-label text-end text-sm-end">Privious Due : </label>
 																			<div class="col-3">
-																			<input onchange="PaidAmount()" type="text" name="previousdue" id="previousdue" class="form-control text-end"  value="" placeholder="0.00">
+																			<input onchange="FullPayment()" type="text" name="previousdue" id="previousdue" class="form-control text-end"  value="" placeholder="0.00">
 																			</div>
 																		</div>
 																		<div class="row mb-2">
@@ -330,14 +330,14 @@ display: none;
 														
 													<div class="">
 														<label class="ms-2" style="font-size: 18px;" for="">Paid Amount</label>
-														<input onblur="PaidAmount()" id="paidamount" name="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00">
+														<input onchange="PaidAmount()" id="paidamount" name="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00">
 														<label  class="ms-2" style="font-size: 18px;" for="">Due Amount</label>
 														<!-- <input onblur="PaidAmount()" id="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00"> -->
 														<label id="duelbl" name="dueamount" class="ms-2" style="font-size: 18px;" for="">0.00</label>
 													</div>
 													<div>
 														<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
-														<button onclick="OrderConfirm()"  class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button>
+														<button  class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button> <!-- onclick="OrderConfirm()" -->
 														<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
 													</div>
 													
@@ -379,16 +379,15 @@ display: none;
 			let getdis =document.getElementById('ivoicediscount').value;
 			let totaldis = document.getElementById('totaldiscount');
 			let gtotal = document.getElementById('Total');
-
+			subTotal();
 			if(getdis.length<=0){
-				subTotal()
 				//PaidAmount();
 				totaldis.value="0.00";
 			}else{
 			Totaldiscount =((Number(getdis)*Number(gtotal.value))/100);
 			totaldis.value=Totaldiscount.toFixed(2);
 			gtotal.value=Number((gtotal.value)-Totaldiscount).toFixed(2);
-			
+			FullPayment();
 			}
 		}
 		function PaidAmount() {
@@ -415,16 +414,19 @@ display: none;
 			}
 		}
 		function FullPayment() {
-			let gtotal = Number(document.getElementById('Total').value);
+			var gtotal = Number(document.getElementById('Total').value);
+			var due_amount = Number(document.getElementById('previousdue').value);
+			gtotal = gtotal + due_amount;
 			let paidamount = document.getElementById('paidamount');
-			//console.log(gtotal);
-			//let fullPaidbtn = document.getElementById('fullPaidbtn');
+			// PaidAmount() ;
+			// console.log(gtotal);
+			// let fullPaidbtn = document.getElementById('fullPaidbtn');
 			// if(gtotal.length<=0){
 			// 	fullPaidbtn.attr("disabled",true);
 			// }else{
 			// fullPaidbtn.attr("disabled",true);
 			paidamount.value=gtotal;
-			// }
+			//}
 		}
 
 
@@ -439,7 +441,7 @@ display: none;
 			
 			});
 		});
-		//FullPayment()
+		// FullPayment();
 		subTotal();
 		
 		</script>
