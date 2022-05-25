@@ -117,7 +117,7 @@ include('includes/config.php');
 
 			$userid = $_SESSION['alogin'];
 			
-			$customerid =rand(50,5000);      //$_GET['customerid'];
+			$customerid =rand(50,500000);      //$_GET['customerid'];
 			$totaldiscount = $_GET['totaldiscount'];
 			$grandtotal = $_GET['grandtotal'];
 			$paidamount = $_GET['paidamount'];
