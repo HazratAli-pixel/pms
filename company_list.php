@@ -1,9 +1,9 @@
 <?php
 $user = [
 	"id"=> 1,
-	"name"=> "Hazrat",
-	"phn"=> 0123654,
-	"roll"=> 120
+	"name"=> "Hasib",
+	"phn"=> 0178...,
+	"roll"=> 183
 ];
 
 ?>
