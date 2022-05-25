@@ -1,15 +1,3 @@
-<?php
-$user = [
-	"id"=> 1,
-	"name"=> "Hasib",
-	"phn"=> 0178...,
-	"roll"=> 183
-];
-
-?>
-
-
-
 
 <?php
 session_start();
@@ -134,17 +122,11 @@ else{
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT name from  company";
+                                        <?php $sql = "SELECT * from  company";
                                         $query = $dbh -> prepare($sql);
                                         $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;
-										//print_r($results);
-										echo json_encode($results);
-										$json = json_encode($results);
-										var_dump(json_decode($json));
-										var_dump(json_decode($json, true));
-
                                         if($query->rowCount() > 0)
                                         {
                                         foreach($results as $result)
@@ -201,15 +183,7 @@ else{
 		</div>
 	</div>
 
-	<script>
-	var names = <?php 
-	echo json_decode(json_encode($json, true));
-	// echo json_encode($user);  
-	
-	?>;
-alert("Result : "+names.name);
 
-</script>
 
 
 	<!-- Loading Scripts -->

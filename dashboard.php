@@ -143,6 +143,20 @@ else{
 									<div class="panel panel-default">
 										<div class="panel-body bk-white text-black">
 											<div class="stat-panel text-center" style="padding-left: 15px;">
+											<?php 
+													$sql6 ="SELECT * from medicine_list order by shelf DESC limit 10";
+													$query6 = $dbh -> prepare($sql6);;
+													$query6->execute();
+													$results6=$query6->fetchAll(PDO::FETCH_OBJ);
+													
+													foreach($results6 as $result){
+														$names[] = $result->medicine_name;
+														$price[] = $result->shelf;
+													}
+												?>
+
+
+
 													<div style="overflow: hidden;" >
 														<canvas id="myChart"  style="width:100%;max-width:780px"></canvas>
 													</div>
@@ -299,9 +313,9 @@ else{
 
 	<!-- Loading Scripts -->
 	<script>
-var xValues = ["Napa", "Seclo", "Histacine", "Ace+","A","B","C"];
-var yValues = [55, 49, 44, 52,45,23,45];
-var barColors = ["red", "green","blue","orange","black","Blue","orange","green","Blue","orange"];
+var xValues = <?php echo json_encode($names);  ?>;
+var yValues = <?php echo json_encode($price);  ?>;
+var barColors = ["red", "green","blue","orange","black","red", "green","blue","orange","black"];
 
 new Chart("myChart", {
   type: "bar",
@@ -330,10 +344,10 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
 var data = google.visualization.arrayToDataTable([
   ['Contry', 'Mhl'],
-  ['Total Sale',54.8],
-  ['Total Service',48.6],
-  ['Total Salary',44.4],
-  ['Total Income',23.9]
+  ['Total Sale',54],
+  ['Total Service',48],
+  ['Total Salary',44],
+  ['Total Income',23]
 ]);
 
 var options = {
