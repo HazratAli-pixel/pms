@@ -73,7 +73,7 @@ include('includes/config.php');
 							<td class='itotal text-center'>$Itotal</td>
 							<td class='text-center'>
 							<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-							<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+							<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]' data-toggle='modal' data-target='#exampleModal'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 							</td>
 							
 							

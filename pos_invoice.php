@@ -70,6 +70,7 @@ display: none;
 	</head>
 	
 	<body>
+
 		<?php include('includes/header.php');?>
 		<div class="ts-main-content">
 		<?php include('includes/leftbar.php');?>
@@ -161,7 +162,7 @@ display: none;
 																
 																<tbody id="myTable">
 
-																	<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_list.medicine_name ASC ";
+																	<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
 																	$query = $dbh -> prepare($sql);
 																	$query->execute();
 																	$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -259,7 +260,7 @@ display: none;
 																						<td class='itotal text-center'>$Itotal</td>
 																						<td class='text-center'>
 																						<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-																						<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+																						<button class='btn btn-outline-none'  data-toggle='modal' data-target='#exampleModal' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 																						</td>
 																					</tr>";
 																			}
@@ -337,7 +338,7 @@ display: none;
 													</div>
 													<div>
 														<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
-														<button  class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button> <!-- onclick="OrderConfirm()" -->
+														<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button> <!-- onclick="OrderConfirm()" -->
 														<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
 													</div>
 													
@@ -357,6 +358,27 @@ display: none;
 				</div>
 			</div>
 	</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Napa
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+				</div>
+			</div>
+			</div>
+
+
 
 		<script>
 		let Iprice = document.getElementsByClassName('iprice');
@@ -426,11 +448,9 @@ display: none;
 			// }else{
 			// fullPaidbtn.attr("disabled",true);
 			paidamount.value=gtotal;
+			PaidAmount();
 			//}
 		}
-
-
-		
 
 		$(document).ready(() =>{
 		$("#AddItemById").blur(() =>{
@@ -443,10 +463,15 @@ display: none;
 		});
 		// FullPayment();
 		subTotal();
-		
+
 		</script>
 	
 		<!-- Loading Scripts -->
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 		<script src="./js/sweetalert.js"></script>
 		<script src="./js/query.js"></script>
 		<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
