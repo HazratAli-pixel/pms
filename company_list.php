@@ -53,6 +53,7 @@ else{
 	<!-- Admin Stye -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css">
+
     
   <style>
 		.errorWrap {
@@ -75,10 +76,6 @@ else{
 
 </head>
 <body>
-
-
-
-
 	<?php include('includes/header.php');?>
 	<div class="ts-main-content">
 		<?php include('includes/leftbar.php');?>
@@ -180,13 +177,10 @@ else{
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>		
 	</div>
 
 
-
-
-	<!-- Loading Scripts -->
 	<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap-select.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>

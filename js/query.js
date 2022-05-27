@@ -25,7 +25,7 @@ function reply_click(clicked_id)
 
 function DisplayItem(){
 	let tbody = document.getElementById('DisplayData');
-	let Gtotal = document.getElementById('Gtotal');
+	// let Gtotal = document.getElementById('Gtotal');
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -33,8 +33,7 @@ function DisplayItem(){
 			}
 			else{
 				tbody.innerHTML=this.responseText;
-				subTotal();
-				
+				subTotal();			
 								
 			}
 		}
@@ -42,6 +41,26 @@ function DisplayItem(){
 	xmlhttp.open("GET", "query.php?DataShow", true);
 	xmlhttp.send();
 }
+function show_item(clicked_id){
+	let m_body = document.getElementsByClassName('modal-body');
+	let body = document.getElementById('exampleModal');
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+				alert(this.responseText);
+				// m_body.innerHTML=this.responseText;	
+				//body.show();
+				// $("#exampleModal").show();
+				
+		}
+	}
+
+	xmlhttp.open("GET", "query.php?showinfo="+clicked_id, true);
+	xmlhttp.send();
+}
+
+
+
 function remove_item(clicked_id)
 	{
 		var r = confirm("Want to remove this?");
@@ -49,9 +68,7 @@ function remove_item(clicked_id)
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-				var result = Number(this.responseText);
 				DisplayItem();
-				
 				}
 			}
 				xmlhttp.open("GET", "query.php?RemoveItem="+clicked_id, true);
@@ -66,9 +83,7 @@ function changeQty(clicked_id,itemvalue)
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-				var result = Number(this.responseText);
 				DisplayItem();
-				
 				}
 			}
 				xmlhttp.open("GET", "query.php?UpItem="+clicked_id+"&itemvalue="+itemvalue, true);
@@ -83,7 +98,7 @@ clearbtn.addEventListener('click',Clearfunction);
 function Clearfunction(){
 	swal({
 		title: "Are you sure?",
-		text: "Once deleted, you will not be able to recover this imaginary file!",
+		text: "Once deleted, you will not be able to recover this imaginary list!",
 		icon: "warning",
 		buttons: true,
 		dangerMode: true,
@@ -150,9 +165,6 @@ function OrderConfirm(){
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			var result = Number(this.responseText);
-			alert("insert section work "+result);
-			if(result ==7){
 				swal({
 					title: "Success",
 					text: "Want to print this",
@@ -166,19 +178,13 @@ function OrderConfirm(){
 					  }
 					  else
 					  {
-						  document.location = 'pos_invoice.php';
+						document.location = 'pos_invoice.php';
 					  }
 				});
-				//document.location = 'pos_invoice.php';
-			}
-			else if(result ==8){
-				swal("Good job!", "You clicked the button!", "info");
-			}
 			}
 		}
 		xmlhttp.open("GET", "query.php?customerid="+customerid+"&totaldiscount="+totaldiscount+"&grandtotal="+grandtotal+"&due="+due+"&vat="+vat+"&paidamount="+paidamount+"&ordersubmit", true); 
 		xmlhttp.send();
-
 	}
 	else{
 		swal({

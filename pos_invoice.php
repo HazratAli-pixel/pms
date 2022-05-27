@@ -31,7 +31,6 @@ include('includes/config.php');
 		<!-- Sandstone Bootstrap CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<!-- Bootstrap Datatables -->
 		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 		
@@ -70,6 +69,7 @@ display: none;
 	</head>
 	
 	<body>
+
 		<?php include('includes/header.php');?>
 		<div class="ts-main-content">
 		<?php include('includes/leftbar.php');?>
@@ -90,6 +90,7 @@ display: none;
 												
 											</div>
 										</div>
+									
 										<div class="card-body m-1 p-1" >
 											<div class="col-12 d-flex flex-column flex-sm-column flex-md-column flex-lg-row flex-xl-row">
 												<!-- button -->
@@ -161,7 +162,7 @@ display: none;
 																
 																<tbody id="myTable">
 
-																	<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_list.medicine_name ASC ";
+																	<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
 																	$query = $dbh -> prepare($sql);
 																	$query->execute();
 																	$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -265,16 +266,6 @@ display: none;
 																			}
 																		}
 																		?>
-																	<!-- <tr>						
-																			<td style="text-align: center; width:30%" >Name </td>
-																			<td style="text-align: center; width:13%" >Batch </td>
-																			<td style="text-align: center; width:14%" >Ex-Date </td>
-																			<td style="text-align: center; width:10%" >Quantity </td>
-																			<td style="text-align: center; width:10%" >price </td>
-																			<td style="text-align: center; width:10%" >Total </td>
-																			<td style="text-align: center; width:13%" >Action</td>
-																			
-																		</tr> -->
 																	</tbody>
 																</table>
 															
@@ -335,9 +326,11 @@ display: none;
 														<!-- <input onblur="PaidAmount()" id="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00"> -->
 														<label id="duelbl" name="dueamount" class="ms-2" style="font-size: 18px;" for="">0.00</label>
 													</div>
+													
 													<div>
 														<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
-														<button  class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button> <!-- onclick="OrderConfirm()" -->
+														<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
+														<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button>
 														<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
 													</div>
 													
@@ -347,6 +340,7 @@ display: none;
 											
 											<!-- footer part end -->
 										</div>
+
 										<!-- body end -->
 									</div>
 								</div>
@@ -357,6 +351,26 @@ display: none;
 				</div>
 			</div>
 	</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																						
+			<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+				</div>
+			</div>
+			</div>			
 
 		<script>
 		let Iprice = document.getElementsByClassName('iprice');
@@ -426,11 +440,9 @@ display: none;
 			// }else{
 			// fullPaidbtn.attr("disabled",true);
 			paidamount.value=gtotal;
+			PaidAmount();
 			//}
 		}
-
-
-		
 
 		$(document).ready(() =>{
 		$("#AddItemById").blur(() =>{
@@ -443,10 +455,15 @@ display: none;
 		});
 		// FullPayment();
 		subTotal();
-		
+
 		</script>
 	
 		<!-- Loading Scripts -->
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 		<script src="./js/sweetalert.js"></script>
 		<script src="./js/query.js"></script>
 		<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
