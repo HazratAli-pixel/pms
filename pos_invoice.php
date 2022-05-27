@@ -31,7 +31,6 @@ include('includes/config.php');
 		<!-- Sandstone Bootstrap CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<!-- Bootstrap Datatables -->
 		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 		
@@ -91,6 +90,7 @@ display: none;
 												
 											</div>
 										</div>
+									
 										<div class="card-body m-1 p-1" >
 											<div class="col-12 d-flex flex-column flex-sm-column flex-md-column flex-lg-row flex-xl-row">
 												<!-- button -->
@@ -260,22 +260,12 @@ display: none;
 																						<td class='itotal text-center'>$Itotal</td>
 																						<td class='text-center'>
 																						<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-																						<button class='btn btn-outline-none'  data-toggle='modal' data-target='#exampleModal' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+																						<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 																						</td>
 																					</tr>";
 																			}
 																		}
 																		?>
-																	<!-- <tr>						
-																			<td style="text-align: center; width:30%" >Name </td>
-																			<td style="text-align: center; width:13%" >Batch </td>
-																			<td style="text-align: center; width:14%" >Ex-Date </td>
-																			<td style="text-align: center; width:10%" >Quantity </td>
-																			<td style="text-align: center; width:10%" >price </td>
-																			<td style="text-align: center; width:10%" >Total </td>
-																			<td style="text-align: center; width:13%" >Action</td>
-																			
-																		</tr> -->
 																	</tbody>
 																</table>
 															
@@ -336,9 +326,11 @@ display: none;
 														<!-- <input onblur="PaidAmount()" id="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00"> -->
 														<label id="duelbl" name="dueamount" class="ms-2" style="font-size: 18px;" for="">0.00</label>
 													</div>
+													
 													<div>
 														<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
-														<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button> <!-- onclick="OrderConfirm()" -->
+														<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
+														<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button>
 														<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
 													</div>
 													
@@ -348,6 +340,7 @@ display: none;
 											
 											<!-- footer part end -->
 										</div>
+
 										<!-- body end -->
 									</div>
 								</div>
@@ -361,6 +354,7 @@ display: none;
 
 			<!-- Modal -->
 			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																						
 			<div class="modal-dialog">
 				<div class="modal-content">
 				<div class="modal-header">
@@ -368,7 +362,7 @@ display: none;
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					Napa
+
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -376,9 +370,7 @@ display: none;
 				</div>
 				</div>
 			</div>
-			</div>
-
-
+			</div>			
 
 		<script>
 		let Iprice = document.getElementsByClassName('iprice');

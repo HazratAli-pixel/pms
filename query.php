@@ -1,10 +1,12 @@
 <?php
 
-use function Symfony\Component\VarDumper\Dumper\esc;
+	use Dflydev\DotAccessData\Data;
 
-session_start();
-error_reporting(0);
-include('includes/config.php');
+	use function Symfony\Component\VarDumper\Dumper\esc;
+
+	session_start();
+	error_reporting(0);
+	include('includes/config.php');
 	if(isset($_GET['userid']))
 		{
         $username = $userid=($_GET['userid']);
@@ -73,7 +75,7 @@ include('includes/config.php');
 							<td class='itotal text-center'>$Itotal</td>
 							<td class='text-center'>
 							<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-							<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]' data-toggle='modal' data-target='#exampleModal'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+							<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 							</td>
 							
 							
@@ -82,6 +84,25 @@ include('includes/config.php');
 			echo $Data;
 		}
 	}
+	if(isset($_GET['showinfo'])){
+		$value = $_GET['showinfo'];
+		$sql = "SELECT * from  medicine_list WHERE  item_code='$value'";
+		$query = $dbh -> prepare($sql);
+		$query->execute();
+		$results=$query->fetchAll(PDO::FETCH_OBJ);
+		$cnt=1;
+			foreach($results as $result){
+				$name = $result->medicine_name;
+				$price = $result->selling_pricce;
+			}
+			$Data2="
+Name : $name
+Price: $price";
+		echo $Data2;
+
+	}
+
+
 	if(isset($_GET['RemoveItem'])){
 		if(isset($_SESSION['items'])){
 			foreach($_SESSION['items'] as $key => $value){
@@ -137,43 +158,28 @@ include('includes/config.php');
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			
-					$sql2="INSERT INTO sellingproduct(InvoiceId, CustomerID, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
-					VALUES(:lastInsertId, :customerid,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
-					$i= count($_SESSION['items']);
-					
-						for($count = 0; $count<$i; $count++)
-						{
-							$result.=$count;
-							$data = array(
-								':lastInsertId'	=>	$lastInsertId,
-								':customerid'	=>	$customerid,
-								':ItemId'	=>	$_SESSION['items'][$count]['ItemId'],
-								':Batch'	=>	$_SESSION['items'][$count]['Batch'],
-								':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
-								':Price'	=>	$_SESSION['items'][$count]['Price'],
-								':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
-								':userid'	=>	$_SESSION['alogin']
-								
-								);
-							$statement = $dbh->prepare($sql2);
-							$statement->execute($data);
-						}
-					unset ($_SESSION['items']);
-					echo $result;
-
-						// $query2 = $dbh->prepare($sql2);
-						// $query2->bindParam(':lastInsertId',$lastInsertId,PDO::PARAM_STR);
-						// $query2->bindParam(':customerid',$customerid,PDO::PARAM_STR);
-						// $query2->bindParam(':ItemId',$ItemId,PDO::PARAM_STR);
-						// $query2->bindParam(':Batch',$Batch,PDO::PARAM_STR);
-						// $query2->bindParam(':SellQty',$SellQty,PDO::PARAM_STR);
-						// $query2->bindParam(':Price',$Price,PDO::PARAM_STR);
-						// $query2->bindParam(':PursingPrice',$PursingPrice,PDO::PARAM_STR);
-
-
-				}
-			else {
+			$i= count($_SESSION['items']);
+			$sql2="INSERT INTO sellingproduct(InvoiceId, CustomerID, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
+			VALUES(:lastInsertId, :customerid,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
+			for($count = 0; $count<$i; $count++)
+			{
+				$data = array(
+				':lastInsertId'	=>	$lastInsertId,
+				':customerid'	=>	$customerid,
+				':ItemId'	=>	$_SESSION['items'][$count]['ItemId'],
+				':Batch'	=>	$_SESSION['items'][$count]['Batch'],
+				':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
+				':Price'	=>	$_SESSION['items'][$count]['Price'],
+				':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
+				':userid'	=>	$_SESSION['alogin']			
+				); 
+				$statement = $dbh->prepare($sql2);
+				$statement->execute($data);
+			}
+			unset ($_SESSION['items']);
+		}
+		else {
 				
 			}
-		}
+	}
 ?>
