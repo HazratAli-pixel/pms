@@ -42,15 +42,13 @@ function DisplayItem(){
 	xmlhttp.send();
 }
 function show_item(clicked_id){
-	let m_body = document.getElementsByClassName('modal-body');
-	let body = document.getElementById('exampleModal');
+	let m_body = document.getElementById('mbody');
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-				alert(this.responseText);
-				// m_body.innerHTML=this.responseText;	
-				//body.show();
-				// $("#exampleModal").show();
+				//alert(this.responseText);
+				m_body.innerHTML=this.responseText;	
+				$("#exampleModal").modal("show");
 				
 		}
 	}

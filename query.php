@@ -86,19 +86,23 @@
 	}
 	if(isset($_GET['showinfo'])){
 		$value = $_GET['showinfo'];
-		$sql = "SELECT * from  medicine_list WHERE  item_code='$value'";
+		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
+		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list INNER JOIN stocktable ON
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId";
 		$query = $dbh -> prepare($sql);
+		$query-> bindParam(':ItemId', $value, PDO::PARAM_STR);
 		$query->execute();
 		$results=$query->fetchAll(PDO::FETCH_OBJ);
 		$cnt=1;
 			foreach($results as $result){
 				$name = $result->medicine_name;
-				$price = $result->selling_pricce;
+				$inqty = $result->InQty;
+				$outqty = $result->OutQty;
+				$inStock = $inqty-$outqty;
 			}
-			$Data2="
-Name : $name
-Price: $price";
-		echo $Data2;
+			$inStock = $inqty-$outqty;
+			$Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Product Buy : $inqty</p><p>Product Sale : $outqty</p><p>In Stock : $inStock</p>";
+			echo $Data2;
 
 	}
 
