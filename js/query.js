@@ -194,5 +194,19 @@ function OrderConfirm(){
 	}
 }
 
+function edit_unit(clicked_id){
+	let m_body = document.getElementById('mbody3');
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+				//alert(this.responseText);
+				m_body.innerHTML=this.responseText;	
+				$("#exampleModal3").modal("show");
+				
+		}
+	}
 
+	xmlhttp.open("GET", "query.php?edit_unit="+clicked_id, true);
+	xmlhttp.send();
+}
 

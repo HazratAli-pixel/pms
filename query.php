@@ -186,4 +186,92 @@
 				
 			}
 	}
+	if(isset($_GET['edit_unit'])){
+		$value = $_GET['edit_unit'];
+		$sql = "SELECT * from medicine_unit WHERE ID=:id";;
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':id',$value,PDO::PARAM_STR);
+		$query->execute();
+		$result=$query->fetch(PDO::FETCH_OBJ);
+		$name = $result->MedicineUnit;
+		$inqty = $result->Status;
+		// $Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Status : $inqty</p>";
+		if($result->Status==1){
+			$Data2="<form method='post' class='row' onsubmit='return' >
+			<div class='col-md-12'>
+				<div class='row mb-3'>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>Medicine Unit : </label>
+					<div class='col-sm-5'>
+					<input type='text' class='form-control' name='category' value='$result->MedicineUnit'>
+					<input type='hidden' name='id' value='$value'>
+					</div>
+				</div>
+			</div>
+														
+			<div class='col-md-12'>
+				<div class='row mb-3'>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>Status :</label>
+					<div class='col-sm-8 d-flex align-items-center'>
+						
+						<div class='form-check form-check-inline'>
+							<input class='form-check-input' checked type='radio' value='$result->Status' name='radio_value' id='inlineRadio1' value='option1'>
+							<label class='form-check-label' for='inlineRadio1'>Active</label>
+						</div>
+						<div class='form-check form-check-inline'>
+							<input class='form-check-input' type='radio' value='0' name='radio_value' id='inlineRadio2'>
+							<label class='form-check-label' for='inlineRadio2'>Inactive</label>
+						</div>
+					</div>
+				</div>
+			</div>											
+	
+			<div class='hr-dashed'></div>
+	
+				<div class='col-md-6'>
+					<div class='d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end'>
+						<button style='min-width: 150px;' class='btn btn-success' type='submit' name='update' >Update</button>
+					</div>
+			</div>						
+		</form>";
+		}else{
+			$Data2="<form method='post' class='row' onsubmit='return' >
+			<div class='col-md-12'>
+				<div class='row mb-3'>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>Medicine Unit : </label>
+					<div class='col-sm-5'>
+					<input type='text' class='form-control' name='category' value='$result->MedicineUnit'>
+					<input type='hidden' name='id' value='$value'>
+					</div>
+				</div>
+			</div>
+														
+			<div class='col-md-12'>
+				<div class='row mb-3'>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>Status :</label>
+					<div class='col-sm-8 d-flex align-items-center'>
+						<div class='form-check form-check-inline'>
+							<input class='form-check-input'  type='radio' value='1' name='radio_value' id='inlineRadio1' value='option1'>
+							<label class='form-check-label' for='inlineRadio1'>Active</label>
+						</div>
+						<div class='form-check form-check-inline'>
+							<input class='form-check-input' checked type='radio' value='$result->Status' name='radio_value' id='inlineRadio2'>
+							<label class='form-check-label' for='inlineRadio2'>Inactive</label>
+						</div>
+					</div>
+				</div>
+			</div>											
+	
+			<div class='hr-dashed'></div>
+	
+				<div class='col-md-6'>
+					<div class='d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end'>
+						<button style='min-width: 150px;' class='btn btn-success' type='submit' name='update' >Update</button>
+					</div>
+			</div>						
+		</form>";
+		}
+		
+		echo $Data2;
+
+	}
 ?>
