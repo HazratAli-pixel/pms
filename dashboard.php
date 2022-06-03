@@ -144,14 +144,16 @@ else{
 										<div class="panel-body bk-white text-black">
 											<div class="stat-panel text-center" style="padding-left: 15px;">
 											<?php 
-													$sql6 ="SELECT * from medicine_list order by shelf DESC limit 10";
+													$sql6 ="SELECT medicine_list.medicine_name, sum(sellingproduct.Qty) AS Qty
+													FROM (sellingproduct RIGHT JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code)
+													GROUP BY ProductId ORDER BY COUNT(ProductId) DESC limit 10";
 													$query6 = $dbh -> prepare($sql6);;
 													$query6->execute();
 													$results6=$query6->fetchAll(PDO::FETCH_OBJ);
 													
 													foreach($results6 as $result){
 														$names[] = $result->medicine_name;
-														$price[] = $result->shelf;
+														$price[] = $result->Qty;
 													}
 												?>
 

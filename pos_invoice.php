@@ -47,13 +47,13 @@ include('includes/config.php');
 		
 		<style>
 			.footer {
-				position: fixed;
-				margin: 0 auto;
-				bottom: 0;
-				width: 85%;
+				/* position: fixed; */
+				/* margin: 0 auto; */
+				/* bottom: 0; */
+				/* width: 100%; */
 				background-color: white ;
 				color: black;
-				z-index: 3;
+				z-index: 5;
 			}
 			.dataTables_filter {
 				display: none;
@@ -84,7 +84,7 @@ include('includes/config.php');
 										<div class="card-body m-1 p-1" >
 											<div class="col-12 d-flex flex-column flex-sm-column flex-md-column flex-lg-row flex-xl-row">
 												<!-- button -->
-												<?php $sql = "SELECT * from  medicine_category ";
+												<?php $sql = "SELECT * from  medicine_category order by  MedicineCategory ASC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -92,13 +92,13 @@ include('includes/config.php');
 												?>
 												<div class="" style="width: 10%;">
 													<div class="d-flex flex-row flex-wrap flex-sm-row flex-md-column flex-lg-column px-1 py-1">
-														<button class="btn btn-md btn-success" style="margin: 5px;">All</button>
+														<!-- <button class="btn btn-md btn-success" style="margin: 5px;">All</button> -->
 														<?php 
 														if($query->rowCount() > 0)
 														{
 															foreach($results as $result)
 															{
-																if($result->MedicineCategoryStatus ==1)
+																if($result->MedicineCategoryStatus ==1 || $result->MedicineCategoryStatus ==0)
 																{?>
 																	<button class="btn btn-md btn-success" style="margin: 5px;"><?php echo $result->MedicineCategory?></button>
 																<?php 
@@ -180,19 +180,18 @@ include('includes/config.php');
 																	$cquery->execute();
 																	$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 																	?>
-																	<input name="companyname" class="form-control" list="datalistOptionss" id="exampleDataListf"  placeholder="Walking customer">
-																	<datalist id="datalistOptionss" required>
-																		<option value="Walking Customer">
-																		<?php 
-																		foreach($results as $result)
-																		{
-																			if($result->Status==1)
-																			{?>																
-																				<option value="<?php echo htmlentities($result->Name);?>">
+																	<input onchange="DuePerson(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
+																		<datalist id="datalistOptionss" required>
 																			<?php 
-																			} 
-																		}?>
-																	</datalist>
+																			foreach($results as $result)
+																			{
+																				if($result->Status==1)
+																				{?>																
+																					<option id="" value="<?php echo htmlentities($result->Name."-".$result->Phone."-".$result->Address);?>">
+																				<?php 
+																				} 
+																			}?>
+																		</datalist>
 																</div>
 															</div>
 															<div class="row p-2">
@@ -221,7 +220,6 @@ include('includes/config.php');
 																					<td class='text-center'>$value[Batch] </td>
 																					<td class='text-center'>$value[Exdate]</td>
 																					<td class='text-center'><input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
-																																													
 																					</td>
 																					<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
 																					<td class='itotal text-center'>$Itotal</td>
@@ -268,9 +266,9 @@ include('includes/config.php');
 																			</div>
 																		</div>
 																		<div class="row mb-2">
-																			<label for="" style="font-weight: bold;" class="col-8 col-form-label text-end text-sm-end">Change Amount : </label>
+																			<label for="" style="font-weight: bold;" class="col-8 col-form-label text-end text-sm-end"> Total : </label>
 																			<div class="col-3">
-																				<input id="changeamount" type="text" disabled class="form-control text-end" name="" value="" placeholder="0.00">
+																				<input id="paidamount" type="text" disabled class="form-control text-end" name="" value="" placeholder="0.00">
 																			</div>
 																		</div>
 																	</div>
@@ -281,28 +279,6 @@ include('includes/config.php');
 												</div>
 												<!-- Invoice Card end -->
 											</div>
-											<!-- footer  -->
-											<div class="footer">
-												<div class="d-flex flex-wrap justify-content-between p-2">
-													<div class="">
-														<label class="ms-2" style="font-size: 18px;" for="">Paid Amount</label>
-														<input onchange="PaidAmount()" id="paidamount" name="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00">
-														<label  class="ms-2" style="font-size: 18px;" for="">Due Amount</label>
-														<!-- <input onblur="PaidAmount()" id="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00"> -->
-														<label id="duelbl" name="dueamount" class="ms-2" style="font-size: 18px;" for="">0.00</label>
-													</div>
-														
-													<div>
-														<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
-														<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
-														<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button>
-														<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
-													</div>													
-												</div>
-
-											</div>
-												
-											<!-- footer part end -->
 										</div>
 										<!-- body end -->
 									</div>
@@ -313,7 +289,31 @@ include('includes/config.php');
 				</div>
 			</div>
 		</div>
-		
+		<!-- footer  -->
+		<div class="row fixed-bottom">
+			<div class="col-lg-12" >
+				<div class="footer">
+					<div class="d-flex flex-wrap flex-md-col justify-content-between p-2">
+						<div style="margin-left: 25px;">
+							<label class="" style="font-size: 18px;" for="">Total Payable Amount</label>
+							<input disabled onchange="PaidAmount()" id="paidamount2" name="paidamount" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00">
+							<label class="ml-3" style="font-size: 18px;" for="">Paid Amount</label>
+							<input onchange="PaidAmount()" id="" name="" class="ms-2 outline-primary text-end" style="font-size: 18px;width: 80px;"type="float" placeholder="0.00">
+							<label  class="ms-2" style="font-size: 18px;" for="">Due Amount</label>
+							<label id="duelbl" name="dueamount" class="ms-2" style="font-size: 18px;" for="">0.00</label>
+						</div>
+											
+						<div>
+							<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-md btn-warning align-items-center" >Full Paid</button>
+							<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
+							<button onclick="OrderConfirm()" class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button>
+							<label class="me-3 btn btn-md btn-info align-items-center" for="">Bank Payment</label>
+						</div>													
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- footer part end -->
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																
 			<div class="modal-dialog">
@@ -392,6 +392,7 @@ include('includes/config.php');
 				var due_amount = Number(document.getElementById('previousdue').value);
 				gtotal = gtotal + due_amount;
 				let paidamount = document.getElementById('paidamount');
+				let paidamount2 = document.getElementById('paidamount2');
 				// PaidAmount() ;
 				// console.log(gtotal);
 				// let fullPaidbtn = document.getElementById('fullPaidbtn');
@@ -400,6 +401,7 @@ include('includes/config.php');
 				// }else{
 				// fullPaidbtn.attr("disabled",true);
 				paidamount.value=gtotal;
+				paidamount2.value=gtotal;
 				PaidAmount();
 				//}
 			}

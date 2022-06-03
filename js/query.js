@@ -174,3 +174,17 @@ function edit_unit(clicked_id) {
 	xmlhttp.open('GET', `query.php?edit_unit=${clicked_id}`, true);
 	xmlhttp.send();
 }
+
+function DuePerson(clicked_id) {
+	const xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+				//alert(this.responseText);
+				$('#previousdue').val(this.responseText);
+				FullPayment();
+		}
+	};
+
+	xmlhttp.open('GET', `query.php?DueAmount=${clicked_id}`, true);
+	xmlhttp.send();
+}

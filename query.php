@@ -142,7 +142,8 @@
 
 			$userid = $_SESSION['alogin'];
 			
-			$customerid =rand(50,500000);      //$_GET['customerid'];
+			//$customerid =rand(50,500000);      //$_GET['customerid'];
+			$customerid =$_SESSION['C_ID'];
 			$totaldiscount = $_GET['totaldiscount'];
 			$grandtotal = $_GET['grandtotal'];
 			$paidamount = $_GET['paidamount'];
@@ -163,17 +164,17 @@
 			$lastInsertId = $dbh->lastInsertId();
 			
 			$i= count($_SESSION['items']);
-			$sql2="INSERT INTO sellingproduct(InvoiceId, CustomerID, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
-			VALUES(:lastInsertId, :customerid,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
+			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
+			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
 			for($count = 0; $count<$i; $count++)
 			{
+				$T_price = $_SESSION['items'][$count]['SellQty']*$_SESSION['items'][$count]['Price'];
 				$data = array(
 				':lastInsertId'	=>	$lastInsertId,
-				':customerid'	=>	$customerid,
 				':ItemId'	=>	$_SESSION['items'][$count]['ItemId'],
 				':Batch'	=>	$_SESSION['items'][$count]['Batch'],
 				':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
-				':Price'	=>	$_SESSION['items'][$count]['Price'],
+				':Price'	=>	$T_price,
 				':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
@@ -181,6 +182,7 @@
 				$statement->execute($data);
 			}
 			unset ($_SESSION['items']);
+			unset ($_SESSION['C_ID']);
 		}
 		else {
 				
@@ -195,7 +197,6 @@
 		$result=$query->fetch(PDO::FETCH_OBJ);
 		$name = $result->MedicineUnit;
 		$inqty = $result->Status;
-		// $Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Status : $inqty</p>";
 		if($result->Status==1){
 			$Data2="<form method='post' class='row' onsubmit='return' >
 			<div class='col-md-12'>
@@ -274,4 +275,62 @@
 		echo $Data2;
 
 	}
+	if(isset($_GET['CustomerID'])){
+		$str = $_GET['CustomerID'];
+		$value =explode("-",$str);
+		$sql = "SELECT * from customertable WHERE (Name=:name AND Phone=:phone AND Address=:address) OR (Name=:name2 AND Phone=:phone2) 
+		OR (Name=:name3 AND Address=:address3)";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':name',$phone[0],PDO::PARAM_STR);
+		$query->bindParam(':phone',$value[1],PDO::PARAM_STR);
+		$query->bindParam(':address',$value[2],PDO::PARAM_STR);
+		$query->bindParam(':name2',$phone[0],PDO::PARAM_STR);
+		$query->bindParam(':phone2',$value[1],PDO::PARAM_STR);
+		$query->bindParam(':name3',$phone[0],PDO::PARAM_STR);
+		$query->bindParam(':address3',$value[2],PDO::PARAM_STR);
+		$query->execute();
+		$result=$query->fetch(PDO::FETCH_OBJ);
+		//$inqty = $result->Status;
+		// if($result->Status==1){
+		$Data4="$result->ID";
+		// }else{
+		// 	$Data2="";
+		// }
+		
+		echo $Data4;
+	}
+	if(isset($_GET['DueAmount'])){
+		$str = $_GET['DueAmount'];
+		$value =explode("-",$str);
+		$name = $value[0];
+		$phone = $value[1];
+		$add = $value[2];
+		if(strlen($phone)==0)
+		{
+			$phone = "0";
+		}
+		$sql = "SELECT * from customertable WHERE ((Name=:name AND Phone=:phone AND Address=:address) OR (Name=:name2 AND Phone=:phone2) 
+		OR (Name=:name3 AND Address=:address3))";
+		$query = $dbh -> prepare($sql);
+		// $query->bindParam(':phone',$value[1],PDO::PARAM_STR);
+		$query->bindParam(':name',$name,PDO::PARAM_STR);
+		$query->bindParam(':phone',$phone,PDO::PARAM_STR);
+		$query->bindParam(':address',$add,PDO::PARAM_STR);
+		$query->bindParam(':name2',$name,PDO::PARAM_STR);
+		$query->bindParam(':phone2',$phone,PDO::PARAM_STR);
+		$query->bindParam(':name3',$name,PDO::PARAM_STR);
+		$query->bindParam(':address3',$add,PDO::PARAM_STR);
+		$query->execute();
+		$result=$query->fetch(PDO::FETCH_OBJ);
+		//$inqty = $result->Status;
+		// if($result->Status==1){
+		$_SESSION['C_ID']=$result->ID;
+		$Data4="$result->Photo";
+		// }else{
+		// 	$Data2="";
+		// }
+		echo $Data4;
+	}
 ?>
+
+
