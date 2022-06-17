@@ -50,8 +50,8 @@ function show_item(clicked_id) {
 }
 
 function remove_item(clicked_id) {
-		const r = confirm('Want to remove this?');
-			if (r == true) {
+		//const r = confirm('Want to remove this?');
+			//if (r == true) {
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
@@ -60,7 +60,7 @@ function remove_item(clicked_id) {
 			};
 				xmlhttp.open('GET', `query.php?RemoveItem=${clicked_id}`, true);
 				xmlhttp.send();
-	}
+	//}
 					// xmlhttp.send("ItemId="+clicked_id+"@ItemIds");
 }
 
@@ -187,4 +187,18 @@ function DuePerson(clicked_id) {
 
 	xmlhttp.open('GET', `query.php?DueAmount=${clicked_id}`, true);
 	xmlhttp.send();
+}
+
+function clean_filed() {
+	var input_filed_value = document.getElementById('exampleDataListf').value;
+	var input_filed = document.getElementById('exampleDataListf');
+	var cln_id = document.getElementById('cln_id');
+	if(input_filed_value.length==0){
+		input_filed.value = "Walking Customer";
+		cln_id.innerHTML="clean";
+	}else{
+		input_filed.value = "";
+		cln_id.innerHTML="undo";
+	}
+	
 }

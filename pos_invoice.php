@@ -7,8 +7,37 @@ include('includes/config.php');
 		include_once('./includes/address.php');		
 		header('location:index.php');
 	}
-	else{ 
+	else{
+		if(isset($_POST['submit']))
+	  		{
+			
+			$c_name=$_POST['c_name'];
+			$c_phone=$_POST['c_phone'];
+			$c_address=$_POST['c_address'];
+			$status=$_POST['radio_value'];
+
+			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
+			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
+			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
+			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
+			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
+
+			$query->execute();
+			$lastInsertId = $dbh->lastInsertId();
+		// if($lastInsertId)
+		// 	{
+		// 	$msg=" Your info submitted successfully";
+		// 	header("refresh:3;medicine_unit_list.php"); 
+		// 	}
+		// else 
+		// 	{
+		// 	$error=" Something went wrong. Please try again";
+		// 	header("refresh:3;medicine_unit_add.php"); 
+		// 	}
 	
+		}
 	?>
 <!doctype html>
 <html lang="en" class="no-js">
@@ -180,7 +209,8 @@ include('includes/config.php');
 																	$cquery->execute();
 																	$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
 																	?>
-																	<input onchange="DuePerson(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
+																	<div class="input-group mb-3">
+																		<input onchange="DuePerson(this.value)" name="companyname" value="Walking Customer" class="form-control" list="datalistOptionss" id="exampleDataListf" >
 																		<datalist id="datalistOptionss" required>
 																			<?php 
 																			foreach($results as $result)
@@ -192,6 +222,10 @@ include('includes/config.php');
 																				} 
 																			}?>
 																		</datalist>
+																		<button class="btn btn-outline-secondary" type="button" onclick="clean_filed()" id="cln_id">Clean</button>
+																		<button class="btn btn-outline-secondary" type="button" id="add_person" data-toggle="modal" data-target="#exampleModal2">Add</button>
+																	</div>
+																	
 																</div>
 															</div>
 															<div class="row p-2">
@@ -330,7 +364,74 @@ include('includes/config.php');
 					</div>
 				</div>
 			</div>
-		</div>			
+		</div>	
+		
+		
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="mbody2">
+					<div class="card-body">
+						<form method="post" class="row">
+						<div class="">
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_name" placeholder="customer name">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Phone : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_phone" placeholder="phone number">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Address : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_address" placeholder="address">
+								</div>
+							</div>
+							
+						</div>																
+						<div class="">
+							<div class="row mb-3">
+								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
+								<div class="col-sm-8 d-flex align-items-center">
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
+										<label class="form-check-label" for="inlineRadio1">Active</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
+										<label class="form-check-label" for="inlineRadio2">Inactive</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="hr-dashed"></div>
+						<div class="col-md-12">
+							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
+								<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
+								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
+							</div>
+						</div>					
+						</form>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
 
 		<script>
 			let Iprice = document.getElementsByClassName('iprice');
