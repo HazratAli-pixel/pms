@@ -196,6 +196,7 @@ function clean_filed() {
 	if(input_filed_value.length==0){
 		input_filed.value = "Walking Customer";
 		cln_id.innerHTML="clean";
+		DuePerson();
 	}else{
 		input_filed.value = "";
 		cln_id.innerHTML="undo";
