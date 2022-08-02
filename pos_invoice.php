@@ -310,18 +310,18 @@ include('includes/config.php');
 		<!-- footer  -->
 		<div class="footer row fixed-bottom border border-info">
 			<div class="col-12" >
-					<div class="d-flex flex-wrap justify-content-md-center justify-content-lg-between justify-content-xl-between  p-2">
+					<div class="d-flex flex-wrap justify-content-center justify-content-lg-between justify-content-xl-between  p-2">
 						<div class="mb-md-2">
-							<label class="fs-5 fw-bold" style="" for="">Total Payable Amount</label>
-							<input disabled onchange="PaidAmount()" id="paidamount2" name="paidamount" class="ms-2 fs-5 fw-bold outline-primary text-end" style="border-radius: 5px; width: 80px;" type="float" placeholder="0.00">
+							<label class="fs-5 fw-bold"  for="">Payable Amount</label>
+							<input disabled onchange="PaidAmountttt()" id="paidamount2" name="paidamount" class="ms-2 fs-5 fw-bold outline-primary text-end" style="border-radius: 5px; width: 120px;" type="float" placeholder="0.00">
 							<label class="fs-5 fw-bold ml-3" for="">Paid Amount</label>
-							<input onchange="PaidAmount()" id="" name="" class="ms-2 fs-5 fw-bold outline-primary text-end" style="border-radius: 5px; width: 80px;" type="float" placeholder="0.00">
-							<label  class="fs-5 fw-bold ms-2" for="">Due Amount</label>
-							<label id="duelbl" name="dueamount" class="fs-5 fw-bold ms-2" for="">0.00</label>
+							<input onchange="PaidAmount()" id="paidamount3" name="" class="ms-2 fs-5 fw-bold outline-primary text-end" style="border-radius: 5px; width: 120px;" type="float" placeholder="0.00">
+							<label id="DuiLable" class="fs-5 fw-bold ms-2" for=""></label>
+							<label id="duelbl" name="dueamount" class="fs-5 fw-bold ms-2" for=""></label>
 						</div>
 											
 						<div class="">
-							<button id="fullPaidbtn" onclick="FullPayment()" class="me-2 btn btn-warning " >Full Paid</button>
+							<button id="fullPaidbtn" onclick="FullPayment2()" class="me-2 btn btn-warning " >Full Paid</button>
 							<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
 							<button onclick="OrderConfirm()" class="me-2 btn btn-primary" for="">Cash Payment</button>
 							<label class="me-3 btn btn-info " for="">Bank Payment</label>
@@ -420,12 +420,14 @@ include('includes/config.php');
 			function subTotal(){
 				let Itotal = document.getElementsByClassName('itotal');
 				let gtotal = document.getElementById('Total');
+				let paidamount2 = document.getElementById('paidamount2');
 				var Gtotal=0;
 				for (i=0; i<Itotal.length; i++){
 					Gtotal= Gtotal+Number(Itotal[i].innerText);
 
 				}
 				gtotal.value=Gtotal;
+				paidamount2.value=Gtotal;
 			
 			} 
 
@@ -435,37 +437,45 @@ include('includes/config.php');
 				let gtotal = document.getElementById('Total');
 				subTotal();
 				if(getdis.length<=0){
-					//PaidAmount();
 					totaldis.value="0.00";
 				}else{
 				Totaldiscount =((Number(getdis)*Number(gtotal.value))/100);
 				totaldis.value=Totaldiscount.toFixed(2);
-				gtotal.value=Number((gtotal.value)-Totaldiscount).toFixed(2);
+				var amount =Number((gtotal.value)-Totaldiscount);
+				gtotal.value=amount.toFixed(3);
 				FullPayment();
+				PaidAmount();
 				}
 			}
 			function PaidAmount() {
-				let gtotal = Number(document.getElementById('Total').value);
-				let changeamount = document.getElementById('changeamount');
-				let paidamount = document.getElementById('paidamount');
+				let payableamount = document.getElementById('paidamount2');
+				let paidamount = document.getElementById('paidamount3');
 				let Duelabel = document.getElementById('duelbl');
-				let predue = Number(document.getElementById('previousdue').value);
-				if(Number(paidamount.value)<=0){
-					InvoiceDiscount()
-					changeamount.value="0.00";
+				let Due_Lable = document.getElementById('DuiLable');
+				// let predue = Number(document.getElementById('previousdue').value);
+				if(Number(paidamount.value)==Number(payableamount.value)){
+					Due_Lable.innerHTML="Thank you For Full Paid";
 				}
 				else{
-					gtotal = Number((gtotal+predue)-Number(paidamount.value)).toFixed(2);
+					gtotal = Number((payableamount.value)-Number(paidamount.value)).toFixed(2);
 					if(Number(gtotal)<=0){
-						changeamount.value=gtotal;
-						Duelabel.innerHTML="0.00";
+						Due_Lable.innerHTML="Thanks, Change Amount :";
 					}
 					else{
-						Duelabel.innerHTML=gtotal;
-						changeamount.value="0.00";
+						Due_Lable.innerHTML="Due Amount :";
 					}
+					Duelabel.innerHTML=gtotal;
 				
 				}
+			}
+			function FullPayment2(){
+				var gtotal = Number(document.getElementById('Total').value);
+				var due_amount = Number(document.getElementById('previousdue').value);
+				gtotal = gtotal + due_amount;
+				let paidamount3 = document.getElementById('paidamount3');
+				paidamount3.value=gtotal.toFixed(2);
+				PaidAmount();
+
 			}
 			function FullPayment() {
 				var gtotal = Number(document.getElementById('Total').value);
@@ -473,17 +483,8 @@ include('includes/config.php');
 				gtotal = gtotal + due_amount;
 				let paidamount = document.getElementById('paidamount');
 				let paidamount2 = document.getElementById('paidamount2');
-				// PaidAmount() ;
-				// console.log(gtotal);
-				// let fullPaidbtn = document.getElementById('fullPaidbtn');
-				// if(gtotal.length<=0){
-				// 	fullPaidbtn.attr("disabled",true);
-				// }else{
-				// fullPaidbtn.attr("disabled",true);
-				paidamount.value=gtotal;
-				paidamount2.value=gtotal;
-				PaidAmount();
-				//}
+				paidamount.value=gtotal.toFixed(2);
+				paidamount2.value=gtotal.toFixed(2);
 			}
 
 			$(document).ready(() =>{
