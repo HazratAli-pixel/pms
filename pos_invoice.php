@@ -248,8 +248,8 @@ include('includes/config.php');
 																	} 
 																}?>
 															</datalist>
-															<button class="btn btn-outline-secondary" type="button" onclick="clean_filed()" id="cln_id">Clean</button>
-															<button class="btn btn-outline-secondary" type="button" id="add_person" data-toggle="modal" data-target="#exampleModal2">Add</button>
+															<button class="btn btn-outline-primary " type="button" onclick="clean_filed()" id="cln_id">Clean</button>
+															<button class="btn btn-outline-primary" type="button" id="add_person" data-toggle="modal" data-target="#exampleModal2">Add</button>
 														</div>	
 													</div>
 												</div>
@@ -517,6 +517,7 @@ include('includes/config.php');
 					gtotal = Number((payableamount.value)-Number(paidamount.value)).toFixed(2);
 					if(Number(gtotal)<=0){
 						Due_Lable.innerHTML="Thanks, Change Amount :";
+						Duelabel.innerHTML='';
 					}
 					else{
 						Due_Lable.innerHTML="Due Amount :";
