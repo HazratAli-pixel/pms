@@ -511,6 +511,7 @@ include('includes/config.php');
 				// let predue = Number(document.getElementById('previousdue').value);
 				if(Number(paidamount.value)==Number(payableamount.value)){
 					Due_Lable.innerHTML="Thank you For Full Paid";
+					Duelabel.innerHTML='';
 				}
 				else{
 					gtotal = Number((payableamount.value)-Number(paidamount.value)).toFixed(2);

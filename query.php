@@ -352,12 +352,12 @@
 		$value =explode("-",$str);
 		$ID = $value[0];
 		$_SESSION['C_ID'] = $value[0];
-		$sql = "SELECT * from customertable WHERE ID=:id";
+		$sql = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':id',$ID,PDO::PARAM_STR);
 		$query->execute();
 		$result=$query->fetch(PDO::FETCH_OBJ);
-		$Data4="$result->Photo";
+		$Data4="$result->NewDue";
 		echo $Data4;
 
 	}
