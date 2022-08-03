@@ -263,7 +263,7 @@ include('includes/config.php');
 															<th style="text-align: center; width:15%" >Quantity </th>
 															<th style="text-align: center; width:8%" >price </th>
 															<th style="text-align: center; width:10%" >Total </th>
-															<th style="text-align: center; width:13%" >Action</th>
+															<th style="text-align: center; width:9%" >Action</th>
 														</tr>
 													</thead>
 													<tbody id="DisplayData">
@@ -399,7 +399,7 @@ include('includes/config.php');
 					</div>
 					<!-- <div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+						<button type="button" class="btn btn-primary">Save changes</button>
 					</div> -->
 				</div>
 			</div>

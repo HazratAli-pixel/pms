@@ -23,9 +23,6 @@ function reply_click(clicked_id) {
 				m_body.innerHTML = "<h2>Item out of stock</h2>";
 				$('#exampleModal').modal('show');
 			}
-			// else{
-			// 	alert(this.responseText);
-			// }
 		}
 	};
 	xmlhttp.open('GET', `query.php?ItemId=${clicked_id}`, true);
