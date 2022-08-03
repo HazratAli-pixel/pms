@@ -136,7 +136,7 @@ include('includes/config.php');
 										<!-- button Part ends here -->
 
 										<!-- Medicine list Part starts here -->
-										<div class="col-12 col-md-10 col-lg-2">
+										<div class="col-12 col-md-10 col-lg-3">
 											<div class="row px-2 d-flex flex-column flex-sm-row flex-md-row justify-content-between">
 												<div class="col-md-12 ">
 													<input class="form-control" onkeyup="myFunction()" id="myInput" type="search" placeholder="Search Medicine">
@@ -171,7 +171,7 @@ include('includes/config.php');
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
 																			<td style="text-align: center; ">
-																				<p  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" style="user-select: none" class="btn w-100 btn-primary" value="">add</p>
+																				<p  id="<?php echo htmlentities($result->item_code);?>" style="user-select: none" class="btn w-100 btn-primary" value="">add</p>
 																				<input id="BtnNo" class="btn btn-sm btn-primary" type="hidden" value="<?php echo htmlentities($cnt);?>">
 																			</td>
 																		</tr>
@@ -221,7 +221,7 @@ include('includes/config.php');
 										</div>
 										<!-- Medicine list Part ends here -->
 
-										<div class="col-12 col-md-12 col-lg-9">
+										<div class="col-12 col-md-12 col-lg-8">
 											<div class="row">
 												<div class="col-12 d-flex justify-content-between ">
 													<div class="col-xl-3">
@@ -279,7 +279,7 @@ include('includes/config.php');
 																		<td class='text-center'>$value[Batch] </td>
 																		<td class='text-center'>$value[Exdate]</td>
 																		<td class='text-center'>
-																			<input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
+																			<input type='number' class='$value[SellQty]' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
 																		</td>
 																		<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
 																		<td class='itotal text-center'>$Itotal</td>

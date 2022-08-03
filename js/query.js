@@ -10,15 +10,15 @@ function reply_click(clicked_id) {
 
 			if (result == 1) {
 				m_title.innerHTML = "Massage";
-				m_body.innerHTML = "<h3>Item Already Added</h3>";
+				m_body.innerHTML = "<h3>Max Item Added</h3>";
 				$('#exampleModal').modal('show');
 			}
-			else if (result == 5) {
+			else if (result == 3) {
 				m_title.innerHTML = "Massage";
 				m_body.innerHTML = "<h4>Item not available in stock</h4>";
 				$('#exampleModal').modal('show');
 			}
-			else if(result==6){
+			else if(result==2){
 				m_title.innerHTML = "Massage";
 				m_body.innerHTML = "<h2>Item out of stock</h2>";
 				$('#exampleModal').modal('show');
@@ -80,8 +80,13 @@ function changeQty(clicked_id, itemvalue) {
 				const xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
-				DisplayItem();
+					const result = Number(this.responseText);
+					if(result==1){
+						alert(result);
+					}
+					DisplayItem();
 				}
+				
 			};
 				xmlhttp.open('GET', `query.php?UpItem=${clicked_id}&itemvalue=${itemvalue}`, true);
 				xmlhttp.send();

@@ -46,31 +46,42 @@
 						foreach($_SESSION['items'] as $key => $value){
 							if($value['ItemId'] == $_GET['ItemId']){
 								$currentQty = $_SESSION['items'][$key]['SellQty'];
-								$currentQty++;						
-								$_SESSION['items'][$key]['SellQty'] = $currentQty;
+								$Instock = $_SESSION['items'][$key]['InStock'];
+								if($currentQty >= $Instock){
+									echo 1;
+								}
+								else{
+									$currentQty++;						
+									$_SESSION['items'][$key]['SellQty'] = $currentQty;
+								}
 							}
 						}
 					}
 					else if($result->InQty<=$result->OutQty){
-						echo 6;
+						echo 2;
 					}
 					else{
 						$count = count($_SESSION['items']);
 						$qty=1;
+						$stock = $result->InQty-$result->OutQty;
 						$_SESSION['items'][$count] = array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,
-						'OutQty'=>$result->OutQty, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
+						'OutQty'=>$result->OutQty,'InStock'=>$stock,'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
 					}
 					
 					
 				}
 				else if($result->InQty>$result->OutQty){
 					$qty=1;
+					$stock = $result->InQty-$result->OutQty;
 					$_SESSION['items'][0]=array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,
-					'OutQty'=>$result->OutQty, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
+					'OutQty'=>$result->OutQty,'InStock'=>$stock, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
+				}
+				else{
+					echo 2;
 				}				
 			}
 			else {
-				echo 5;
+				echo 3;
 		}
 	}
 	if(isset($_GET['DataShow'])){
@@ -83,7 +94,7 @@
 							</td>
 							<td class='text-center'>$value[Exdate]</td>
 							<td class='text-center'>
-								<input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>																					
+								<input type='number' class='$value[SellQty]' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>																					
 							</td>
 							<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
 							<td class='itotal text-center'>$Itotal</td>
@@ -134,8 +145,16 @@
 		if(isset($_SESSION['items'])){
 			foreach($_SESSION['items'] as $key => $value){
 				if($value['ItemId'] == $_GET['UpItem']){
+					$currentQty = $_SESSION['items'][$key]['SellQty'];
+					// $Instock = $_SESSION['items'][$key]['InStock'];
+					// if($currentQty <= $Instock){
+					// 	echo 1;
+					// 	// $_SESSION['items'][$key]['SellQty'] = $Instock;
+					// }
+					// else{
+					// 	$_SESSION['items'][$key]['SellQty'] = $_GET['itemvalue'];
+					// }
 					$_SESSION['items'][$key]['SellQty'] = $_GET['itemvalue'];
-					
 				}
 			}
 		}
@@ -187,6 +206,8 @@
 			$i= count($_SESSION['items']);
 			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
 			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
+			
+			$sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:Batch";
 			for($count = 0; $count<$i; $count++)
 			{
 				$T_price = $_SESSION['items'][$count]['SellQty']*$_SESSION['items'][$count]['Price'];
@@ -199,8 +220,14 @@
 				':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
+				$data2 = array(
+					':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
+					':Batch'	=>	$_SESSION['items'][$count]['Batch']
+				); 
 				$statement = $dbh->prepare($sql2);
 				$statement->execute($data);
+				$statement = $dbh->prepare($sql3);
+				$statement->execute($data2);
 			}
 			unset ($_SESSION['items']);
 			unset ($_SESSION['C_ID']);
