@@ -112,7 +112,7 @@ include('includes/config.php');
 									<div class="row d-flex">
 										<!-- button Part start here -->
 										<div class="col-12 col-md-2 col-lg-1">
-											<div class="d-flex flex-row justify-content-center flex-wrap flex-sm-row flex-md-column flex-lg-column flex-xl-column">
+											<div id="button_list" class="d-flex flex-row justify-content-center flex-wrap flex-sm-row flex-md-column flex-lg-column flex-xl-column">
 												<?php $sql = "SELECT * from  medicine_category order by  MedicineCategory ASC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
@@ -125,7 +125,7 @@ include('includes/config.php');
 														if($result->MedicineCategoryStatus ==1 || $result->MedicineCategoryStatus ==0)
 														{?>
 															<div class="px-1">
-																<button class="form-control btn btn-md btn-success" style="margin: 5px;"><?php echo $result->MedicineCategory?></button>
+																<button onClick="Category_function(this.id)" class="form-control btn btn-md btn-success" id="<?php echo $result->MedicineCategory?>" style="margin: 5px;"><?php echo $result->MedicineCategory?></button>
 															</div>
 														<?php 
 														}
@@ -165,7 +165,8 @@ include('includes/config.php');
 																	if($result->status ==1)
 																	{?>	
 																		<tr style="user-select: none"  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" class="header">
-																			<td hidden class="text-center"><?php echo htmlentities($cnt);?></td>
+																			<!-- <td hidden class="text-center"><?php echo htmlentities($cnt);?></td> -->
+																			<td style="visibility: none;" hidden class="text-center"><?php echo htmlentities($result->category);?> - All</td>
 																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name);?>  
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
