@@ -109,7 +109,7 @@ include('includes/config.php');
 									</div>
 								</div>
 								<div class="card-body" >
-									<div class="row">
+									<div class="row d-flex">
 										<!-- button Part start here -->
 										<div class="col-12 col-md-2 col-lg-1">
 											<div class="d-flex flex-row justify-content-center flex-wrap flex-sm-row flex-md-column flex-lg-column flex-xl-column">
@@ -136,20 +136,20 @@ include('includes/config.php');
 										<!-- button Part ends here -->
 
 										<!-- Medicine list Part starts here -->
-										<div class="col-12 col-md-10 col-lg-3">
+										<div class="col-12 col-md-10 col-lg-2">
 											<div class="row px-2 d-flex flex-column flex-sm-row flex-md-row justify-content-between">
 												<div class="col-md-12 ">
 													<input class="form-control" onkeyup="myFunction()" id="myInput" type="search" placeholder="Search Medicine">
 												</div>
 											</div>
 											<div class="row  p-2">
-												<div class="col-12">
-													<table id="zctb" class="display ali table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+												<div class="col-12" style="overflow-x: hidden;overflow-y: scroll; height: 700px;">
+													<table id="" class="display ali table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 														<thead>
 															<tr>
-																<th class = "text-center w-25">SL</th>
+																<!-- <th class = "text-center w-25">SL</th> -->
 																<th class = "text-center w-50">Medicine Name</th>
-																<th class = "text-center w-25" >action </th>
+																<th class = "text-center w-50" >action </th>
 															</tr>
 														</thead>
 														<tbody id="myTable">
@@ -164,13 +164,13 @@ include('includes/config.php');
 																{ 
 																	if($result->status ==1)
 																	{?>	
-																		<tr class="header">
-																			<td class="text-center"><?php echo htmlentities($cnt);?></td>
-																			<td><?php echo htmlentities($result->medicine_name);?>  
+																		<tr style="user-select: none"  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" class="header">
+																			<td hidden class="text-center"><?php echo htmlentities($cnt);?></td>
+																			<td class="text-center fw-bold" ><?php echo htmlentities($result->medicine_name);?>  
 																				<input type="hidden" name= "MedicineName" value="<?php echo htmlentities($result->medicine_name);?>">
 																			</td>
 																			<td style="text-align: center; ">
-																				<input style="width: 50px;" id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" class="btn btn-sm btn-primary" value="add">
+																				<p  id="<?php echo htmlentities($result->item_code);?>" onClick="reply_click(this.id)" style="user-select: none" class="btn w-100 btn-primary" value="">add</p>
 																				<input id="BtnNo" class="btn btn-sm btn-primary" type="hidden" value="<?php echo htmlentities($cnt);?>">
 																			</td>
 																		</tr>
@@ -181,11 +181,46 @@ include('includes/config.php');
 														</tbody>
 													</table>
 												</div>
+												<!-- <div class="row p-0 m-0">
+													<div class="col-12 flex-wrap d-flex justify-content-between w-100" style="overflow-x: hidden;overflow-y: scroll; height: 700px;" >
+														<?php $sql = "SELECT * from  medicine_list ORDER BY medicine_name ASC ";
+														$query = $dbh -> prepare($sql);
+														$query->execute();
+														$results=$query->fetchAll(PDO::FETCH_OBJ);
+														$cnt=1;
+														if($query->rowCount() > 0)
+														{
+															foreach($results as $result)
+															{ 
+																if($result->status ==1)
+																{?>
+																<div class="col-4 m-1">
+																	<div class="card ">
+																		<img src="pic/ali2.jpg" class="card-img-top" alt="...">
+																		<div class="card-body">
+																			<h5 class="card-title"><?php echo htmlentities($result->medicine_name);?></h5>
+																		</div>
+																	</div>
+																	</div>
+																	<div class="col-6 col-md-4 col-lg-3 p-1 ">
+																		<div class="card">
+																		<img src="./pic/ali2.jpg" class="h-100 card-img-top" alt="...">
+																		<div class="card-body">
+																			<p class="text-center fw-bold"><?php echo htmlentities($result->medicine_name);?></p>
+																		</div>
+																		</div>
+																	</div>
+																<?php $cnt=$cnt+1; 
+																}
+															}
+														}?>
+													</div>
+												</div> -->
 											</div>
 										</div>
 										<!-- Medicine list Part ends here -->
 
-										<div class="col-12 col-md-12 col-lg-8">
+										<div class="col-12 col-md-12 col-lg-9">
 											<div class="row">
 												<div class="col-12 d-flex justify-content-between ">
 													<div class="col-xl-3">
@@ -206,8 +241,8 @@ include('includes/config.php');
 																foreach($results as $result)
 																{
 																	if($result->Status==1)
-																	{?>																
-																		<option id="" value="<?php echo htmlentities($result->Name."-".$result->Phone."-".$result->Address);?>">
+																	{?>	
+																		<option id="" value="<?php echo htmlentities($result->ID."-".$result->Name."-".$result->Phone."-".$result->Address);?>">
 																		<?php 
 																	} 
 																}?>
@@ -252,6 +287,26 @@ include('includes/config.php');
 																			<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 																		</td>
 																	</tr>";
+																// echo "<tr>						
+																// 		<td class='text-center'>$value[ProductName]</td>
+																// 		<td class='text-center'>
+																// 			<select name='cars' id='cars'>
+																// 				<option value='volvo'>Volvo</option>
+																// 				<option value='saab'>Saab</option>
+																// 				<option value='mercedes'>Mercedes</option>
+																// 				<option value='audi'>Audi</option>
+																// 			</select></td>
+																// 		<td class='text-center'>$value[Exdate]</td>
+																// 		<td class='text-center'>
+																// 			<input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
+																// 		</td>
+																// 		<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
+																// 		<td class='itotal text-center'>$Itotal</td>
+																// 		<td class='text-center'>
+																// 			<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
+																// 			<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+																// 		</td>
+																// 	</tr>";
 															}
 														}?>
 													</tbody>
@@ -337,15 +392,15 @@ include('includes/config.php');
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+						<h3 class="modal-title" id="Modal_title"></h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body" id="mbody">
 					</div>
-					<div class="modal-footer">
+					<!-- <div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 						<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>	

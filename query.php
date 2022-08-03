@@ -26,20 +26,33 @@
 	}
 	if(isset($_GET['ItemId'])){
 		$ItemId=$_GET['ItemId'];
+
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
-		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list INNER JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId";
+		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId ";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
 		$query-> execute();
 		$result = $query -> fetch(PDO::FETCH_OBJ);
 	
-		if($query -> rowCount() > 0)
+			if($query -> rowCount() > 0)
 			{
+				// checked session set or not
                 if(isset($_SESSION['items'])){
 					$SelectedItems = array_column($_SESSION['items'],'ItemId');
+					// checked added item
 					if(in_array($_GET['ItemId'],$SelectedItems)){
-						echo 1;
+						// echo 1;
+						foreach($_SESSION['items'] as $key => $value){
+							if($value['ItemId'] == $_GET['ItemId']){
+								$currentQty = $_SESSION['items'][$key]['SellQty'];
+								$currentQty++;						
+								$_SESSION['items'][$key]['SellQty'] = $currentQty;
+							}
+						}
+					}
+					else if($result->InQty<=$result->OutQty){
+						echo 6;
 					}
 					else{
 						$count = count($_SESSION['items']);
@@ -48,13 +61,13 @@
 						'OutQty'=>$result->OutQty, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
 					}
 					
+					
 				}
-				else{
+				else if($result->InQty>$result->OutQty){
 					$qty=1;
 					$_SESSION['items'][0]=array('ItemId'=>$ItemId,'ProductName'=>$result->medicine_name, 'SellQty'=>$qty,'Batch'=>$result->BatchNumber,'Exdate'=>$result->Date, 'InQty'=>$result->InQty,
 					'OutQty'=>$result->OutQty, 'Price'=>$result->SellPrice, 'PursingPrice'=>$result->PurPrice,'Mstatus'=>$result->status,'SStatus'=>$result->Status);
-				}
-				
+				}				
 			}
 			else {
 				echo 5;
@@ -66,10 +79,11 @@
 				$Itotal = $value['SellQty']* $value['Price'];
 				$Data.="<tr>						
 							<td class='text-center'>$value[ProductName]</td>
-							<td class='text-center'>$value[Batch] </td>
+							<td class='text-center'>$value[Batch]
+							</td>
 							<td class='text-center'>$value[Exdate]</td>
-							<td class='text-center'><input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
-																													
+							<td class='text-center'>
+								<input type='number' class='qty' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>																					
 							</td>
 							<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
 							<td class='itotal text-center'>$Itotal</td>
@@ -77,8 +91,6 @@
 							<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
 							<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
 							</td>
-							
-							
 						</tr>";
 				}
 			echo $Data;
@@ -143,19 +155,28 @@
 			$userid = $_SESSION['alogin'];
 			
 			//$customerid =rand(50,500000);      //$_GET['customerid'];
-			$customerid =$_SESSION['C_ID'];
+			if($_SESSION['C_ID']!=0){
+				$customerid =$_SESSION['C_ID'];
+			}
+			else {
+				$customerid =$_GET['customerid'];
+			}
+			
 			$totaldiscount = $_GET['totaldiscount'];
 			$grandtotal = $_GET['grandtotal'];
 			$paidamount = $_GET['paidamount'];
 			$due = $_GET['due'];
+			$PreDue = $_GET['predue'];
+
 			$vat = $_GET['vat'];
 
-			$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment,discount, Tax, PaidAmount, DueAmount) 
-			VALUES(:customerid,:userid,:grandtotal,:totaldiscount,:vat,:paidamount,:due)";
+			$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment, PreDue, discount, Tax, PaidAmount, DueAmount) 
+			VALUES(:customerid,:userid,:grandtotal,:predue,:totaldiscount,:vat,:paidamount,:due)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':customerid',$customerid,PDO::PARAM_STR);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query->bindParam(':grandtotal',$grandtotal,PDO::PARAM_STR);
+			$query->bindParam(':predue',$PreDue,PDO::PARAM_STR);
 			$query->bindParam(':totaldiscount',$totaldiscount,PDO::PARAM_STR);
 			$query->bindParam(':vat',$vat,PDO::PARAM_STR);
 			$query->bindParam(':paidamount',$paidamount,PDO::PARAM_STR);			
@@ -302,34 +323,16 @@
 	if(isset($_GET['DueAmount'])){
 		$str = $_GET['DueAmount'];
 		$value =explode("-",$str);
-		$name = $value[0];
-		$phone = $value[1];
-		$add = $value[2];
-		if(strlen($phone)==0)
-		{
-			$phone = "0";
-		}
-		$sql = "SELECT * from customertable WHERE ((Name=:name AND Phone=:phone AND Address=:address) OR (Name=:name2 AND Phone=:phone2) 
-		OR (Name=:name3 AND Address=:address3))";
+		$ID = $value[0];
+		$_SESSION['C_ID'] = $value[0];
+		$sql = "SELECT * from customertable WHERE ID=:id";
 		$query = $dbh -> prepare($sql);
-		// $query->bindParam(':phone',$value[1],PDO::PARAM_STR);
-		$query->bindParam(':name',$name,PDO::PARAM_STR);
-		$query->bindParam(':phone',$phone,PDO::PARAM_STR);
-		$query->bindParam(':address',$add,PDO::PARAM_STR);
-		$query->bindParam(':name2',$name,PDO::PARAM_STR);
-		$query->bindParam(':phone2',$phone,PDO::PARAM_STR);
-		$query->bindParam(':name3',$name,PDO::PARAM_STR);
-		$query->bindParam(':address3',$add,PDO::PARAM_STR);
+		$query->bindParam(':id',$ID,PDO::PARAM_STR);
 		$query->execute();
 		$result=$query->fetch(PDO::FETCH_OBJ);
-		//$inqty = $result->Status;
-		// if($result->Status==1){
-		$_SESSION['C_ID']=$result->ID;
 		$Data4="$result->Photo";
-		// }else{
-		// 	$Data2="";
-		// }
 		echo $Data4;
+
 	}
 ?>
 

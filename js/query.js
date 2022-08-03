@@ -1,3 +1,6 @@
+const m_body = document.getElementById('mbody');
+const m_title = document.getElementById('Modal_title');
+m_title.style.color= "magenta";
 function reply_click(clicked_id) {
 	const xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
@@ -6,11 +9,23 @@ function reply_click(clicked_id) {
 			DisplayItem();
 
 			if (result == 1) {
-				alert('Item Already Added');
+				m_title.innerHTML = "Massage";
+				m_body.innerHTML = "<h3>Item Already Added</h3>";
+				$('#exampleModal').modal('show');
 			}
-			if (result == 5) {
-				alert('Item not available in stock');
+			else if (result == 5) {
+				m_title.innerHTML = "Massage";
+				m_body.innerHTML = "<h4>Item not available in stock</h4>";
+				$('#exampleModal').modal('show');
 			}
+			else if(result==6){
+				m_title.innerHTML = "Massage";
+				m_body.innerHTML = "<h2>Item out of stock</h2>";
+				$('#exampleModal').modal('show');
+			}
+			// else{
+			// 	alert(this.responseText);
+			// }
 		}
 	};
 	xmlhttp.open('GET', `query.php?ItemId=${clicked_id}`, true);
@@ -35,11 +50,11 @@ function DisplayItem() {
 	xmlhttp.send();
 }
 function show_item(clicked_id) {
-	const m_body = document.getElementById('mbody');
 	const xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
 				// alert(this.responseText);
+				m_title.innerHTML = "Medicine Information";
 				m_body.innerHTML = this.responseText;
 				$('#exampleModal').modal('show');
 		}
@@ -119,15 +134,19 @@ function myFunction() {
   }
 
 function OrderConfirm() {
-	let customerid; let totaldiscount; let vat; let grandtotal; let due; let paidamount;
+	let customerid, totaldiscount, vat, grandtotal, due, paidamount, previousDue;
 	// customerid = document.getElementById('')
-	customerid = 1;
+	customerid = 0;
 	totaldiscount = Number(document.getElementById('totaldiscount').value);
 	grandtotal = Number(document.getElementById('Total').value);
 	due = Number(document.getElementById('duelbl').innerHTML);
 	vat = Number(document.getElementById('vat').value);
-	paidamount = Number(document.getElementById('paidamount').value);
-
+	previousDue = Number(document.getElementById('previousdue').value);
+	paidamount = Number(document.getElementById('paidamount3').value);
+	// alert(totaldiscount+'/'+ grandtotal+'/'+ due+'/'+ vat+'/'+ paidamount+'/'+ previousDue);
+	if(due<0){
+		due=0;
+	}
 	if (grandtotal > 0) {
 		const xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
@@ -148,7 +167,8 @@ function OrderConfirm() {
 				});
 			}
 		};
-		xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}&due=${due}&vat=${vat}&paidamount=${paidamount}&ordersubmit`, true);
+		xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
+		&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&ordersubmit`, true);
 		xmlhttp.send();
 	} else {
 		swal({
@@ -176,10 +196,11 @@ function edit_unit(clicked_id) {
 }
 
 function DuePerson(clicked_id) {
+	// alert(clicked_id);
 	const xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
-				//alert(this.responseText);
+				// alert(this.responseText);
 				$('#previousdue').val(this.responseText);
 				FullPayment();
 		}

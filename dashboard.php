@@ -54,7 +54,7 @@ else{
 		<?php include('includes/leftbar.php');?>
 			<div class="content-wrapper">
 				<div class="container-fluid">
-					<div class="col-md-12 text-center">
+					<div class="col-12 text-center">
 						<h2 class="page-title">Dashboard</h2>
 					</div>	
 					<div class="row">
@@ -63,7 +63,6 @@ else{
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
 									<div class="panel panel-default">
 										<div class=" p-2 panel-body bk-white text-black">
-										<!-- <img src="UserPhoto/avatar.jpg" width="80px" alt=""> -->
 											<div class="stat-panel text-center">
 												<?php 
 													$sql6 ="SELECT id from tblcontactusquery ";
@@ -167,7 +166,7 @@ else{
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
+								<div class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
 									<div class="panel panel-default">
 										<div class="panel-body bk-primary text-light">
 											<div class="stat-panel text-center">
@@ -177,7 +176,7 @@ else{
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
+								<div class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
 									<div class="panel panel-default">
 										<div class="panel-body bk-white text-black">
 											<div class="stat-panel text-center">
@@ -315,61 +314,61 @@ else{
 
 	<!-- Loading Scripts -->
 	<script>
-var xValues = <?php echo json_encode($names);  ?>;
-var yValues = <?php echo json_encode($price);  ?>;
-var barColors = ["red", "green","blue","orange","black","red", "green","blue","orange","black"];
+	var xValues = <?php echo json_encode($names);  ?>;
+	var yValues = <?php echo json_encode($price);  ?>;
+	var barColors = ["red", "green","blue","orange","black","red", "green","blue","orange","black"];
 
-new Chart("myChart", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-  },
-  options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "Best Sales of the month (Products)"
-    }
-  }
-});
-</script>
+	new Chart("myChart", {
+	type: "bar",
+	data: {
+		labels: xValues,
+		datasets: [{
+		backgroundColor: barColors,
+		data: yValues
+		}]
+	},
+	options: {
+		legend: {display: false},
+		title: {
+		display: true,
+		text: "Best Sales of the month (Products)"
+		}
+	}
+	});
+	</script>
 
 
-<script>
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+	<script>
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-var data = google.visualization.arrayToDataTable([
-  ['Contry', 'Mhl'],
-  ['Total Sale',54],
-  ['Total Service',48],
-  ['Total Salary',44],
-  ['Total Income',23]
-]);
+	function drawChart() {
+	var data = google.visualization.arrayToDataTable([
+	['Contry', 'Mhl'],
+	['Total Sale',54],
+	['Total Service',48],
+	['Total Salary',44],
+	['Total Income',23]
+	]);
 
-var options = {
-  title:'Income Expense Statement',
-  is3D:true
-};
+	var options = {
+	title:'Income Expense Statement',
+	is3D:true
+	};
 
-var chart = new google.visualization.PieChart(document.getElementById('myChart2'));
-  chart.draw(data, options);
-}
-</script>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap-select.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.dataTables.min.js"></script>
-	<script src="js/dataTables.bootstrap.min.js"></script>
-	<script src="js/Chart.min.js"></script>
-	<script src="js/fileinput.js"></script>
-	<script src="js/chartData.js"></script>
-	<script src="js/main.js"></script>
+	var chart = new google.visualization.PieChart(document.getElementById('myChart2'));
+	chart.draw(data, options);
+	}
+	</script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap-select.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/dataTables.bootstrap.min.js"></script>
+		<script src="js/Chart.min.js"></script>
+		<script src="js/fileinput.js"></script>
+		<script src="js/chartData.js"></script>
+		<script src="js/main.js"></script>
 </body>
 </html>
 <?php } ?>
