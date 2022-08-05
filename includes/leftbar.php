@@ -19,11 +19,8 @@
 					</ul>
 				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="./medicine_category_add.php">Add Categroy</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_category_list.php">Categroy List</a></li>
-						<!-- <li style="margin-left: 50px;"><a href="./medicine_unit_add.php">Add Unit</a></li> -->
 						<li style="margin-left: 50px;"><a href="./medicine_unit_list.php">Unit List</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_type_add.php">Add Type</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_type_list.php">Type List</a></li>
 						<li style="margin-left: 50px;"><a href="#">Leaf Setting</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_add.php">Add Medicine</a></li>

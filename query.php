@@ -244,22 +244,53 @@
 			}
 	}
 	if(isset($_GET['edit_unit'])){
-		$value = $_GET['edit_unit'];
-		$sql = "SELECT * from medicine_unit WHERE ID=:id";;
-		$query = $dbh -> prepare($sql);
-		$query->bindParam(':id',$value,PDO::PARAM_STR);
-		$query->execute();
-		$result=$query->fetch(PDO::FETCH_OBJ);
-		$name = $result->MedicineUnit;
-		$inqty = $result->Status;
+		$str = $_GET['edit_unit'];
+		$value =explode("-",$str);
+		$Rout = $value[0];
+		$ID = $value[1];
+		if($Rout == 'unit'){
+			$sql = "SELECT * from medicine_unit WHERE ID=:id";;
+			$query = $dbh -> prepare($sql);
+			$query->bindParam(':id',$ID,PDO::PARAM_STR);
+			$query->execute();
+			$result=$query->fetch(PDO::FETCH_OBJ);
+			$name = $result->MedicineUnit;
+			$inqty = $result->Status;
+			$title="Medicine Unit";
+			$label="Unit Name: ";
+		}
+
+		else if($Rout == 'type'){
+			$sql = "SELECT * from medicine_type WHERE ID=:id";;
+			$query = $dbh -> prepare($sql);
+			$query->bindParam(':id',$ID,PDO::PARAM_STR);
+			$query->execute();
+			$result=$query->fetch(PDO::FETCH_OBJ);
+			$name = $result->MedicineType;
+			$inqty = $result->Status;
+			$title="Medicine Type";
+			$label="Type Name: ";
+		}
+		else if($Rout == 'category'){
+			$sql = "SELECT * from medicine_category WHERE ID=:id";;
+			$query = $dbh -> prepare($sql);
+			$query->bindParam(':id',$ID,PDO::PARAM_STR);
+			$query->execute();
+			$result=$query->fetch(PDO::FETCH_OBJ);
+			$name = $result->MedicineCategory;
+			$inqty = $result->Status;
+			$title="Medicine Category";
+			$label="Category Name: ";
+		}
+
 		if($result->Status==1){
 			$Data2="<form method='post' class='row' onsubmit='return' >
 			<div class='col-md-12'>
 				<div class='row mb-3'>
-					<label class='col-sm-4 col-form-label text-start text-sm-end'>Medicine Unit : </label>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>$label</label>
 					<div class='col-sm-5'>
-					<input type='text' class='form-control' name='category' value='$result->MedicineUnit'>
-					<input type='hidden' name='id' value='$value'>
+					<input type='text' class='form-control' name='category' value='$name'>
+					<input type='hidden' name='id' value='$ID'>
 					</div>
 				</div>
 			</div>
@@ -270,7 +301,7 @@
 					<div class='col-sm-8 d-flex align-items-center'>
 						
 						<div class='form-check form-check-inline'>
-							<input class='form-check-input' checked type='radio' value='$result->Status' name='radio_value' id='inlineRadio1' value='option1'>
+							<input class='form-check-input' checked type='radio' value='$inqty ' name='radio_value' id='inlineRadio1' value='option1'>
 							<label class='form-check-label' for='inlineRadio1'>Active</label>
 						</div>
 						<div class='form-check form-check-inline'>
@@ -293,10 +324,10 @@
 			$Data2="<form method='post' class='row' onsubmit='return' >
 			<div class='col-md-12'>
 				<div class='row mb-3'>
-					<label class='col-sm-4 col-form-label text-start text-sm-end'>Medicine Unit : </label>
+					<label class='col-sm-4 col-form-label text-start text-sm-end'>$label : </label>
 					<div class='col-sm-5'>
-					<input type='text' class='form-control' name='category' value='$result->MedicineUnit'>
-					<input type='hidden' name='id' value='$value'>
+					<input type='text' class='form-control' name='category' value='$name'>
+					<input type='hidden' name='id' value='$ID'>
 					</div>
 				</div>
 			</div>
@@ -310,7 +341,7 @@
 							<label class='form-check-label' for='inlineRadio1'>Active</label>
 						</div>
 						<div class='form-check form-check-inline'>
-							<input class='form-check-input' checked type='radio' value='$result->Status' name='radio_value' id='inlineRadio2'>
+							<input class='form-check-input' checked type='radio' value='$inqty ' name='radio_value' id='inlineRadio2'>
 							<label class='form-check-label' for='inlineRadio2'>Inactive</label>
 						</div>
 					</div>
@@ -326,7 +357,6 @@
 			</div>						
 		</form>";
 		}
-		
 		echo $Data2;
 
 	}

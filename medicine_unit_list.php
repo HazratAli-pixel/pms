@@ -151,7 +151,7 @@ else{
 											<td>
 											
 											<!-- <a href="medicine_unit_edit.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a>  -->
-											 <button type="button"  onClick="edit_unit(this.id)" id="<?php echo htmlentities($result->ID);?>"><i class="fas fa-edit" aria-hidden="true"></i></button> 
+											 <button type="button"  onClick="edit_unit(this.id)" id="unit-<?php echo htmlentities($result->ID);?>"><i class="fas fa-edit" aria-hidden="true"></i></button> 
                                             <a href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
 											<a href="medicine_unit_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
@@ -215,22 +215,20 @@ else{
 			</div>
 		</div>
 	</div>	
-																				<!-- Modal -->
-																					<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-																						
-																						<div class="modal-dialog">
-																							<div class="modal-content">
-																							<div class="modal-header">
-																								<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
-																								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-																							</div>
-																							<div class="modal-body" id="mbody3">
-																			
-																							</div>
-																						
-																							</div>
-																						</div>
-																						</div>	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Medicne Information</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="mbody3">
+
+				</div>
+			</div>
+		</div>
+	</div>	
 
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
