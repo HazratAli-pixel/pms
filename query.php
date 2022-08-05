@@ -110,21 +110,28 @@
 	if(isset($_GET['showinfo'])){
 		$value = $_GET['showinfo'];
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
-		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list INNER JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId";
+		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.RestQty  FROM medicine_list Right JOIN stocktable ON
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status=1";
 		$query = $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $value, PDO::PARAM_STR);
 		$query->execute();
-		$results=$query->fetchAll(PDO::FETCH_OBJ);
+		// $results=$query->fetchAll(PDO::FETCH_OBJ);
+		$results=$query->fetch(PDO::FETCH_OBJ);
 		$cnt=1;
-			foreach($results as $result){
-				$name = $result->medicine_name;
-				$inqty = $result->InQty;
-				$outqty = $result->OutQty;
-				$inStock = $inqty-$outqty;
-			}
-			$inStock = $inqty-$outqty;
-			$Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Product Buy : $inqty</p><p>Product Sale : $outqty</p><p>In Stock : $inStock</p>";
+			// foreach($results as $result){
+			// 	$name = $result->medicine_name;
+			// 	$inqty = $result->InQty;
+			// 	$outqty = $result->OutQty;
+			// 	$inStock = $inqty-$outqty;
+			// }
+			// $inStock = $inqty-$outqty;
+			// $Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Product Buy : $inqty</p><p>Product Sale : $outqty</p><p>In Stock : $inStock</p>";
+			$Data2="
+			<p> <span class='fw-bold'>Name : </span> $results->medicine_name</p>
+			<p> <span class='fw-bold'>Product Buy : </span> $results->InQty</p>
+			<p> <span class='fw-bold'>Product Sale : </span> $results->OutQty</p>
+			<p> <span class='fw-bold'>In Stock : </span> $results->RestQty</p>
+			<p> <span class='fw-bold'>Pursing Price : </span> $results->PurPrice</p>";
 			echo $Data2;
 
 	}

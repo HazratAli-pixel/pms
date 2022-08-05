@@ -87,6 +87,9 @@ include('includes/config.php');
 			.dataTables_filter {
 				display: none;
 			}
+			.bg-style{
+				background-image: linear-gradient(to right, rgba(202, 166, 227,.3), rgba(133, 160, 199,.3), rgba(202, 166, 227,.3));
+			}
 		</style>
 
 	</head>
@@ -100,7 +103,7 @@ include('includes/config.php');
 					<div class="row">
 						<div class="w-100 m-0 px-1">
 							<div class="card" style="margin-right: 2px;">
-								<div class="card-header d-flex justify-content-between align-items-center">
+								<div class="card-header  d-flex justify-content-between align-items-center">
 									<div class="fs-3">
 										Sells table
 									</div>
@@ -146,7 +149,7 @@ include('includes/config.php');
 												<div class="col-12" style="overflow-x: hidden;overflow-y: scroll; height: 700px;">
 													<table id="" class="display ali table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 														<thead>
-															<tr>
+															<tr class="bg-style">
 																<!-- <th class = "text-center w-25">SL</th> -->
 																<th class = "text-center w-50">Medicine Name</th>
 																<th class = "text-center w-50" >action </th>
@@ -257,7 +260,7 @@ include('includes/config.php');
 											<div class="row">
 												<table id="" class="col-12 display table table-striped table-bordered table-hover w-100" cellspacing="0">
 													<thead>
-														<tr>						
+														<tr class='bg-style'>						
 															<th style="text-align: center; width:20%">Name </th>
 															<th style="text-align: center; width:10%" >Batch </th>
 															<th style="text-align: center; width:10%" >Ex-Date </th>
@@ -393,10 +396,11 @@ include('includes/config.php');
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 class="modal-title" id="Modal_title"></h3>
+						<h3 class="modal-title text-center" id="Modal_title"></h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div class="modal-body" id="mbody">
+					<div class="modal-body bg-style" id="mbody">
+
 					</div>
 					<!-- <div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
