@@ -116,8 +116,8 @@ else{
                                 
 								<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 									<thead>
-										<tr>
-										    <th>#</th>
+										<tr class="bg-info">
+										    <th class="">#</th>
 											<th>Category Name</th>
 											<th>Status</th>
                                             <th>Action</th>

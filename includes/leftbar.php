@@ -21,7 +21,7 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="./medicine_category_add.php">Add Categroy</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_category_list.php">Categroy List</a></li>
-						<li style="margin-left: 50px;"><a href="./medicine_unit_add.php">Add Unit</a></li>
+						<!-- <li style="margin-left: 50px;"><a href="./medicine_unit_add.php">Add Unit</a></li> -->
 						<li style="margin-left: 50px;"><a href="./medicine_unit_list.php">Unit List</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_type_add.php">Add Type</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_type_list.php">Type List</a></li>
@@ -125,6 +125,6 @@
 						
 					</ul>
 				</li>
-				<li><a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+				<li style="margin-bottom: 200px;"><a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
 		</ul>
 </nav>

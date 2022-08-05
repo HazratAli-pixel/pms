@@ -7,7 +7,12 @@
 	$query->execute();
 	$result=$query->fetch(PDO::FETCH_OBJ);	
 ?>
+<style>
+	.active-status{
+		background-color: green;
+	}
 
+</style>
 
 
 
@@ -20,7 +25,14 @@
 		<ul class="ts-profile-nav">
 			
 			<li class="ts-account">
-				<a href="#"><img src="./UserPhoto/<?php echo $result->Photo ?>" class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i></a>
+				<!-- <a href="#"><img src="./UserPhoto/<?php echo $result->Photo ?>" class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i></a> -->
+				<a type="button" class=" position-relative">
+					
+				<img src="./UserPhoto/<?php echo $result->Photo ?>" class="ts-avatar hidden-side" alt=""> <?php echo $result->Name?> <i class="fa fa-angle-down hidden-side"></i>
+					<span style="margin-left: -82px; margin-top:14px; padding:6px" class="position-absolute active-status border border-light rounded-circle">
+						<span class="visually-hidden">ali</span>
+					</span>
+				</a>
 				<ul>
 					<li><a href="change-password.php"><i class="fas fa-user me-2"></i> Profile</a></li>
 					<li><a href="change-password.php"><i class="fas fa-user-edit me-2"></i> Edit Profile</a></li>

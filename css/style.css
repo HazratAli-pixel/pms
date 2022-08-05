@@ -781,3 +781,6 @@ li {
 #itemBtn:hover{
   color: #0010ce;
 }
+.bg-style{
+	background-image: linear-gradient(to right, rgba(202, 166, 227,.3), rgba(133, 160, 199,.3), rgba(202, 166, 227,.3));
+}

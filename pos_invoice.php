@@ -53,6 +53,7 @@ include('includes/config.php');
 		<title>PMS| Message</title>
 		
 		<!-- Font awesome -->
+		<link rel="stylesheet" href="includes/style.css">
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 		<!-- Sandstone Bootstrap CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -95,7 +96,10 @@ include('includes/config.php');
 	</head>
 	
 	<body>
-		<?php include('includes/header.php');?>
+		<?php 
+		include('includes/header.php');
+		?>
+		
 		<div class="ts-main-content">
 			<?php include('includes/leftbar.php');?>
 			<div class="content-wrapper">
