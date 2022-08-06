@@ -117,7 +117,7 @@ else{
 											<th>Address</th>
 											<th>Mobile</th>
 											<th>Status</th>
-											<th>Balance</th>
+											<th class="text-end">Due Balance</th>
                                             <th>Action</th>
 										</tr>
 									</thead>
@@ -150,7 +150,14 @@ else{
 											}
 											
 											?></td>
-											<td><?php echo htmlentities($cnt);?></td>
+											<?php 
+											$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
+											 $query = $dbh -> prepare($sql2);
+											 $query->bindParam(':id',$result->ID,PDO::PARAM_STR);
+											 $query->execute();
+											 $result2=$query->fetch(PDO::FETCH_OBJ);
+											?>
+											<td class="text-end"><?php echo $result2->NewDue;?></td>
 											<td>
 											
 											<a href="customer_list.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
@@ -160,23 +167,6 @@ else{
 										</tr>
 										<?php $cnt=$cnt+1; }} ?>
 									</tbody>
-                                    <?php if ($query->rowCount() >35){ ?>
-                                    <tfoot>
-										<tr>
-                                        <th>#</th>
-											<th>Name</th>
-											<th>Address</th>
-											<th>Mobile</th>
-											<th>Email</th>
-											<th>City</th>
-											<th>State</th>
-											<th>Zip</th>										
-                                            <th>County</th>
-											<th>Balance</th>
-                                            <th>Action</th>
-										</tr>
-									</tfoot>
-                                    <?php }?>
 								</table>
 							</div>
 						</div>

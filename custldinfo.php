@@ -9,44 +9,10 @@ if(strlen($_SESSION['alogin'])==0)
 	header('location:index.php');
 	}
 else{
-	if(isset($_REQUEST['del']))
-	{
-		$did=intval($_GET['del']);
-		$sql = "delete from medicine_list WHERE  item_code=:did";
-		$query = $dbh->prepare($sql);
-		$query-> bindParam(':did',$did, PDO::PARAM_STR);
-		$query -> execute();
-		$msg="Record deleted Successfully";
-        header("refresh:3;medicine_list.php");
-	}
-	if(isset($_POST['submit']))
-	  		{
-			
-			$c_name=$_POST['c_name'];
-			$c_phone=$_POST['c_phone'];
-			$c_address=$_POST['c_address'];
-			$status=$_POST['radio_value'];
-
-			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
-			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
-			$query = $dbh->prepare($sql);
-			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
-			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
-			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
-			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-
-			$query->execute();
-			$lastInsertId = $dbh->lastInsertId();
-		// if($lastInsertId)
-		// 	{
-		// 	$msg=" Your info submitted successfully";
-		// 	header("refresh:3;medicine_unit_list.php"); 
-		// 	}
-		// else 
-		// 	{
-		// 	$error=" Something went wrong. Please try again";
-		// 	header("refresh:3;medicine_unit_add.php"); 
-		// 	}
+	
+	if(isset($_POST['custldinfo']))
+	  	{
+			$id = $_GET['custId'];
 	
 		}
 }
@@ -73,10 +39,7 @@ else{
 	<!-- Bootstrap Datatables -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-	<!-- Bootstrap social button library -->
-	<link rel="stylesheet" href="css/bootstrap-social.css">
-	<!-- Bootstrap select -->
-	<link rel="stylesheet" href="css/bootstrap-select.css">
+
 	<!-- Bootstrap file input -->
 	<link rel="stylesheet" href="css/fileinput.min.css">
 	<!-- Awesome Bootstrap checkbox -->
@@ -96,76 +59,102 @@ else{
 					<div class="col-md-12">
 						
 						<!-- Zero Configuration Table -->
+						<?php
+						$id = $_GET['custId'];
+						$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+						$query = $dbh -> prepare($sql);
+						$query->bindParam(':id',$id,PDO::PARAM_STR);
+						$query->execute();
+						$result2=$query->fetch(PDO::FETCH_OBJ);
+						
+						?>
 						<div class="card">
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Customer Information
+										Individual Ledger Information
 									</div>
 									<div >
-                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button>                                              
+                                    <a href="customer_ledger.php" class="btn btn-primary mr-3"><i class="fas fa-list mr-2" style="margin-right: 10px;"></i>ledger list</a>    
+									<button type="button" class="btn btn-success mr-3"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i>Customer ledger</button>                                              
 									</div>
 								</div>
                             </div>
 							<div class="card-body">
-                                <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
-								<table  id="zctb" class="display table table-striped table-bordered table-hover" >
-									<thead>
-										<tr>
+                                <a href="#" style="color:red; font-size:16px;">Download ledger info</a>
+								<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0">
+								<?php
+									$id = $_GET['custId'];
+									$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
+									$query = $dbh -> prepare($sql);
+									$query->bindParam(':id',$id,PDO::PARAM_STR);
+									$query->execute();
+									$result2=$query->fetch(PDO::FETCH_OBJ);
+									
+									?>
+									<div class="row">
+										<div class="col-12  d-flex">
+											<div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1">
+												<h5 class="">Name : </h5> 
+												<h5 class="">Phone : </h5> 
+												<h5 class="">Address : </h5> 
+											</div>
+											<div class="col-6">
+												<h5 class=""><?php echo htmlentities($result2->Name);?></h5> 
+												<h5 class=""><?php echo htmlentities($result2->Phone);?></h5> 
+												<h5 class=""><?php echo htmlentities($result2->Address);?></h5> 
+											</div>											
+										</div>
+									</div>
+									<thead class="bg-info">
+										<tr class="text-end">
 										    <th>#</th>
-											<th>Name</th>
-											<th>Address</th>
-											<th>Mobile</th>
-											<!-- <th>Total Debit</th> -->
-											<!-- <th>Total Credit</th> -->
-											<th>Total Due</th>
-                                            <th>Action</th>
+                                            <th>Date</th>
+											<th>Debit</th>
+											<th>Pre Due</th>
+											<th>Total</th>
+											<th>Credit</th>
+											<th>New Due</th>
+											<th class="text-center">Invoice ID</th>
 										</tr>
 									</thead>
 									
 									<tbody>
 
                                         <?php 
-										// $sql = "SELECT customertable.ID customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-										// SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-										// GROUP BY customerledger.CustomerID";
-										$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-										SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-										GROUP BY customerledger.CustomerID";
-                                        $query = $dbh -> prepare($sql);
-                                        $query->execute();
-                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;
+										$id = $_GET['custId'];
+										$sql = "SELECT * from customerledger WHERE CustomerID=:id";
+										$query = $dbh -> prepare($sql);
+										$query->bindParam(':id',$id,PDO::PARAM_STR);
+										$query->execute(); 
+										$results=$query->fetchAll(PDO::FETCH_OBJ);
                                         if($query->rowCount() > 0)
                                         {
-                                        foreach($results as $result)
-                                        {				?>	
+											foreach($results as $result)
+											{				?>	
+											<tr class="text-end">
+												<td class="bg-info"><?php echo htmlentities($cnt);?></td>
+												<td style="background-color: rgb(189, 242, 237);"><?php echo $result->Date;?></td>
+												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->Debit);?></td>
+												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->PreDue);?></td>
+												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->Total);?></td>
+												<td style="background-color: rgb(189, 242, 212);"><?php echo htmlentities($result->Credit);?></td>
+												<td style="background-color: rgb(242, 189, 236);"><?php echo htmlentities($result->NewDue);?></td>
+												<td style="background-color: rgb(189, 242, 237);" class="text-center"><p class="btn" id="invoice-<?php echo htmlentities($result->InvoiceId);?>"><i class="fa fa-info-circle" aria-hidden="true"></i></p></td>
+												
+											</tr>
+										<?php $cnt=$cnt+1; }?>
 										<tr>
-											<td><?php echo htmlentities($cnt);?></td>
-											<td><?php echo htmlentities($result->Name);?></td>
-											<td><?php echo htmlentities($result->Address);?></td>
-                                            <td><?php echo htmlentities($result->Phone);?></td>
-											<!-- $total = number_format($result->total_amount, 2, '.', ''); -->
-											<!-- <td><?php echo $totals = (number_format($result->total_debit, 2, '.', '')+number_format($result->total_due, 2, '.', ''));?></td>
-											<td><?php echo $total2 = number_format($result->total, 2, '.', '');?></td>
-											<td><?php echo $totals-$total2;?></td>
-											<td><?php echo $totals-$total2;?></td> -->
-											<?php 
-											$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
-											 $query = $dbh -> prepare($sql2);
-											 $query->bindParam(':id',$result->ID,PDO::PARAM_STR);
-											 $query->execute();
-											 $result2=$query->fetch(PDO::FETCH_OBJ);
-											?>
-											<td><?php echo $result2->NewDue;?></td>
 											
-											<td>
-											<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="ledgerinf(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                                            <a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-											<a class="mx-1" href="customer_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
-											</td>
+											<!-- <td class="text-end text-lg bg-black text-white fw-bold" ><br></td> -->
+											<td class="text-end text-lg bg-black text-white fw-bold" colspan='6'>Total Due Amount :</td>
+											<td class="text-end text-lg bg-black text-white fw-bold"><?php echo htmlentities($result->NewDue);?></td>
+											<!-- <td><?php echo htmlentities($result->InvoiceId);?></td>
+											<td><?php echo $result->Date;?></td> -->
 										</tr>
-										<?php $cnt=$cnt+1; }} ?>
+										<?php
+									} ?>
 									</tbody>
 								</table>
 							</div>
@@ -177,8 +166,7 @@ else{
 	</div>
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
-		<!-- <div class="modal-dialog modal-dialog-centered modal-xl"> -->
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-dialog-centered modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
