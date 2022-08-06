@@ -228,6 +228,7 @@ include('includes/config.php');
 										</div>
 										<!-- Medicine list Part ends here -->
 
+										<!-- Calculation table start herer -->
 										<div class="col-12 col-md-12 col-lg-8">
 											<div class="row">
 												<div class="col-12 d-flex justify-content-between ">
@@ -361,6 +362,7 @@ include('includes/config.php');
 												</div>
 											</div>
 										</div>
+										<!-- Calculation table ends herer -->
 									</div>  
 									<!-- card body row ends here -->
 								</div>

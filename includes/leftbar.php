@@ -6,14 +6,14 @@
 			
 				<li><a href="#"><i class="typcn typcn-group mr-2"></i> Customer</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="msg.php">Add Customer</a></li>
+						<li style="margin-left: 50px;"><a href="add_customer.php">Add Customer</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Customer List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Customer Ledger</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="typcn typcn-group-outline mr-2"></i> Company</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="company_add.php">Add Company</a></li>
+						<li style="margin-left: 50px;"><a href="company_.php">Add Company</a></li>
 						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Company Ledger</a></li>
 					</ul>

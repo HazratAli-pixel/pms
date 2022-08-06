@@ -20,8 +20,8 @@ if(strlen($_SESSION['alogin'])==0)
 									</thead>
 
 <?php 
-$filename="Teacher list";
-$sql = "SELECT * from  tblblooddonars ";
+$filename="Medicine list";
+$sql = "SELECT * from  medicine_list ";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -34,12 +34,14 @@ foreach($results as $result)
 echo '  
 <tr>  
 <td>'.$cnt.'</td> 
-<td>'.$complainNumber= $result->FullName.'</td> 
-<td>'.	$MobileNumber= $result->MobileNumber.'</td> 		
+<td>'.$complainNumber= $result->medicine_name.'</td> 
+<td>'.	$MobileNumber= $result->item_code.'</td> 		
+<td>'.	$MobileNumber= $result->unit.'</td> 		
+<td>'.	$MobileNumber= $result->menufacturer.'</td> 		
 </tr>  
 ';
 header("Content-type: application/octet-stream");
-header("Content-Disposition: attachment; filename=".$filename."-report.xls");
+header("Content-Disposition: attachment; filename=".$filename."-report.xlsx");
 header("Pragma: no-cache");
 header("Expires: 0");
 			$cnt++;
