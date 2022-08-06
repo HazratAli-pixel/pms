@@ -116,15 +116,18 @@ else{
 											<th>Name</th>
 											<th>Address</th>
 											<th>Mobile</th>
-											<th>Status</th>
-											<th>Balance</th>
+											<th>Total Debit</th>
+											<th>Total Credit</th>
+											<th>Total Due</th>
                                             <th>Action</th>
 										</tr>
 									</thead>
 									
 									<tbody>
 
-                                        <?php $sql = "SELECT * from  customertable";
+                                        <?php $sql = "SELECT customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
+										SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
+										GROUP BY customerledger.CustomerID";
                                         $query = $dbh -> prepare($sql);
                                         $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -138,7 +141,7 @@ else{
 											<td><?php echo htmlentities($result->Name);?></td>
 											<td><?php echo htmlentities($result->Address);?></td>
                                             <td><?php echo htmlentities($result->Phone);?></td>
-											<td class="text-center"><?php 
+											<!-- <td class="text-center"><?php 
 											if($row['Status']==0){
 												?>
 												<a href="m_modarator.php?close=<?php echo base64_encode($row['PhoneNumber'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>
@@ -149,8 +152,11 @@ else{
 												<?php
 											}
 											
-											?></td>
-											<td><?php echo htmlentities($cnt);?></td>
+											?></td> -->
+											<!-- $total = number_format($result->total_amount, 2, '.', ''); -->
+											<td><?php echo $totals = (number_format($result->total_debit, 2, '.', '')+number_format($result->total_due, 2, '.', ''));?></td>
+											<td><?php echo $total2 = number_format($result->total, 2, '.', '');?></td>
+											<td><?php echo $totals-$total2;?></td>
 											<td>
 											
 											<a href="customer_list.php?edit=<?php echo htmlentities($result->ID);?>" > <i class="fas fa-edit" aria-hidden="true"></i></a> 
