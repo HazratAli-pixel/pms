@@ -62,7 +62,7 @@ include('includes/config.php');
         if($result)
         {
             $msg=" Update successfully"; 
-            header("refresh:3;medicine_edit.php");
+            header("refresh:3;medicine_list.php");
             
         }			
 		else {
@@ -185,7 +185,7 @@ include('includes/config.php');
 														<div class="col-sm-8">														
 															<select name="boxsize" class="form-control form-select form-select-md " >
 																<option value="<?php echo htmlentities($result->box_size);?>"selected class=""><?php echo htmlentities($result->box_size);?></option>
-																<option value="11">11</option>																
+																<!-- <option value="11">11</option>																 -->
 															</select>														
 														</div>
 													</div>
@@ -196,7 +196,7 @@ include('includes/config.php');
 														<div class="col-sm-8">
 														<select name="unit" class="form-control form-select form-select-md ">
                                                             <option value="<?php echo htmlentities($result->unit);?>"selected class=""><?php echo htmlentities($result->unit);?></option>
-																<option value="11">11</option>																
+																<!-- <option value="11">11</option>																 -->
 															</select>
 														</div>
 													</div>
@@ -224,7 +224,7 @@ include('includes/config.php');
 														<div class="col-sm-8">
 															<select name="category" class="form-control form-select form-select-md ">
                                                             <option value="<?php echo htmlentities($result->category);?>"selected class=""><?php echo htmlentities($result->category);?></option>
-																<option value="11">11</option>
+																<!-- <option value="11">11</option> -->
 																
 															</select>
 														</div>
@@ -244,7 +244,7 @@ include('includes/config.php');
 														<div class="col-sm-8">
 															<select name="medicinetype" class="form-control form-select form-select-md ">
                                                             <option value="<?php echo htmlentities($result->medicine_type);?>"selected class=""><?php echo htmlentities($result->medicine_type);?></option>
-																<option value="11">11</option>																
+																<!-- <option value="11">11</option>																 -->
 															</select>
 														</div>
 													</div>

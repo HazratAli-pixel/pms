@@ -212,7 +212,7 @@ include('includes/config.php');
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Unit <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">															
 															<select name="unit" class="form-control form-select form-select-md" required>
-																<option value="" Disabled selected class="">Select category</option>
+																<option value="" Disabled selected class="">Select Unit</option>
 																<?php																
 																foreach($results as $result){
 																	if($result->Status==1){
