@@ -1,25 +1,27 @@
 
 <?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
+	session_start();
+	error_reporting(0);
+	include('includes/config.php');
+	if(strlen($_SESSION['alogin'])==0)
+		{
+		include_once('./includes/address.php');	
+		header('location:index.php');
+		}
+
+	else
 	{
-	include_once('./includes/address.php');	
-	header('location:index.php');
-	}
-else{
-	if(isset($_REQUEST['del']))
-	{
-		$did=intval($_GET['del']);
-		$sql = "delete from medicine_list WHERE  item_code=:did";
-		$query = $dbh->prepare($sql);
-		$query-> bindParam(':did',$did, PDO::PARAM_STR);
-		$query -> execute();
-		$msg="Record deleted Successfully";
-        header("refresh:3;medicine_list.php");
-	}
-	if(isset($_POST['submit']))
+		if(isset($_REQUEST['del']))
+		{
+			$did=intval($_GET['del']);
+			$sql = "delete from medicine_list WHERE  item_code=:did";
+			$query = $dbh->prepare($sql);
+			$query-> bindParam(':did',$did, PDO::PARAM_STR);
+			$query -> execute();
+			$msg="Record deleted Successfully";
+			header("refresh:3;medicine_list.php");
+		}
+		if(isset($_POST['submit']))
 	  		{
 			
 			$c_name=$_POST['c_name'];
@@ -37,21 +39,29 @@ else{
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
-		// if($lastInsertId)
-		// 	{
-		// 	$msg=" Your info submitted successfully";
-		// 	header("refresh:3;medicine_unit_list.php"); 
-		// 	}
-		// else 
-		// 	{
-		// 	$error=" Something went wrong. Please try again";
-		// 	header("refresh:3;medicine_unit_add.php"); 
-		// 	}
 	
 		}
-}
- ?>
-
+		if(isset($_GET['close'])){    
+			$cmpid=$_GET['close'];
+			$sts=0;
+			$sql ="update customertable set Status=:status where ID=:cusId";
+			$query = $dbh->prepare($sql);
+			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
+			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
+			$query -> execute();
+			echo "<script>window.location.href='customer_list.php'</script>";
+			}
+		if(isset($_GET['active'])){    
+			$cmpid=$_GET['active'];
+			$sts=1;
+			$sql ="update customertable set Status=:status where ID=:cusId";
+			$query = $dbh->prepare($sql);
+			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
+			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
+			$query -> execute();
+			echo "<script>window.location.href='customer_list.php'</script>";
+			}
+	?>
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -62,7 +72,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS | Company List  </title>
+	<title>PMS | Customer List  </title>
 
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -73,14 +83,7 @@ else{
 	<!-- Bootstrap Datatables -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-	<!-- Bootstrap social button library -->
-	<link rel="stylesheet" href="css/bootstrap-social.css">
-	<!-- Bootstrap select -->
-	<link rel="stylesheet" href="css/bootstrap-select.css">
-	<!-- Bootstrap file input -->
-	<link rel="stylesheet" href="css/fileinput.min.css">
-	<!-- Awesome Bootstrap checkbox -->
-	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+	
 	<!-- Admin Stye -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css">
@@ -103,6 +106,7 @@ else{
 										Customer Information
 									</div>
 									<div >
+                                        <a href="customer_ledger.php" class="btn btn-warning mr-3"><i class="fa fa-info-circle me-3" aria-hidden="true"></i> Customer Ledger</a>                                              
                                         <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button>                                              
 									</div>
 								</div>
@@ -116,7 +120,7 @@ else{
 											<th>Name</th>
 											<th>Address</th>
 											<th>Mobile</th>
-											<th>Status</th>
+											<th class="text-center">Status</th>
 											<th class="text-end">Due Balance</th>
                                             <th>Action</th>
 										</tr>
@@ -139,13 +143,14 @@ else{
 											<td><?php echo htmlentities($result->Address);?></td>
                                             <td><?php echo htmlentities($result->Phone);?></td>
 											<td class="text-center"><?php 
-											if($row['Status']==0){
+											$rno=mt_rand(10000,99999);  
+											if($result->Status==1){
 												?>
-												<a href="m_modarator.php?close=<?php echo base64_encode($row['PhoneNumber'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>
+												<a href="customer_list.php?close=<?php echo $result->ID?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>
 												<?php
 											}
 											else { ?>
-												<a href="m_modarator.php?active=<?php echo base64_encode($row['PhoneNumber'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="want to active?"><button type="button" class="btn btn-warning">Close</button></a>
+												<a href="customer_list.php?active=<?php echo $result->ID;?>" class="mr-25" data-toggle="tooltip" data-original-title="want to active?"><button type="button" class="btn btn-warning">Close</button></a>
 												<?php
 											}
 											
@@ -255,4 +260,5 @@ else{
     
 </body>
 </html>
+<?php } ?>
 

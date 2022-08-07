@@ -17,9 +17,9 @@ else{
 		$query-> bindParam(':did',$did, PDO::PARAM_STR);
 		$query -> execute();
 		$msg="Record deleted Successfully";
-        header("refresh:3;medicine_list.php");
+        header("refresh:3;company_list.php");
 	}
-}
+
  ?>
 
 <!doctype html>
@@ -54,25 +54,6 @@ else{
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css">
 
-    
-  <style>
-		.errorWrap {
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #dd3d36;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-.succWrap{
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #5cb85c;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-		</style>
 
 </head>
 <body>
@@ -195,3 +176,4 @@ else{
 </body>
 </html>
 
+<?php } ?>

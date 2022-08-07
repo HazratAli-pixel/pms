@@ -37,19 +37,9 @@ else{
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
-		// if($lastInsertId)
-		// 	{
-		// 	$msg=" Your info submitted successfully";
-		// 	header("refresh:3;medicine_unit_list.php"); 
-		// 	}
-		// else 
-		// 	{
-		// 	$error=" Something went wrong. Please try again";
-		// 	header("refresh:3;medicine_unit_add.php"); 
-		// 	}
-	
+
 		}
-}
+
  ?>
 
 <!doctype html>
@@ -62,7 +52,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS | Company List  </title>
+	<title>PMS | Customer Ledger  </title>
 
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -74,12 +64,6 @@ else{
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 	<!-- Bootstrap social button library -->
-	<link rel="stylesheet" href="css/bootstrap-social.css">
-	<!-- Bootstrap select -->
-	<link rel="stylesheet" href="css/bootstrap-select.css">
-	<!-- Bootstrap file input -->
-	<link rel="stylesheet" href="css/fileinput.min.css">
-	<!-- Awesome Bootstrap checkbox -->
 	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
 	<!-- Admin Stye -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -103,7 +87,8 @@ else{
 										Customer Information
 									</div>
 									<div >
-                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button>                                              
+										<a href="customer_list.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Customer List</a>
+                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button>
 									</div>
 								</div>
                             </div>
@@ -140,11 +125,11 @@ else{
                                         {
                                         foreach($results as $result)
                                         {				?>	
-										<tr>
+										<tr id="cusid-<?php echo htmlentities($result->ID);?>">
 											<td><?php echo htmlentities($cnt);?></td>
-											<td><?php echo htmlentities($result->Name);?></td>
-											<td><?php echo htmlentities($result->Address);?></td>
-                                            <td><?php echo htmlentities($result->Phone);?></td>
+											<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?></td>
+											<td id="cusadd-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Address);?></td>
+                                            <td id="cusphone-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Phone);?></td>
 											<!-- $total = number_format($result->total_amount, 2, '.', ''); -->
 											<!-- <td><?php echo $totals = (number_format($result->total_debit, 2, '.', '')+number_format($result->total_due, 2, '.', ''));?></td>
 											<td><?php echo $total2 = number_format($result->total, 2, '.', '');?></td>
@@ -157,10 +142,10 @@ else{
 											 $query->execute();
 											 $result2=$query->fetch(PDO::FETCH_OBJ);
 											?>
-											<td><?php echo $result2->NewDue;?></td>
+											<td id="newdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
 											
 											<td>
-											<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="ledgerinf(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+											<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                                             <a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
 											<a class="mx-1" href="customer_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
 											</td>
@@ -237,6 +222,23 @@ else{
 		</div>
 	</div>
 
+	<script>
+		function (event) {
+		const m_body = document.getElementById('mbody2');
+		const xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				// alert(this.responseText);
+				m_body.innerHTML = this.responseText;
+				$('#exampleModal2').modal('show');
+				}
+			};
+
+		xmlhttp.open('GET', `query.php?edit_unit=${clicked_id}`, true);
+		xmlhttp.send();
+	}
+	</script>
+
 	<!-- Loading Scripts -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -257,3 +259,4 @@ else{
 </body>
 </html>
 
+<?php } ?>
