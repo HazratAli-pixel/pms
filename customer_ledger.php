@@ -154,7 +154,7 @@ else{
 							<div class="card-body">
                                 <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
 								<div class="row">
-									<div class="col-9">
+									<div class="col-12 col-md-8 col-lg-8 col-xl-9 d-flex row flex-sm-column">
 										<table  id="zctb" class="display table table-striped table-bordered table-hover" >
 											<thead class="bg-style">
 												<tr>
@@ -209,7 +209,7 @@ else{
 											</tbody>
 										</table>
 									</div>
-									<div class="col-3 bg-info rounded">
+									<div class="col-12 col-md-4 col-lg-4 col-xl-3 bg-info rounded p-2">
 										<form action="" method="POST">
 											<div class="info text-center pt-2">
 												<h4 name="cusName" id="cusName">Name </h4>
