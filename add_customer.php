@@ -12,55 +12,31 @@ include('includes/config.php');
 	
 		if(isset($_POST['submit']))
 	  		{
-			$cname=$_POST['cname'];
-			$mobile=$_POST['mobile'];
-			$email1=$_POST['email1'];
-			$email2=$_POST['email2'];
+			$name=$_POST['name'];
 			$phone=$_POST['phone'];
-			$contact=$_POST['contact'];
-			$address1=$_POST['address1'];
-			$address2=$_POST['address2'];
-			$fax=$_POST['fax'];
-			$city=$_POST['city'];
+			$address=$_POST['address'];
 			$state=$_POST['state'];
-			$zipcode=$_POST['zipcode'];
-			$country=$_POST['country'];
-            $companyid=$_POST['companyid'];            
-			$priviousbal=$_POST['priviousbal'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO company (name, mobile, email1, email2, phono,contact, address1, address2, fax, city, state, zip, country, priviousbal,companyid, status) 
-			VALUES(:cname,:mobile,:email1,:email2,:phone,:contact,:address1,:address2,:fax,:city,:state,:zipcode,:country,:priviousbal,:companyid,:radio_value)";
+			$sql="INSERT INTO customertable (Name,Phone,Address,State,Status) 
+			VALUES(:name,:phone,:address,:state,:status)";
 			$query = $dbh->prepare($sql);
-			$query->bindParam(':cname',$cname,PDO::PARAM_STR);
-			$query->bindParam(':mobile',$mobile,PDO::PARAM_STR);
-			$query->bindParam(':email1',$email1,PDO::PARAM_STR);
-			$query->bindParam(':email2',$email2,PDO::PARAM_STR);
+			$query->bindParam(':name',$name,PDO::PARAM_STR);
 			$query->bindParam(':phone',$phone,PDO::PARAM_STR);
-			$query->bindParam(':contact',$contact,PDO::PARAM_STR);
-			$query->bindParam(':address1',$address1,PDO::PARAM_STR);
-			$query->bindParam(':address2',$address2,PDO::PARAM_STR);
-			$query->bindParam(':fax',$fax,PDO::PARAM_STR);
-			$query->bindParam(':city',$city,PDO::PARAM_STR);
+			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':state',$state,PDO::PARAM_STR);
-			$query->bindParam(':zipcode',$zipcode,PDO::PARAM_STR);
-			$query->bindParam(':country',$country,PDO::PARAM_STR);
-            $query->bindParam(':priviousbal',$priviousbal,PDO::PARAM_STR);
-            $query->bindParam(':companyid',$companyid,PDO::PARAM_STR);
-			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-
-
+			$query->bindParam(':status',$status,PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
 			{
 			$msg=" Your info submitted successfully";
-			header("refresh:3;company_list.php"); 
+			header("refresh:2;customer_list.php"); 
 			}
 		else 
 			{
 			$error=" Something went wrong. Please try again";
-			header("refresh:3;company_add.php"); 
+			header("refresh:2;customer_list.php"); 
 			}
 	
 		}
@@ -111,8 +87,10 @@ include('includes/config.php');
 					<div class="row">
 						<div class="col-md-12">
 							
+							<div class="col-12 p-2">
 							<?php if($error){?><div class="errorWrap"><strong>ERROR </strong>: <?php echo htmlentities($error); ?> </div><?php } 
 					else if($msg){?><div class="succWrap"><strong>SUCCESS </strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+							</div>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="card" style="width: 100%;">
@@ -126,8 +104,8 @@ include('includes/config.php');
 											</div>
 										</div>
 										<div class="card-body">
-											<form method="post" class="row" enctype="multipart/form-data" >
-                                                <div class="col-md-6">
+											<form method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-between align-items-center" >
+                                                <div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Name : </label>
 														<div class="col-sm-8">
@@ -135,7 +113,7 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Phone : <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
@@ -143,7 +121,7 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Address : </label>
 														<div class="col-sm-8">
@@ -151,7 +129,7 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-                                                <div class="col-md-6">
+                                                <div class="col-12 col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">State :</label>
 														<div class="col-sm-8">
@@ -159,15 +137,29 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-                                                											
+												<div class="col-12 col-md-6">
+													<div class="row mb-3">
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
+														<div class="col-sm-8 d-flex align-items-center">
+															<div class="form-check form-check-inline">
+																<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
+																<label class="form-check-label" for="inlineRadio1">Active</label>
+															</div>
+															<div class="form-check form-check-inline">
+																<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
+																<label class="form-check-label" for="inlineRadio2">Inactive</label>
+															</div>
+														</div>
+													</div>	                                                											
+												</div>
 																
 												<div class="hr-dashed"></div>
 
-													<div class="col-md-12">
+												<div class="col-12 col-md-6">
 														<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
 															<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
 															<button style="min-width: 150px;" class="btn btn-success" type="submit" name="submit" >Submit</button>
-														</div>
+												</div>
 												</div>						
 											</form>	
 										</div>

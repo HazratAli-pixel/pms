@@ -34,7 +34,6 @@ else{
 			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
 			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-			
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			
@@ -43,9 +42,7 @@ else{
 		{
 			
 			$cusId=$_POST['cusID2'];
-			// $cusId=6;
 			$cusName=$_POST['cusName2'];
-			// $cusId=$_POST['cusName'];
 			$preDue=$_POST['preDue'];
 			$newDue=$_POST['newDue'];
 			$paidAmount=$_POST['paidAmount'];
@@ -53,8 +50,6 @@ else{
 			$switch=$_POST['switch'];
 			$cusPhone2=$_POST['cusPhone2'];
 			$userid = $_SESSION['alogin'];
-			// $query=mysqli_query($con,"INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit) 
-			// values('$userid','$cusId','$preDue','$paidAmount')");
 			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
 			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments)";
 
@@ -67,9 +62,10 @@ else{
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 			date_default_timezone_get('Asia/Dhaka');
-			$time= date('y/m/d')."-".date("h:i:s A");
+			$time= date('d/m/y')."-".date("h:i:s A");
 			
-			$mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
+			// $mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
+			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
 
 			if($switch==1){
 				// $mssg = $_POST["message"];
@@ -154,7 +150,7 @@ else{
 							<div class="card-body">
                                 <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
 								<div class="row">
-									<div class="col-12 col-md-8 col-lg-8 col-xl-9 d-flex row flex-sm-column">
+									<div class="col-12 col-md-8 col-lg-8 col-xl-9 d-flex row flex-sm-column table-responsive">
 										<table  id="zctb" class="display table table-striped table-bordered table-hover" >
 											<thead class="bg-style">
 												<tr>
