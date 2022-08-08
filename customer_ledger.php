@@ -20,13 +20,13 @@ else{
         header("refresh:3;medicine_list.php");
 	}
 	if(isset($_POST['submit']))
-	  		{
+	{
 			
 			$c_name=$_POST['c_name'];
 			$c_phone=$_POST['c_phone'];
 			$c_address=$_POST['c_address'];
 			$status=$_POST['radio_value'];
-
+			
 			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
 			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
 			$query = $dbh->prepare($sql);
@@ -34,10 +34,64 @@ else{
 			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
 			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-
+			
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
+			
+		}
+		if(isset($_POST['paydue']))
+		{
+			
+			$cusId=$_POST['cusID2'];
+			// $cusId=6;
+			$cusName=$_POST['cusName2'];
+			// $cusId=$_POST['cusName'];
+			$preDue=$_POST['preDue'];
+			$newDue=$_POST['newDue'];
+			$paidAmount=$_POST['paidAmount'];
+			$comments=$_POST['comments'];
+			$switch=$_POST['switch'];
+			$cusPhone2=$_POST['cusPhone2'];
+			$userid = $_SESSION['alogin'];
+			// $query=mysqli_query($con,"INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit) 
+			// values('$userid','$cusId','$preDue','$paidAmount')");
+			$sql="INSERT INTO customerledger (AdminID,CustomerID,PreDue,Credit,Comments) 
+			VALUES(:userid,:cusId,:preDue,:paidAmount,:comments)";
 
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->bindParam(':cusId',$cusId,PDO::PARAM_STR);
+			$query->bindParam(':preDue',$preDue,PDO::PARAM_STR);
+			$query->bindParam(':paidAmount',$paidAmount,PDO::PARAM_STR);
+			$query->bindParam(':comments',$comments,PDO::PARAM_STR);
+			$query->execute();
+			$lastInsertId = $dbh->lastInsertId();
+			date_default_timezone_get('Asia/Dhaka');
+			$time= date('y/m/d')."-".date("h:i:s A");
+			
+			$mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
+
+			if($switch==1){
+				// $mssg = $_POST["message"];
+				$url = "http://gsms.putulhost.com/smsapi";
+				$data = [
+				"api_key" => "C200114562795a9fbdc4e5.87112767",
+				"type" => "text",
+				"contacts" => "$cusPhone2",
+				"senderid" => "8809601001536",
+				"msg" => "$mssg"
+			];
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			$response = curl_exec($ch);
+			curl_close($ch);
+			//return $response;
+			echo "<script>window.location.href='customer_ledger.php'</script>";
+			}
 		}
 
  ?>
@@ -69,6 +123,11 @@ else{
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css">
 
+	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		
+
 </head>
 <body>
 	<?php include('includes/header.php');?>
@@ -94,65 +153,137 @@ else{
                             </div>
 							<div class="card-body">
                                 <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
-								<table  id="zctb" class="display table table-striped table-bordered table-hover" >
-									<thead>
-										<tr>
-										    <th>#</th>
-											<th>Name</th>
-											<th>Address</th>
-											<th>Mobile</th>
-											<!-- <th>Total Debit</th> -->
-											<!-- <th>Total Credit</th> -->
-											<th>Total Due</th>
-                                            <th>Action</th>
-										</tr>
-									</thead>
-									
-									<tbody>
+								<div class="row">
+									<div class="col-9">
+										<table  id="zctb" class="display table table-striped table-bordered table-hover" >
+											<thead class="bg-style">
+												<tr>
+													<th>#</th>
+													<th>Name</th>
+													<th>Address</th>
+													<th>Mobile</th>
+													<!-- <th>Total Debit</th> -->
+													<!-- <th>Total Credit</th> -->
+													<th>Total Due</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
 
-                                        <?php 
-										// $sql = "SELECT customertable.ID customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-										// SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-										// GROUP BY customerledger.CustomerID";
-										$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-										SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-										GROUP BY customerledger.CustomerID";
-                                        $query = $dbh -> prepare($sql);
-                                        $query->execute();
-                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
-                                        $cnt=1;
-                                        if($query->rowCount() > 0)
-                                        {
-                                        foreach($results as $result)
-                                        {				?>	
-										<tr id="cusid-<?php echo htmlentities($result->ID);?>">
-											<td><?php echo htmlentities($cnt);?></td>
-											<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?></td>
-											<td id="cusadd-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Address);?></td>
-                                            <td id="cusphone-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Phone);?></td>
-											<!-- $total = number_format($result->total_amount, 2, '.', ''); -->
-											<!-- <td><?php echo $totals = (number_format($result->total_debit, 2, '.', '')+number_format($result->total_due, 2, '.', ''));?></td>
-											<td><?php echo $total2 = number_format($result->total, 2, '.', '');?></td>
-											<td><?php echo $totals-$total2;?></td>
-											<td><?php echo $totals-$total2;?></td> -->
-											<?php 
-											$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
-											 $query = $dbh -> prepare($sql2);
-											 $query->bindParam(':id',$result->ID,PDO::PARAM_STR);
-											 $query->execute();
-											 $result2=$query->fetch(PDO::FETCH_OBJ);
-											?>
-											<td id="newdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
+												<?php 
+												// $sql = "SELECT customertable.ID customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
+												// SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
+												// GROUP BY customerledger.CustomerID";
+												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
+												SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
+												GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
+												$query = $dbh -> prepare($sql);
+												$query->execute();
+												$results=$query->fetchAll(PDO::FETCH_OBJ);
+												$cnt=1;
+												if($query->rowCount() > 0)
+												{
+												foreach($results as $result)
+												{				?>	
+												<tr id="cusid-<?php echo htmlentities($result->ID);?>">
+													<td><?php echo htmlentities($cnt);?></td>
+													<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?></td>
+													<td id="cusadd-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Address);?></td>
+													<td id="cusphone-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Phone);?></td>
+													<?php 
+													$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
+													$query = $dbh -> prepare($sql2);
+													$query->bindParam(':id',$result->ID,PDO::PARAM_STR);
+													$query->execute();
+													$result2=$query->fetch(PDO::FETCH_OBJ);
+													?>
+													<td id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
+													
+													<td>
+													<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+													<a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
+													<p class="bg-warning btn p-1" onclick="paydues(this.id)" id="<?php echo htmlentities($result->ID);?>"> pay</p>
+													</td>
+												</tr>
+												<?php $cnt=$cnt+1; }} ?>
+											</tbody>
+										</table>
+									</div>
+									<div class="col-3 bg-info rounded">
+										<form action="" method="POST">
+											<div class="info text-center pt-2">
+												<h4 name="cusName" id="cusName">Name </h4>
+												<input hidden name="cusName2" id="cusName2" type="text" class="form-control text-end">
+												<h4 hidden name="cusID" id="cusId">ID: </h4>
+												<input hidden name="cusID2" id="cusId2" type="text" class="form-control text-end">
+												<h4 id="cusPhone">Phone </h4>
+											</div>
+											<!-- <div class="calculation">
+												<div class="div">
+													<label for="">Previous Due: </label>
+													<input class="form-control" type="float" value="">
+												</div>
+											</div> -->
 											
-											<td>
-											<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                                            <a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-											<a class="mx-1" href="customer_list.php?del=<?php echo htmlentities($result->ID);?>" onclick="return confirm('Do you really want to delete this record')"> <i style="color: red;" class="far fa-trash-alt" aria-hidden="true"></i></a>
-											</td>
-										</tr>
-										<?php $cnt=$cnt+1; }} ?>
-									</tbody>
-								</table>
+											<div class="col-12 d-flex flex-column justify-content-end pb-5 pt-2">
+												<hr>
+													<div class="row mb-2">
+														<label  for="" class="fw-bold col-6 text-end">Privious Due : </label>
+														<div class="col-6">
+															<input id="preDue" name="preDue" type="text" class="form-control text-end" value="" placeholder="0.00" readonly>
+														</div>
+													</div>
+													<div class="row mb-2">
+														<label for="" class="fw-bold col-6 text-end">Paid Amount : </label>
+														<div class="col-6">
+															<input onkeyup="calculation()" id="paidAmount" name="paidAmount" type="text" class="form-control text-end" placeholder="0.00">
+														</div>
+													</div>
+													<hr>
+													<div class="row mb-2">
+														<label for="" class="fw-bold col-6 text-end">New Due : </label>
+														<div class="col-6">
+															<input name="newDue" type="float" id="newDue" class="form-control text-end" value="" placeholder="0.00" readonly>
+														</div>
+													</div>
+													<br><br>
+													<div class="row mb-2">
+														<label for="" class="fw-bold col-6 text-end">Comments : </label>
+														<div class="col-6">
+															<textarea name="comments" rows="3" id="" type="text" class="form-control" name="" value="" placeholder="Comments"></textarea>
+														</div>
+													</div>
+													<div class="row mb-2">
+														<div class="col-6 msg-btn d-flex justify-content-end">
+															<div class="form-check form-switch text-end">
+																<input class="form-check-input" value="1" type="checkbox" name="switch" id="flexSwitchCheckDefault">
+																<label class="form-check-label" for="flexSwitchCheckDefault">Want messgae?</label>
+															</div>
+														</div>
+														<div class="col-6">
+															<input type="text" name="cusPhone2" id="cusPhone2" class="form-control"  value="" placeholder="Phone Number">
+														</div>
+													</div>
+													<!-- <div class="row mb-2 justify-content-end">
+														<div class="col-6 my-3">
+															<p id="fullPaid" onclick="fullpaid()" class="form-control btn btn-warning" >Full Paid</p>
+														</div>
+														<div class="col-6 my-3">
+															<button type="submit" class="form-control btn btn-success" name="paydue">submit</button>
+														</div>
+													</div> -->
+												</div>
+												<div class="row mb-2 justify-content-end">
+														<div class="col-6 my-3">
+															<p id="fullPaid" onclick="fullpaid()" class="form-control btn btn-warning" >Full Paid</p>
+														</div>
+														<div class="col-6 my-3">
+															<button type="submit" class="form-control btn btn-success" name="paydue">submit</button>
+														</div>
+													</div>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -223,20 +354,47 @@ else{
 	</div>
 
 	<script>
-		function (event) {
-		const m_body = document.getElementById('mbody2');
-		const xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function () {
-			if (this.readyState == 4 && this.status == 200) {
-				// alert(this.responseText);
-				m_body.innerHTML = this.responseText;
-				$('#exampleModal2').modal('show');
-				}
-			};
+		function paydues(clicked_id) {
+			var name ="cusname-"+clicked_id;
+			var phone ="cusphone-"+clicked_id;
+			var due ="cusdue-"+clicked_id;
+			// var address ="cusname-"+clicked_id;
+			// alert(nameID);
+			var names =  document.getElementById(name).innerText;
+			var due =  document.getElementById(due).innerText;
+			var phone =  document.getElementById(phone).innerText;
 
-		xmlhttp.open('GET', `query.php?edit_unit=${clicked_id}`, true);
-		xmlhttp.send();
-	}
+			// var names =  document.getElementById(name).innerText;
+			var cusname = document.getElementById('cusName');
+			var cusname2 = document.getElementById('cusName2');
+			var cusid = document.getElementById('cusId');
+			var cusid2 = document.getElementById('cusId2');
+			var cusPhone = document.getElementById('cusPhone');
+			var cusPhone2 = document.getElementById('cusPhone2');
+			var preDue = document.getElementById('preDue');
+			cusname.innerHTML = names;
+			cusname2.value = names;
+			cusPhone.innerHTML = phone;
+			cusPhone2.value = phone;
+			cusid.innerHTML = clicked_id;
+			cusid2.value = clicked_id;
+			preDue.value = due;
+		}
+		function calculation() {
+			var paidAmount =  document.getElementById('paidAmount').value;
+			var preDue =  document.getElementById('preDue').value;
+			var newDue =  document.getElementById('newDue');
+			var newDues = preDue - paidAmount;
+			newDue.value = newDues.toFixed(2);
+		}
+		function fullpaid() {
+			var paidAmount =  document.getElementById('paidAmount');
+			var preDue =  document.getElementById('preDue').value;
+			var newDue =  document.getElementById('newDue');
+			// var newDues = preDue - paidAmount;
+			paidAmount.value = preDue;
+			newDue.value = "0.00";
+		}
 	</script>
 
 	<!-- Loading Scripts -->

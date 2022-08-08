@@ -14,3 +14,11 @@ catch (PDOException $e)
 exit("Error: " . $e->getMessage());
 }
 ?>
+
+<?php
+$domain = "localhost/url/";
+$con=mysqli_connect("localhost", "root", "", "pharmacy_management_system");
+if(mysqli_connect_errno()){
+echo "Connection Fail".mysqli_connect_error();
+}
+?>
