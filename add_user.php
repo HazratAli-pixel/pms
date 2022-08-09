@@ -14,8 +14,7 @@ include('includes/config.php');
 			$name=$_POST['name'];
 			$fname=$_POST['fname'];
 			$mname=$_POST['mname'];
-			$email1=$_POST['email1'];
-			$email2=$_POST['email2'];
+			$email=$_POST['email'];
 			$address=$_POST['address'];
 			$nid=$_POST['nid'];
 			$userid=$_POST['userid'];
@@ -37,7 +36,7 @@ include('includes/config.php');
 
 			//$status=1;
 		
-			$sql="INSERT INTO user_info (UserId, NidNumber,Name, FName, MName, Phone1, Phone2, Email1, Email2, Address, Photo, status) 
+			$sql="INSERT INTO user_info (UserId, NidNumber,Name, FName, MName, Phone1, Phone2, Email1,Address, Photo, status) 
 			VALUES(:userid,:nid,:name,:fname,:mname,:phone1,:phone2,:email1,:email2,:address,:photo,:status)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
@@ -47,7 +46,6 @@ include('includes/config.php');
 			$query->bindParam(':mname',$mname,PDO::PARAM_STR);
 			$query->bindParam(':phone1',$phone1,PDO::PARAM_STR);
 			$query->bindParam(':phone2',$phone2,PDO::PARAM_STR);
-			$query->bindParam(':email1',$email1,PDO::PARAM_STR);
 			$query->bindParam(':email2',$email2,PDO::PARAM_STR);
 			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':photo',$file_name,PDO::PARAM_STR);
@@ -197,9 +195,9 @@ include('includes/config.php');
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email 1 :</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email :</label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="email1" placeholder="Email address 1">
+														<input type="text" class="form-control" name="email" placeholder="Email address 1">
 														</div>
 													</div>
 												</div>
@@ -208,14 +206,6 @@ include('includes/config.php');
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Phone 2 <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" name="phone2" placeholder="Phone number 2">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email 2 :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="email2" placeholder="Email address 2">
 														</div>
 													</div>
 												</div>

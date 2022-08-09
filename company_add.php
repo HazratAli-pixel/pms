@@ -14,41 +14,24 @@ include('includes/config.php');
 	  		{
 			$cname=$_POST['cname'];
 			$mobile=$_POST['mobile'];
-			$email1=$_POST['email1'];
-			$email2=$_POST['email2'];
-			$phone=$_POST['phone'];
-			$contact=$_POST['contact'];
-			$address1=$_POST['address1'];
-			$address2=$_POST['address2'];
+			$email=$_POST['email'];
+			$address=$_POST['address'];
 			$fax=$_POST['fax'];
 			$city=$_POST['city'];
-			$state=$_POST['state'];
 			$zipcode=$_POST['zipcode'];
-			$country=$_POST['country'];
-            $companyid=$_POST['companyid'];            
-			$priviousbal=$_POST['priviousbal'];
 			$status=$_POST['radio_value'];
 
-			$sql="INSERT INTO company (name, mobile, email1, email2, phono,contact, address1, address2, fax, city, state, zip, country, priviousbal,companyid, status) 
-			VALUES(:cname,:mobile,:email1,:email2,:phone,:contact,:address1,:address2,:fax,:city,:state,:zipcode,:country,:priviousbal,:companyid,:radio_value)";
+			$sql="INSERT INTO company (name, mobile, email, address1, fax, city, zip,status) 
+			VALUES(:cname,:mobile,:email,:address,:fax,:city,:zipcode,:radio_value)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':cname',$cname,PDO::PARAM_STR);
 			$query->bindParam(':mobile',$mobile,PDO::PARAM_STR);
-			$query->bindParam(':email1',$email1,PDO::PARAM_STR);
-			$query->bindParam(':email2',$email2,PDO::PARAM_STR);
-			$query->bindParam(':phone',$phone,PDO::PARAM_STR);
-			$query->bindParam(':contact',$contact,PDO::PARAM_STR);
-			$query->bindParam(':address1',$address1,PDO::PARAM_STR);
-			$query->bindParam(':address2',$address2,PDO::PARAM_STR);
+			$query->bindParam(':email',$email,PDO::PARAM_STR);
+			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':fax',$fax,PDO::PARAM_STR);
 			$query->bindParam(':city',$city,PDO::PARAM_STR);
-			$query->bindParam(':state',$state,PDO::PARAM_STR);
 			$query->bindParam(':zipcode',$zipcode,PDO::PARAM_STR);
-			$query->bindParam(':country',$country,PDO::PARAM_STR);
-            $query->bindParam(':priviousbal',$priviousbal,PDO::PARAM_STR);
-            $query->bindParam(':companyid',$companyid,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
@@ -77,7 +60,7 @@ include('includes/config.php');
 		<meta name="author" content="Hazrat Ali">
 		<meta name="theme-color" content="#3e454c">
 		
-		<title>CKAMS| Admin Add Teacher</title>
+		<title>PMS-Add Company information</title>
 	
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -156,14 +139,6 @@ include('includes/config.php');
 											<form method="post" class="row" enctype="multipart/form-data" >
                                                 <div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Id : </label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="companyid" placeholder="Company Unique ID">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Name : </label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" name="cname" placeholder="Company Name">
@@ -180,53 +155,21 @@ include('includes/config.php');
 												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email-1 : </label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email : </label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="email1" placeholder="Email address 1">
-														</div>
-													</div>
-												</div>
-                                                
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Email-2 :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="email2" placeholder="Email Address 2">
+														<input type="text" class="form-control" name="email" placeholder="Email address 1">
 														</div>
 													</div>
 												</div>
                                                 <div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">phone :</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end"> Address:</label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="phone" placeholder="Phone Number">
+														<input type="text" class="form-control" name="address" placeholder="Enter Address 1">
 														</div>
 													</div>
 												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Contact :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="contact" placeholder="Contact">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end"> Address 1:</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="address1" placeholder="Enter Address 1">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Address 2 :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="address2" placeholder="Enter Address 2">
-														</div>
-													</div>
-												</div>
+                                              
                                                 <div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Fax :</label>
@@ -245,36 +188,12 @@ include('includes/config.php');
 												</div>
                                                 <div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">State :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="state" placeholder="State">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Zip Code :</label>
 														<div class="col-sm-8">
 														<input type="text" class="form-control" name="zipcode" placeholder="Zip/postal Code">
 														</div>
 													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Country :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="country" placeholder="Enter Country">
-														</div>
-													</div>
-												</div>
-                                                <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Privous Balance :</label>
-														<div class="col-sm-8">
-														<input type="float" class="form-control text-end" name="priviousbal" placeholder="00.0">
-														</div>
-													</div>
-												</div>                                                
+												</div>                                              
 												<div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>

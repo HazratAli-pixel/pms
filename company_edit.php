@@ -77,25 +77,20 @@ include('includes/config.php');
 		<meta name="author" content="Hazrat Ali">
 		<meta name="theme-color" content="#3e454c">
 		
-		<title>CKAMS| Admin Add Teacher</title>
+		<title>PMS-Edit Company information</title>
 	
 		<!-- Font awesome -->
-		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-		<!-- Sandstone Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-		<!-- Bootstrap Datatables -->
-		<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
-		<!-- Bootstrap social button library -->
-		<link rel="stylesheet" href="css/bootstrap-social.css">
-		<!-- Bootstrap select -->
-		<link rel="stylesheet" href="css/bootstrap-select.css">
-		<!-- Bootstrap file input -->
-		<link rel="stylesheet" href="css/fileinput.min.css">
-		<!-- Awesome Bootstrap checkbox -->
-		<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
-		<!-- Admin Stye -->
-		<link rel="stylesheet" href="css/style.css">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+	<!-- Sandstone Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<style>
 		.errorWrap {
 			padding: 10px;
@@ -112,18 +107,16 @@ include('includes/config.php');
 			border-left: 4px solid #5cb85c;
 			-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
 			box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-			
 	}
 			</style>
 		<script language="javascript">
 			function isNumberKey(evt)
 			{
-				
-				var charCode = (evt.which) ? evt.which : event.keyCode
-						
+				var charCode = (evt.which) ? evt.which : event.keyCode		
 				if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode!=46)
-				return false;
-		
+				{
+					return false;
+				}
 				return true;
 			}
 		  </script>
