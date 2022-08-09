@@ -61,11 +61,11 @@ else{
 			$query->bindParam(':comments',$comments,PDO::PARAM_STR);
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
-			date_default_timezone_get('Asia/Dhaka');
-			$time= date('d/m/y')."-".date("h:i:s A");
+			date_default_timezone_set('Asia/Dhaka');
+			$date = date('d/m/Y H:i');
 			
 			// $mssg = "Money recived. Amount tk:".urlencode($paidAmount)." TrxID: ".urlencode($lastInsertId)." Due amount : ".urlencode($newDue)."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
-			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".date('y/m/d')."-".date("h:i:s A").". Raha Phamacy";
+			$mssg = "Money recived. Amount tk:".$paidAmount." TrxID: ".$lastInsertId." Due amount : ".$newDue."tk ".$date.". Raha Phamacy";
 
 			if($switch==1){
 				// $mssg = $_POST["message"];
