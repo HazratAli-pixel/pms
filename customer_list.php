@@ -136,7 +136,7 @@
 											<td><?php echo htmlentities($result->Address);?></td>
                                             <td><?php echo htmlentities($result->Phone);?></td>
 											<td class="text-center"><?php 
-											$rno=mt_rand(10000,99999);  
+											// $rno=mt_rand(10000,99999);  
 											if($result->Status==1){
 												?>
 												<a href="customer_list.php?close=<?php echo $result->ID?>" class="mr-25" data-toggle="tooltip" data-original-title="want to close?"> <button type="button" class="btn btn-success">Active</button></a>

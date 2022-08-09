@@ -28,10 +28,10 @@
 					</ul>
 				
 				</li>
-				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purches</a>
+				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purchase</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="msg.php">Add Purchease</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Purchease List</a></li>
+						<li style="margin-left: 50px;"><a href="msg.php">Add Purchase</a></li>
+						<li style="margin-left: 50px;"><a href="msg.php">Purchase List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-hand-holding-usd mr-2"></i> Invoice</a>
@@ -70,8 +70,6 @@
 				</li>
 				<li><a href="#"><i class="fas fa-book-open mr-2"></i> Report</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="msg.php">Add Closing</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Closing List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Add Closing</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Closing List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Sales Report</a></li>
@@ -116,10 +114,10 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="user_info.php">User Information</a></li>
 						<li style="margin-left: 50px;"><a href="add_user.php">Add User</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">User List</a></li>
+						<li style="margin-left: 50px;"><a href="user_list.php">User List</a></li>
+						<li style="margin-left: 50px;"><a href="add_role.php">Add Role</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Add User Rule</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Rule List</a></li>
-						
 					</ul>
 				</li>
 				<li style="margin-bottom: 200px;"><a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>

@@ -78,25 +78,15 @@ include('includes/config.php');
 		<meta name="author" content="Hazrat Ali">
 		<meta name="theme-color" content="#3e454c">
 		
-		<title>PMS| Medicine Add</title>
+		<title>PMS-Add User</title>
 	
-		<!-- Font awesome -->
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-		<!-- Sandstone Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-		<!-- Bootstrap Datatables -->
-		<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
-		<!-- Bootstrap social button library -->
-		<link rel="stylesheet" href="css/bootstrap-social.css">
-		<!-- Bootstrap select -->
-		<link rel="stylesheet" href="css/bootstrap-select.css">
-		<!-- Bootstrap file input -->
-		<link rel="stylesheet" href="css/fileinput.min.css">
-		<!-- Awesome Bootstrap checkbox -->
-		<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
-		<!-- Admin Stye -->
-		<link rel="stylesheet" href="css/style.css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+		
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css">
+
 	<style>
 		.errorWrap {
 			padding: 10px;
@@ -129,20 +119,19 @@ include('includes/config.php');
 						<div class="col-md-12">							
 							<?php if($error){?><div class="errorWrap"><strong>ERROR </strong>: <?php echo htmlentities($error); ?> </div>
 							<?php } 
-					else if($msg){?><div class="succWrap"><strong>SUCCESS </strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
-							<div class="row">
-								<div class="col-md-12">
-									<div class="card" style="width: 100%;">
-										<div class="card-header d-flex justify-content-between align-items-center h-100px">
+								else if($msg){?><div class="succWrap"><strong>SUCCESS </strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+							
+							<div class="card">
+								<div class="card-header d-flex justify-content-between align-items-center h-100px">
 		  									<div style="font-size: 20px; " class="bg-primary;">
 												User Information
 											</div>
 											<div >
-												<a href="add_user_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> User List</button></a>
+												<a href="user_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> User List</button></a>
 												
 											</div>
-										</div>
-										<div class="card-body">
+								</div>
+								<div class="card-body">
 											<form method="post" class="row" enctype="multipart/form-data" onsubmit="return" >
 												<div class="col-md-6">
 													<div class="row mb-3">
@@ -250,8 +239,6 @@ include('includes/config.php');
 														</div>
 												</div>						
 											</form>	
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
