@@ -38,7 +38,7 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="msg.php">Add Invoice</a></li>
 						<li style="margin-left: 50px;"><a href="pos_invoice.php">POS Invoice</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Invoice List</a></li>
+						<li style="margin-left: 50px;"><a href="invoicelist.php">Invoice List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-retweet mr-2"></i> Return</a>

@@ -78,7 +78,7 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Company Information
+										System User List
 									</div>
 									<div >
                                         <a href="add_user.php"><button type="button" class="btn btn-info" style="margin-right: 15px;"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add User</button></a>                                                

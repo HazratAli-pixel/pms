@@ -124,7 +124,7 @@ include('includes/config.php');
 							<div class="card">
 								<div class="card-header d-flex justify-content-between align-items-center h-100px">
 		  									<div style="font-size: 20px; " class="bg-primary;">
-												User Information
+												Add User
 											</div>
 											<div >
 												<a href="user_list.php"><button type="button" class="btn btn-info"><i class="fas fa-align-justify mr-2" style="margin-right: 10px;"></i> User List</button></a>

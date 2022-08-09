@@ -790,3 +790,11 @@ li {
 .bg-style3{
 	background-image: linear-gradient(to right, rgba(114, 103, 212, 0.5), rgba(219, 134, 191, 0.5), rgba(114, 103, 212, 0.5));
 }
+
+.right-side{
+  background-color:  rgba(172, 228, 250,.5);
+  overflow-x: hidden;
+  overflow-y: scroll; 
+  min-height: 550px; 
+  max-height: 700px;
+}

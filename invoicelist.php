@@ -102,7 +102,7 @@ else{
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS-Customer Ledger  </title>
+	<title>PMS-Invoice List </title>
 
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -115,7 +115,7 @@ else{
 
 	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		
 
 </head>
@@ -142,31 +142,32 @@ else{
 								</div>
                             </div>
 							<div class="card-body">
-                                <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
-								<div class="row">
+                                <a href="download-records.php" style="color:red; font-size:16px;">Download invoice list</a>
+								<div class="row ">
 									<div class="col-12 col-md-8 col-lg-8 col-xl-9 d-flex row flex-sm-column table-responsive">
-										<table  id="zctb" class="display table table-striped table-bordered table-hover" >
+								
+										<table id="zctb" class="display table table-striped table-bordered table-hover" >
 											<thead class="bg-style">
 												<tr>
 													<th>#</th>
 													<th>Name</th>
 													<th>Address</th>
-													<th>Mobile</th>
-													<!-- <th>Total Debit</th> -->
-													<!-- <th>Total Credit</th> -->
-													<th>Total Due</th>
-													<th>Action</th>
+													<th class="text-end">Amount</th>
+													<th class="text-end">PreDue</th>
+													<th class="text-end">Total</th>
+													<th class="text-end">Discount</th>
+													<th class="text-end">Paid</th>
+													<th class="text-end">Due</th>
+													<th class="text-center">Date</th>
+													<th class="text-center">Action</th>
 												</tr>
 											</thead>
 											<tbody>
 
 												<?php 
-												// $sql = "SELECT customertable.ID customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-												// SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-												// GROUP BY customerledger.CustomerID";
-												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, SUM(customerledger.Total) AS total, SUM(customerledger.Debit) AS total_debit, 
-												SUM(customerledger.NewDue) AS total_due FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
-												GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
+												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment,
+												invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
+												ON invoice.CustomerID = customertable.ID where customertable.ID!= 0 ORDER BY customertable.Name";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -175,103 +176,92 @@ else{
 												{
 												foreach($results as $result)
 												{				?>	
-												<tr id="cusid-<?php echo htmlentities($result->ID);?>">
+												<tr id="invoice-<?php echo htmlentities($result->ID);?>">
 													<td><?php echo htmlentities($cnt);?></td>
-													<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?></td>
+													<td id="cusname-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Name);?>
+														<p hidden><?php echo htmlentities($result->ID);?></p>
+													</td>
 													<td id="cusadd-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Address);?></td>
-													<td id="cusphone-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Phone);?></td>
-													<?php 
-													$sql2 = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
-													$query = $dbh -> prepare($sql2);
-													$query->bindParam(':id',$result->ID,PDO::PARAM_STR);
-													$query->execute();
-													$result2=$query->fetch(PDO::FETCH_OBJ);
-													?>
-													<td id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php 
+													 $netamount = $result->NetPayment+$result->discount;
+													 echo $netamount;
 													
-													<td>
-													<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-													<a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
-													<p class="bg-warning btn p-1" onclick="paydues(this.id)" id="<?php echo htmlentities($result->ID);?>"> pay</p>
+													?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PreDue;?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Total_with_due;?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->discount;?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PaidAmount;?></td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->DueAmount;?></td>
+													<td class="text-center" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->date;?></td>
+													
+													<td class="text-center">
+													<!-- <a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+													<a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a>  -->
+													<p class="bg-warning btn p-1" onclick="invodetails(this.id)" id="<?php echo htmlentities($result->ID);?>">Info</p>
 													</td>
 												</tr>
 												<?php $cnt=$cnt+1; }} ?>
 											</tbody>
 										</table>
 									</div>
-									<div class="col-12 col-md-4 col-lg-4 col-xl-3 bg-info rounded p-2 h-75">
-										<form action="" method="POST">
+									<div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
 											<div class="info text-center pt-2">
-												<h4 name="cusName" id="cusName">Name </h4>
+												<h4 name="cusName" id="cusName">Indivisual Invoice Details </h4>
 												<input hidden name="cusName2" id="cusName2" type="text" class="form-control text-end">
 												<h4 hidden name="cusID" id="cusId">ID: </h4>
+												
+												<h4 name="cusName" id="cusName">Name </h4>
 												<input hidden name="cusID2" id="cusId2" type="text" class="form-control text-end">
-												<h4 id="cusPhone">Phone </h4>
+												<h5 id="cusPhone">Phone </h5>
+												<h5 id="cusadd">Address </h5>
+												
 											</div>
-											<!-- <div class="calculation">
-												<div class="div">
-													<label for="">Previous Due: </label>
-													<input class="form-control" type="float" value="">
-												</div>
-											</div> -->
+											<hr>
 											
-											<div class="col-12 d-flex flex-column justify-content-end pb-5 pt-2">
-												<hr>
-													<div class="row mb-2">
-														<label  for="" class="fw-bold col-6 text-end">Privious Due : </label>
-														<div class="col-6">
-															<input id="preDue" name="preDue" type="text" class="form-control text-end" value="" placeholder="0.00" readonly>
-														</div>
-													</div>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-6 text-end">Paid Amount : </label>
-														<div class="col-6">
-															<input onkeyup="calculation()" id="paidAmount" name="paidAmount" type="number" class="form-control text-end" placeholder="0.00">
-														</div>
-													</div>
-													<hr>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-6 text-end">New Due : </label>
-														<div class="col-6">
-															<input name="newDue" type="float" id="newDue" class="form-control text-end" value="" placeholder="0.00" readonly>
-														</div>
-													</div>
-													<br><br>
-													<div class="row mb-2">
-														<label for="" class="fw-bold col-6 text-end">Comments : </label>
-														<div class="col-6">
-															<textarea name="comments" rows="3" id="" type="text" class="form-control" name="" value="" placeholder="Comments"></textarea>
-														</div>
-													</div>
-													<div class="row mb-2">
-														<div class="col-6 msg-btn d-flex justify-content-end">
-															<div class="form-check form-switch text-end">
-																<input class="form-check-input" value="1" type="checkbox" name="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">Want messgae?</label>
-															</div>
-														</div>
-														<div class="col-6">
-															<input type="text" name="cusPhone2" id="cusPhone2" class="form-control"  value="" placeholder="Phone Number">
-														</div>
-													</div>
-													<!-- <div class="row mb-2 justify-content-end">
-														<div class="col-6 my-3">
-															<p id="fullPaid" onclick="fullpaid()" class="form-control btn btn-warning" >Full Paid</p>
-														</div>
-														<div class="col-6 my-3">
-															<button type="submit" class="form-control btn btn-success" name="paydue">submit</button>
-														</div>
-													</div> -->
-												</div>
-												<div class="row mb-2 justify-content-end">
-														<div class="col-6 my-3">
-															<p id="fullPaid" onclick="fullpaid()" class="form-control btn btn-warning" >Full Paid</p>
-														</div>
-														<div class="col-6 my-3">
-															<button type="submit" class="form-control btn btn-success" name="paydue">submit</button>
-														</div>
-													</div>
-										</form>
+											<div class="col-12 d-flex flex-column justify-content-end">
+												<table class="display table table-striped table-bordered border border-dark table-hover">
+													<thead class="bg-style">
+														<tr>
+															<th>SN</th>
+															<th>Name</th>
+															<th>Batch</th>
+															<th>Qty</th>
+															<th>Price</th>
+															<th>Total</th>
+														</tr>
+													</thead>
+													<tbody id="invoice_details">
+														<!-- show invoice information here using ajax-->
+													</tbody>
+													<tfoot>
+														<tr>
+															<td class="text-end" colspan="5">Total</td>
+															<td class="text-end" >12</td>
+														</tr>
+														<tr>
+															<td class="text-end" colspan="5">Discount</td>
+															<td class="text-end" >12</td>
+														</tr>
+														<tr>
+															<td class="text-end" colspan="5">Previous Due</td>
+															<td class="text-end" >12</td>
+														</tr>
+														<tr>
+															<td class="text-end" colspan="5">Grand Total</td>
+															<td class="text-end" >12</td>
+														</tr>
+														<tr>
+															<td class="text-end" colspan="5">Paid Amount</td>
+															<td class="text-end" >12</td>
+														</tr>
+														<tr>
+															<td class="text-end" colspan="5">Due Amount</td>
+															<td class="text-end" >12</td>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
+												
 									</div>
 								</div>
 							</div>
@@ -344,47 +334,43 @@ else{
 	</div>
 
 	<script>
-		function paydues(clicked_id) {
-			var name ="cusname-"+clicked_id;
-			var phone ="cusphone-"+clicked_id;
-			var due ="cusdue-"+clicked_id;
-			// var address ="cusname-"+clicked_id;
-			// alert(nameID);
-			var names =  document.getElementById(name).innerText;
-			var due =  document.getElementById(due).innerText;
-			var phone =  document.getElementById(phone).innerText;
-
+		function invodetails(clicked_id) {
+			// var name ="cusname-"+clicked_id;
+			// var phone ="cusphone-"+clicked_id;
+			// var due ="cusdue-"+clicked_id;
+			// alert("Ok 1 - "+clicked_id);
 			// var names =  document.getElementById(name).innerText;
-			var cusname = document.getElementById('cusName');
-			var cusname2 = document.getElementById('cusName2');
-			var cusid = document.getElementById('cusId');
-			var cusid2 = document.getElementById('cusId2');
-			var cusPhone = document.getElementById('cusPhone');
-			var cusPhone2 = document.getElementById('cusPhone2');
-			var preDue = document.getElementById('preDue');
-			cusname.innerHTML = names;
-			cusname2.value = names;
-			cusPhone.innerHTML = phone;
-			cusPhone2.value = phone;
-			cusid.innerHTML = clicked_id;
-			cusid2.value = clicked_id;
-			preDue.value = due;
+			// var due =  document.getElementById(due).innerText;
+			// var phone =  document.getElementById(phone).innerText;
+			// var cusname = document.getElementById('cusName');
+			// var cusname2 = document.getElementById('cusName2');
+			// var cusid = document.getElementById('cusId');
+			// var cusid2 = document.getElementById('cusId2');
+			// var cusPhone = document.getElementById('cusPhone');
+			// var cusPhone2 = document.getElementById('cusPhone2');
+			// var preDue = document.getElementById('preDue');
+			
+			// cusname.innerHTML = names;
+			// cusname2.value = names;
+			// cusPhone.innerHTML = phone;
+			// cusPhone2.value = phone;
+			// cusid.innerHTML = clicked_id;
+			// cusid2.value = clicked_id;
+			// preDue.value = due;
+			var tbody = document.getElementById('invoice_details');
+
+			const xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+						// alert("Ok 2");
+						tbody.innerHTML = this.responseText;
+						// $('#exampleModal3').modal('show');
+				}
+			};
+			xmlhttp.open('GET', `query.php?invodetails=${clicked_id}`, true);
+			xmlhttp.send();
 		}
-		function calculation() {
-			var paidAmount =  document.getElementById('paidAmount').value;
-			var preDue =  document.getElementById('preDue').value;
-			var newDue =  document.getElementById('newDue');
-			var newDues = preDue - paidAmount;
-			newDue.value = newDues.toFixed(2);
-		}
-		function fullpaid() {
-			var paidAmount =  document.getElementById('paidAmount');
-			var preDue =  document.getElementById('preDue').value;
-			var newDue =  document.getElementById('newDue');
-			// var newDues = preDue - paidAmount;
-			paidAmount.value = preDue;
-			newDue.value = "0.00";
-		}
+		
 	</script>
 
 	<!-- Loading Scripts -->

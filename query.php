@@ -224,7 +224,7 @@
 				':Batch'	=>	$_SESSION['items'][$count]['Batch'],
 				':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
 				':Price'	=>	$T_price,
-				':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
+				':PursingPrice'	=>	$_SESSION['items'][$count]['Price'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
 				$data2 = array(
@@ -394,10 +394,35 @@
 		$query->bindParam(':id',$ID,PDO::PARAM_STR);
 		$query->execute();
 		$result=$query->fetch(PDO::FETCH_OBJ);
+		$_SESSION['cusPhone']= $result->Phone;
 		$Data4="$result->NewDue";
 		echo $Data4;
 
 	}
+	if(isset($_GET['invodetails'])){
+		$invoId = $_GET['invodetails'];
+		$sql = "SELECT sellingproduct.BatchId,sellingproduct.Qty,sellingproduct.Price,sellingproduct.NetPrice, medicine_list.medicine_name from 
+		sellingproduct left join  medicine_list ON sellingproduct.ProductId = medicine_list.item_code WHERE InvoiceId=:id";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':id',$invoId,PDO::PARAM_STR);
+		$query->execute();
+		$results=$query->fetchAll(PDO::FETCH_OBJ);
+		if($query->rowCount() > 0)
+		{ $cnt=1;
+			foreach($results as $result){
+				$Data.="<tr>						
+					<td class='text-center'>$cnt</td>
+					<td class='text-center'>$result->medicine_name</td>
+					<td class='text-center'>$result->BatchId</td>
+					<td class='text-center'>$result->Qty</td>
+					<td class='text-center'>$result->NetPrice</td>
+					<td class='text-center'>$result->Price</td>
+				</tr>";
+			}
+		}
+		echo $Data;
+	}
+	
 ?>
 
 
