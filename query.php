@@ -188,6 +188,7 @@
 				$customerid =$_GET['customerid'];
 			}
 			
+			$msgstatus = $_GET['msgstatus'];
 			$totaldiscount = $_GET['totaldiscount'];
 			$grandtotal = $_GET['grandtotal'];
 			$paidamount = $_GET['paidamount'];
@@ -235,6 +236,30 @@
 				$statement->execute($data);
 				$statement = $dbh->prepare($sql3);
 				$statement->execute($data2);
+			}
+			date_default_timezone_set('Asia/Dhaka');
+			$date = date('d/m/Y H:i');
+			$grandtotal= $grandtotal+$PreDue;
+			$mssg = "Payment Successful. Amount: ".$grandtotal." Paid: ".$paidamount." TrxID: ".$lastInsertId." Due amount : ".$due."tk ".$date.". Raha Phamacy";
+
+			if($msgstatus==1){
+				$number = $_SESSION['cusPhone'];
+				$url = "http://gsms.putulhost.com/smsapi";
+				$data = [
+				"api_key" => "C200114562795a9fbdc4e5.87112767",
+				"type" => "text",
+				"contacts" => "$number",
+				"senderid" => "8809601001536",
+				"msg" => "$mssg"
+			];
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			$response = curl_exec($ch);
+			curl_close($ch);			
 			}
 			unset ($_SESSION['items']);
 			unset ($_SESSION['C_ID']);
@@ -389,7 +414,8 @@
 		$value =explode("-",$str);
 		$ID = $value[0];
 		$_SESSION['C_ID'] = $value[0];
-		$sql = "SELECT * from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1";
+		$sql = "SELECT customerledger.NewDue, customertable.Phone from customerledger LEFT JOIN customertable ON 
+		customerledger.CustomerID=customertable.ID WHERE customerledger.CustomerID=:id ORDER BY customerledger.ID DESC limit 1";
 		$query = $dbh -> prepare($sql);
 		$query->bindParam(':id',$ID,PDO::PARAM_STR);
 		$query->execute();
@@ -418,6 +444,7 @@
 					<td class='text-center'>$result->NetPrice</td>
 					<td class='text-center'>$result->Price</td>
 				</tr>";
+				$cnt++;
 			}
 		}
 		echo $Data;

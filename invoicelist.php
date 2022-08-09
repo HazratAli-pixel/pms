@@ -133,11 +133,13 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Customer Information
+										Invoice Information
 									</div>
 									<div >
 										<a href="customer_list.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Customer List</a>
-                                        <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button>
+										<a href="customer_ledger.php" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Pay Dues</a>
+                                        <!-- <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button> -->
+                                        
 									</div>
 								</div>
                             </div>
@@ -152,6 +154,7 @@ else{
 													<th>#</th>
 													<th>Name</th>
 													<th>Address</th>
+													<!-- <th class="text-center">Invoie</th> -->
 													<th class="text-end">Amount</th>
 													<th class="text-end">PreDue</th>
 													<th class="text-end">Total</th>
@@ -182,17 +185,17 @@ else{
 														<p hidden><?php echo htmlentities($result->ID);?></p>
 													</td>
 													<td id="cusadd-<?php echo htmlentities($result->ID);?>" ><?php echo htmlentities($result->Address);?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php 
+													<td class="text-end" id="cusnetamount-<?php echo htmlentities($result->ID);?>" ><?php 
 													 $netamount = $result->NetPayment+$result->discount;
 													 echo $netamount;
 													
 													?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PreDue;?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Total_with_due;?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->discount;?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PaidAmount;?></td>
-													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->DueAmount;?></td>
-													<td class="text-center" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->date;?></td>
+													<td class="text-end" id="cuspredue-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PreDue;?></td>
+													<td class="text-end" id="custotal-<?php echo htmlentities($result->ID);?>" ><?php echo $result->Total_with_due;?></td>
+													<td class="text-end" id="cusdiscount-<?php echo htmlentities($result->ID);?>" ><?php echo $result->discount;?></td>
+													<td class="text-end" id="cuspaidamount-<?php echo htmlentities($result->ID);?>" ><?php echo $result->PaidAmount;?></td>
+													<td class="text-end" id="cusdueamount-<?php echo htmlentities($result->ID);?>" ><?php echo $result->DueAmount;?></td>
+													<td class="text-center" id="cusdate-<?php echo htmlentities($result->ID);?>" ><?php echo $result->date;?></td>
 													
 													<td class="text-center">
 													<!-- <a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
@@ -206,14 +209,12 @@ else{
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
 											<div class="info text-center pt-2">
-												<h4 name="cusName" id="cusName">Indivisual Invoice Details </h4>
-												<input hidden name="cusName2" id="cusName2" type="text" class="form-control text-end">
-												<h4 hidden name="cusID" id="cusId">ID: </h4>
-												
-												<h4 name="cusName" id="cusName">Name </h4>
-												<input hidden name="cusID2" id="cusId2" type="text" class="form-control text-end">
-												<h5 id="cusPhone">Phone </h5>
-												<h5 id="cusadd">Address </h5>
+												<h4 >Indivisual Invoice Details </h4>
+												<h4 name="cusName" id="cusName">Name</h4>
+												<div class="d-flex justify-content-center">
+													<p id="cusAdd">Address : </p>
+													<p id="invoids" class="ps-3"> Invoice ID</p>
+												</div>
 												
 											</div>
 											<hr>
@@ -236,27 +237,27 @@ else{
 													<tfoot>
 														<tr>
 															<td class="text-end" colspan="5">Total</td>
-															<td class="text-end" >12</td>
+															<td id="invo1" class="text-end" >0.00</td>
 														</tr>
 														<tr>
 															<td class="text-end" colspan="5">Discount</td>
-															<td class="text-end" >12</td>
+															<td id="invo2" class="text-end" >0.00</td>
 														</tr>
 														<tr>
 															<td class="text-end" colspan="5">Previous Due</td>
-															<td class="text-end" >12</td>
+															<td id="invo3" class="text-end" >0.00</td>
 														</tr>
 														<tr>
 															<td class="text-end" colspan="5">Grand Total</td>
-															<td class="text-end" >12</td>
+															<td id="invo4" class="text-end" >0.00</td>
 														</tr>
 														<tr>
 															<td class="text-end" colspan="5">Paid Amount</td>
-															<td class="text-end" >12</td>
+															<td id="invo5" class="text-end" >0.00</td>
 														</tr>
 														<tr>
-															<td class="text-end" colspan="5">Due Amount</td>
-															<td class="text-end" >12</td>
+															<td class="text-end bg-info" colspan="5">Due Amount</td>
+															<td id="invo6" class="text-end" >0.00</td>
 														</tr>
 													</tfoot>
 												</table>
@@ -335,30 +336,43 @@ else{
 
 	<script>
 		function invodetails(clicked_id) {
-			// var name ="cusname-"+clicked_id;
-			// var phone ="cusphone-"+clicked_id;
-			// var due ="cusdue-"+clicked_id;
+			var cusname ="cusname-"+clicked_id;
+			var cusadd ="cusadd-"+clicked_id;
+			var cusnetamount ="cusnetamount-"+clicked_id;
+			var cuspredue ="cuspredue-"+clicked_id;
+			var custotal ="custotal-"+clicked_id;
+			var cusdiscount ="cusdiscount-"+clicked_id;
+			var cuspaidamount ="cuspaidamount-"+clicked_id;
+			var cusdueamount ="cusdueamount-"+clicked_id;
 			// alert("Ok 1 - "+clicked_id);
-			// var names =  document.getElementById(name).innerText;
-			// var due =  document.getElementById(due).innerText;
-			// var phone =  document.getElementById(phone).innerText;
-			// var cusname = document.getElementById('cusName');
-			// var cusname2 = document.getElementById('cusName2');
-			// var cusid = document.getElementById('cusId');
-			// var cusid2 = document.getElementById('cusId2');
-			// var cusPhone = document.getElementById('cusPhone');
-			// var cusPhone2 = document.getElementById('cusPhone2');
-			// var preDue = document.getElementById('preDue');
+			var cusname1 =  document.getElementById(cusname).innerText;
+			var cusadd1 =  document.getElementById(cusadd).innerText;
+			var cusnetamount1 =  document.getElementById(cusnetamount).innerText;
+			var cuspredue1 =  document.getElementById(cuspredue).innerText;
+			var custotal1 =  document.getElementById(custotal).innerText;
+			var cusdiscount1 =  document.getElementById(cusdiscount).innerText;
+			var cuspaidamount1 =  document.getElementById(cuspaidamount).innerText;
+			var cusdueamount1 =  document.getElementById(cusdueamount).innerText;
 			
-			// cusname.innerHTML = names;
-			// cusname2.value = names;
-			// cusPhone.innerHTML = phone;
-			// cusPhone2.value = phone;
-			// cusid.innerHTML = clicked_id;
-			// cusid2.value = clicked_id;
-			// preDue.value = due;
+			var cusName = document.getElementById('cusName');
+			var cusAdd = document.getElementById('cusAdd');
+			var invoids = document.getElementById('invoids');
+			var invo1 = document.getElementById('invo1');
+			var invo2 = document.getElementById('invo2');
+			var invo3 = document.getElementById('invo3');
+			var invo4 = document.getElementById('invo4');
+			var invo5 = document.getElementById('invo5');
+			var invo6 = document.getElementById('invo6');
+			cusName.innerHTML = cusname1;
+			cusAdd.innerHTML = cusadd1;
+			invoids.innerHTML = "- "+clicked_id;
+			invo1.innerHTML = cusnetamount1;
+			invo2.innerHTML = cusdiscount1;
+			invo3.innerHTML = cuspredue1;
+			invo4.innerHTML = custotal1;
+			invo5.innerHTML = cuspaidamount1;
+			invo6.innerHTML = cusdueamount1;
 			var tbody = document.getElementById('invoice_details');
-
 			const xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {

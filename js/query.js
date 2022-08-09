@@ -153,11 +153,12 @@ function Category_function(clicked_id){
 }
 
 function OrderConfirm() {
-	let customerid, totaldiscount, vat, grandtotal, due, paidamount, previousDue;
+	let customerid, totaldiscount, vat, grandtotal, due, paidamount, previousDue, msgstatus;
 	// customerid = document.getElementById('')
 	customerid = 0;
 	totaldiscount = Number(document.getElementById('totaldiscount').value);
 	grandtotal = Number(document.getElementById('Total').value);
+	msgstatus = document.getElementById('msgid').value;
 	due = Number(document.getElementById('duelbl').innerHTML);
 	vat = Number(document.getElementById('vat').value);
 	previousDue = Number(document.getElementById('previousdue').value);
@@ -179,7 +180,8 @@ function OrderConfirm() {
 					})
 				.then((willDelete) => {
 					if (willDelete) {
-						document.location = 'msg.php';
+						alert("Update Comming soon....");
+						document.location = 'pos_invoice.php';
 					  } else {
 						document.location = 'pos_invoice.php';
 					  }
@@ -187,7 +189,7 @@ function OrderConfirm() {
 			}
 		};
 		xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
-		&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&ordersubmit`, true);
+		&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
 		xmlhttp.send();
 	} else {
 		swal({

@@ -116,7 +116,19 @@ else{
 	<script src="https://kit.fontawesome.com/b6e439dc17.js" crossorigin="anonymous"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		
+	<style>
+		/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+	</style>
 
 </head>
 <body>
@@ -133,7 +145,7 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Customer Information
+										Customer legder Information
 									</div>
 									<div >
 										<a href="customer_list.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Customer List</a>
@@ -154,8 +166,8 @@ else{
 													<th>Mobile</th>
 													<!-- <th>Total Debit</th> -->
 													<!-- <th>Total Credit</th> -->
-													<th>Total Due</th>
-													<th>Action</th>
+													<th class="text-end">Total Due</th>
+													<th class="text-center">Action</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -173,6 +185,7 @@ else{
 												$cnt=1;
 												if($query->rowCount() > 0)
 												{
+												$totaldueamount=0;
 												foreach($results as $result)
 												{				?>	
 												<tr id="cusid-<?php echo htmlentities($result->ID);?>">
@@ -187,9 +200,9 @@ else{
 													$query->execute();
 													$result2=$query->fetch(PDO::FETCH_OBJ);
 													?>
-													<td id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
-													
-													<td>
+													<td class="text-end" id="cusdue-<?php echo htmlentities($result->ID);?>" ><?php echo $result2->NewDue;?></td>
+													<?php $totaldueamount+= $result2->NewDue; ?>
+													<td class="text-center">
 													<a href="custldinfo.php?custId=<?php echo htmlentities($result->ID);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->ID);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
 													<a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a> 
 													<p class="bg-warning btn p-1" onclick="paydues(this.id)" id="<?php echo htmlentities($result->ID);?>"> pay</p>
@@ -197,6 +210,12 @@ else{
 												</tr>
 												<?php $cnt=$cnt+1; }} ?>
 											</tbody>
+											<tfoot>
+												<tr>
+													<td class="text-end text-lg bg-black text-white fw-bold" colspan="4">Total Due</td>
+													<td class="text-end text-lg bg-black text-white fw-bold"> <?php echo $totaldueamount ?></td>
+												</tr>
+											</tfoot>
 										</table>
 									</div>
 									<div class="col-12 col-md-4 col-lg-4 col-xl-3 bg-info rounded p-2 h-75">

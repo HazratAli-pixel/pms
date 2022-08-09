@@ -385,7 +385,11 @@ include('includes/config.php');
 							<label id="duelbl" name="dueamount" class="fs-5 fw-bold ms-2" for=""></label>
 						</div>
 											
-						<div class="">
+						<div class="d-flex align-items-center">
+							<div class="form-check form-switch pe-2">
+								<input id="msgid" class="form-check-input" value="1" type="checkbox" name="switch" id="flexSwitchCheckDefault">
+								<label class="form-check-label" for="flexSwitchCheckDefault">msg</label>
+							</div>
 							<button id="fullPaidbtn" onclick="FullPayment2()" class="me-2 btn btn-warning " >Full Paid</button>
 							<!-- <a href="query2.php"><button class="me-2 btn btn-md btn-primary align-items-center" for="">Cash Payment</button></a> onclick="OrderConfirm()" -->
 							<button onclick="OrderConfirm()" class="me-2 btn btn-primary" for="">Cash Payment</button>

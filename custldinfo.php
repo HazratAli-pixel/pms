@@ -81,8 +81,8 @@ else{
 								</div>
                             </div>
 							<div class="card-body">
-                                <a href="#" style="color:red; font-size:16px;">Download ledger info</a>
-								<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0">
+                                <a href="#" style="color:red; font-size:16px;">Download Individual ledger info</a>
+								<table id="" class="display table table-striped table-bordered table-hover" cellspacing="0">
 								<?php
 									$id = $_GET['custId'];
 									$sql = "SELECT Name,Address, Phone FROM customertable WHERE ID=:id"; 
@@ -109,7 +109,7 @@ else{
 									<thead class="bg-info">
 										<tr class="text-end">
 										    <th>#</th>
-                                            <th>Date</th>
+                                            <th class="text-center">Date</th>
 											<th>Debit</th>
 											<th>Pre Due</th>
 											<th>Total</th>
@@ -119,7 +119,7 @@ else{
 										</tr>
 									</thead>
 									
-									<tbody>
+									<tbody style="overflow-x: hidden;overflow-y: scroll;">
 
                                         <?php 
                                         $cnt=1;
@@ -135,24 +135,37 @@ else{
 											{				?>	
 											<tr class="text-end">
 												<td class="bg-info"><?php echo htmlentities($cnt);?></td>
-												<td style="background-color: rgb(189, 242, 237);"><?php echo $result->Date;?></td>
-												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->Debit);?></td>
-												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->PreDue);?></td>
+												<td class="text-center" style="background-color: rgb(189, 242, 237);"><?php echo $result->Date;?></td>
+												<td style="background-color: rgb(189, 242, 212);"><?php echo htmlentities($result->Debit);?></td>
+												<td style="background-color: rgba(242, 189, 236,0.5);"><?php echo htmlentities($result->PreDue);?></td>
 												<td style="background-color: rgb(189, 242, 237);"><?php echo htmlentities($result->Total);?></td>
 												<td style="background-color: rgb(189, 242, 212);"><?php echo htmlentities($result->Credit);?></td>
-												<td style="background-color: rgb(242, 189, 236);"><?php echo htmlentities($result->NewDue);?></td>
-												<td style="background-color: rgb(189, 242, 237);" class="text-center"><p class="btn" id="invoice-<?php echo htmlentities($result->InvoiceId);?>"><i class="fa fa-info-circle" aria-hidden="true"></i></p></td>
+												<td style="background-color: rgba(242, 189, 236,0.5);"><?php echo htmlentities($result->NewDue);?></td>
+												<td style="background-color: rgba(189, 242, 237, 0.8);" class="text-center"> 
+													<?php 
+													if($result->Debit != 0){
+														?> 
+															<p onclick="invodetails(this.id)" id="<?php echo htmlentities($result->InvoiceId);?>" class="btn btn-info btn-sm">details</p>
+														<?php
+													}
+													else{
+														?> 
+															<p title="Only Due Paid" style="cursor: not-allowed;" id="<?php echo htmlentities($result->InvoiceId);?>" class="btn btn-warning btn-sm">No details</p>
+														<?php
+													}
+													
+													?>
+												</td>
 												
 											</tr>
 										<?php $cnt=$cnt+1; }?>
-										<tr>
-											
-											<!-- <td class="text-end text-lg bg-black text-white fw-bold" ><br></td> -->
-											<td class="text-end text-lg bg-black text-white fw-bold" colspan='6'>Total Due Amount :</td>
-											<td class="text-end text-lg bg-black text-white fw-bold"><?php echo htmlentities($result->NewDue);?></td>
-											<!-- <td><?php echo htmlentities($result->InvoiceId);?></td>
-											<td><?php echo $result->Date;?></td> -->
-										</tr>
+										<tfoot>
+											<tr>
+												<!-- <td class="text-end text-lg bg-black text-white fw-bold" ><br></td> -->
+												<td class="text-end text-lg bg-black text-white fw-bold" colspan='6'>Total Due Amount :</td>
+												<td class="text-end text-lg bg-black text-white fw-bold"><?php echo htmlentities($result->NewDue);?></td>
+											</tr>
+										</tfoot>
 										<?php
 									} ?>
 									</tbody>
@@ -165,66 +178,63 @@ else{
 		</div>		
 	</div>
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+	<div class="modal fade" id="exampleModal8" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
 		<div class="modal-dialog modal-dialog-centered modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+					<h5 class="modal-title" id="exampleModalLabel">Invoice Product info</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<div class="modal-body" id="mbody2">
+				<div class="modal-body" id="mbody8">
+					<div class=" text-center">
+						<h1 class="" id="invoiceids"></h1>
+					</div>
 					<div class="card-body">
-						<form method="post" class="row">
-						<div class="">
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_name" placeholder="customer name">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Phone : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_phone" placeholder="phone number">
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Address : </label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="c_address" placeholder="address">
-								</div>
-							</div>
-							
-						</div>																
-						<div class="">
-							<div class="row mb-3">
-								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
-								<div class="col-sm-8 d-flex align-items-center">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
-										<label class="form-check-label" for="inlineRadio1">Active</label>
+						<div class="col-12 rounded">
+											<div class="col-12 d-flex flex-column justify-content-end">
+												<table class="display table table-striped table-bordered border border-dark table-hover">
+													<thead class="bg-style">
+														<tr>
+															<th>SN</th>
+															<th>Name</th>
+															<th>Batch</th>
+															<th>Qty</th>
+															<th>Price</th>
+															<th>Total</th>
+														</tr>
+													</thead>
+													<tbody id="invoice_details">
+														<!-- show invoice information here using ajax-->
+													</tbody>
+													
+												</table>
+											</div>
+												
 									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
-										<label class="form-check-label" for="inlineRadio2">Inactive</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="hr-dashed"></div>
-						<div class="col-md-12">
-							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
-								<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
-								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
-							</div>
-						</div>					
-						</form>	
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<script>
+		function invodetails(clicked_id) {
+			var tbody = document.getElementById('invoice_details');
+			var invoiceids = document.getElementById('invoiceids');
+			const xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+						// alert("Ok 2");
+						invoiceids.innerHTML="Invoice No : "+clicked_id;
+						tbody.innerHTML = this.responseText;
+						$('#exampleModal8').modal('show');
+				}
+			};
+			xmlhttp.open('GET', `query.php?invodetails=${clicked_id}`, true);
+			xmlhttp.send();
+		}
+		
+	</script>
 	<!-- Loading Scripts -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
