@@ -170,7 +170,7 @@ else{
 												<?php 
 												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment,
 												invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
-												ON invoice.CustomerID = customertable.ID where customertable.ID!= 0 ORDER BY customertable.Name";
+												ON invoice.CustomerID = customertable.ID where customertable.ID!= 0 ORDER BY invoice.ID DESC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);

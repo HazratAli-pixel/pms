@@ -30,8 +30,8 @@
 				</li>
 				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purchase</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="msg.php">Add Purchase</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Purchase List</a></li>
+						<li style="margin-left: 50px;"><a href="add_purchase.php">Add Purchase</a></li>
+						<li style="margin-left: 50px;"><a href="purchase_list.php">Purchase List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-hand-holding-usd mr-2"></i> Invoice</a>

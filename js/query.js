@@ -153,7 +153,7 @@ function Category_function(clicked_id){
 }
 
 function OrderConfirm() {
-	let customerid, totaldiscount, vat, grandtotal, due, paidamount, previousDue, msgstatus;
+	let customerid, totaldiscount, vat, grandtotal, due, paidamount,paidamount2, previousDue, msgstatus;
 	// customerid = document.getElementById('')
 	customerid = 0;
 	totaldiscount = Number(document.getElementById('totaldiscount').value);
@@ -163,37 +163,83 @@ function OrderConfirm() {
 	vat = Number(document.getElementById('vat').value);
 	previousDue = Number(document.getElementById('previousdue').value);
 	paidamount = Number(document.getElementById('paidamount3').value);
+	paidamount2 = Number(document.getElementById('paidamount2').value);
 	// alert(totaldiscount+'/'+ grandtotal+'/'+ due+'/'+ vat+'/'+ paidamount+'/'+ previousDue);
 	if(due<0){
 		due=0;
-	}
+	} 
 	if (grandtotal > 0) {
-		const xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function () {
-		if (this.readyState == 4 && this.status == 200) {
-				swal({
-					title: 'Success',
-					text: 'Want to print this',
-					icon: 'success',
-					buttons: true,
-
-					})
+		if (paidamount>0){
+			const xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+					swal({
+						title: 'Success',
+						text: 'Want to print this',
+						icon: 'success',
+						buttons: true,
+	
+						})
+					.then((willDelete) => {
+						if (willDelete) {
+							document.location = 'pos_invoice.php';
+						  } 
+						  else {
+							document.location = 'pos_invoice.php';
+						  }
+					});
+				}
+			};
+			xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
+			&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
+			xmlhttp.send();
+		}
+		else{
+			swal({
+				title: 'Pay minimum Amount',
+				text: 'Want to save without payment?',
+				icon: 'warning',
+				buttons: true,
+				dangerMode: true,
+				})
 				.then((willDelete) => {
+					paidamount = 0;
+					due = paidamount2;
 					if (willDelete) {
-						alert("Update Comming soon....");
-						document.location = 'pos_invoice.php';
-					  } else {
-						document.location = 'pos_invoice.php';
-					  }
-				});
-			}
-		};
-		xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
-		&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
-		xmlhttp.send();
-	} else {
+						const xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+								swal({
+									title: 'Success',
+									text: 'Want to print this',
+									icon: 'success',
+									buttons: true,
+				
+									})
+								.then((willDelete) => {
+									if (willDelete) {
+										document.location = 'pos_invoice.php';
+									}
+									else {
+										document.location = 'pos_invoice.php';
+									}
+								});
+							}
+						};
+						xmlhttp.open('GET', `query.php?customerid=${customerid}&totaldiscount=${totaldiscount}&grandtotal=${grandtotal}
+						&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
+						xmlhttp.send();
+					  } 
+					//   else {
+					// 	document.location = 'pos_invoice.php';
+					//   }
+				});		
+		}
+	}
+	else {
 		swal({
-			title: 'Nothing to submit!',
+			title: 'No Item!',
+			text: 'You have not select any Item.',
 			icon: 'warning',
 			// buttons: true,
 			dangerMode: true,

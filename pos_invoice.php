@@ -263,16 +263,16 @@ include('includes/config.php');
 												</div>
 											</div>
 											<div class="row">
-												<table id="" class="col-12 display table table-striped table-bordered table-hover w-100" cellspacing="0">
+												<table id="" class="col-12 display table  table-bordered table-hover w-100" cellspacing="0">
 													<thead>
 														<tr class='bg-style'>						
 															<th style="text-align: center; width:20%">Name </th>
 															<th style="text-align: center; width:10%" >Batch </th>
 															<th style="text-align: center; width:10%" >Ex-Date </th>
-															<th style="text-align: center; width:15%" >Quantity </th>
+															<th style="text-align: center; width:10%" >Quantity </th>
 															<th style="text-align: center; width:8%" >price </th>
 															<th style="text-align: center; width:10%" >Total </th>
-															<th style="text-align: center; width:9%" >Action</th>
+															<th style="text-align: center; width:12%" >Action</th> <p></p>
 														</tr>
 													</thead>
 													<tbody id="DisplayData">
@@ -283,17 +283,20 @@ include('includes/config.php');
 															{
 																$Itotal = $value['SellQty']*$value['Price'];
 																echo "<tr>						
-																		<td class='text-center'>$value[ProductName]</td>
-																		<td class='text-center'>$value[Batch] </td>
-																		<td class='text-center'>$value[Exdate]</td>
+																		<td class='text-center'> <p class='form-control'>$value[ProductName]</p>  </td>
+																		<td class='text-center'> <p class='form-control'>$value[Batch]</p> </td>
+																		<td class='text-center'> <p class='form-control' readonly>$value[Exdate]</p></td>
 																		<td class='text-center'>
-																			<input type='number' class='$value[SellQty]' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
+																			<input type='number' class='form-control $value[SellQty] text-center' id='$value[ItemId]' onChange='changeQty(this.id,this.value)' value='$value[SellQty]' min='1' max='120'>
 																		</td>
-																		<td class='iprice text-center'>$value[Price] <input type='hidden'  id='$value[Price]'  min='1' max='120'></td>
-																		<td class='itotal text-center'>$Itotal</td>
+																		<td class='iprice text-center'>
+																			<p class='form-control' readonly>$value[Price]</p>  
+																			<input type='hidden'  id='$value[Price]'  min='1' max='120'>
+																		</td>
+																		<td class='itotal text-center'><p class='form-control' readonly>$Itotal</p> </td>
 																		<td class='text-center'>
-																			<button class='btn btn-outline-none tprice' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt' aria-hidden='true'></i></button>
-																			<button class='btn btn-outline-none' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye' aria-hidden='true'></i></button>
+																			<p class='btn btn-outline-none tprice p-0 me-1' onClick='remove_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-trash-alt p-0 m-0' aria-hidden='true'></i></p>
+																			<p class='btn btn-outline-none p-0 m-0' onClick='show_item(this.id)' id='$value[ItemId]'><i style='color: red;' class='far fa-eye p-0 m-0' aria-hidden='true'></i></p>
 																		</td>
 																	</tr>";
 																// echo "<tr>						
