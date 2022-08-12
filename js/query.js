@@ -158,13 +158,19 @@ function OrderConfirm() {
 	customerid = 0;
 	totaldiscount = Number(document.getElementById('totaldiscount').value);
 	grandtotal = Number(document.getElementById('Total').value);
-	msgstatus = document.getElementById('msgid').value;
+	var x = document.getElementById("flexSwitchCheckDefault").checked;
+	if(x==true){
+		msgstatus = 1;
+	}
+	else{
+		msgstatus = 0;
+	}
 	due = Number(document.getElementById('duelbl').innerHTML);
 	vat = Number(document.getElementById('vat').value);
 	previousDue = Number(document.getElementById('previousdue').value);
 	paidamount = Number(document.getElementById('paidamount3').value);
 	paidamount2 = Number(document.getElementById('paidamount2').value);
-	// alert(totaldiscount+'/'+ grandtotal+'/'+ due+'/'+ vat+'/'+ paidamount+'/'+ previousDue);
+	// alert(msgstatus);
 	if(due<0){
 		due=0;
 	} 
@@ -230,9 +236,6 @@ function OrderConfirm() {
 						&due=${due}&vat=${vat}&paidamount=${paidamount}&predue=${previousDue}&msgstatus=${msgstatus}&ordersubmit`, true);
 						xmlhttp.send();
 					  } 
-					//   else {
-					// 	document.location = 'pos_invoice.php';
-					//   }
 				});		
 		}
 	}
@@ -241,7 +244,6 @@ function OrderConfirm() {
 			title: 'No Item!',
 			text: 'You have not select any Item.',
 			icon: 'warning',
-			// buttons: true,
 			dangerMode: true,
 			});
 	}
