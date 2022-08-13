@@ -23,7 +23,7 @@
 			$product_id = $_POST['product_id'];
 			$batch_id = $_POST['batch_id'];
 			$expeire_date = $_POST['expeire_date'];
-			$product_quantity = $_POST['box_quantity'];
+			$product_quantity = $_POST['product_quantity'];
 			$product_rate = $_POST['product_rate'];
 			$mrp = $_POST['mrp'];
 			$userid = $_SESSION['alogin'];
@@ -40,25 +40,6 @@
 				$query = mysqli_query($con,$sql);
 			}
 
-			// $sql="INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,ExDate,Qty,Mprice,MRP) 
-			// VALUES(:invoice_no,:product_id,:batch_id,:expeire_date,:product_quantity,:product_rate,:mrp)";
-			// foreach ($batch_id as $key => $value)
-			// {
-			// 	$data = array(
-			// 	':invoice_no'	=>	$invoice_no,
-			// 	':product_id'	=>	$_POST['product_id'][$key],
-			// 	':batch_id'	=>	$_POST['batch_id'][$key],
-			// 	':expeire_date'	=>	$_POST['expeire_date'][$key],
-			// 	':product_quantity'	=>	$_POST['product_quantity'][$key],
-			// 	':product_rate'	=>	$_POST['product_rate'][$key],
-			// 	':mrp'	=>	$_POST['mrp'][$key]
-			// 	); 
-			// 	$statement = $dbh->prepare($sql);
-			// 	$statement->execute($data);
-			// }
-			// echo "<script>alert($key)</script>";
-			
-	
 		}
 	?>
 <!doctype html>
@@ -235,17 +216,17 @@
 															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class form-control text-end"  tabindex="7" placeholder="Batch Id">
 														</td>
 														<td>
-															<input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required>
+															<input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onclick="checkExpiredate(1)" required>
 														</td>
 														<td class="wt">
 															<input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly>
 														</td>
 														<td class="text-end">
-															<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required">
+															<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required" readonly>
 														</td>
 													
 														<td class="text-end">
-															<input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="" >
+															<input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required">
 															<input type="hidden" name="unit_qty[]" id="unit_qty_1">
 														</td>
 														<td class="test">
@@ -276,7 +257,7 @@
 													<tr>
 														<td class="text-end" colspan="8"><b>Vat:</b></td>
 														<td class="text-end">
-															<input type="text" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="0.00" tabindex="15" />
+															<input type="text" id="vat" onkeyup="purchase_vatcalculation()" class="text-end form-control valid_number" name="vat" placeholder="%" tabindex="15" />
 														</td>
 														<td>
 
@@ -405,6 +386,17 @@
 	</div>
 
 <script>
+// $(function() {
+// $( "#date_picker" ).datepicker({
+//   dateFormat: 'dd-mm-yy'
+// });
+// });
+// const prices = document.querySelectorAll('product_rate_1');
+// for (const price of prices){
+// 	console.log(price.innerText);
+// }
+
+
 var count = 1;
 function add_purchaseRow(click){
 				// var id = click
@@ -416,16 +408,16 @@ function add_purchaseRow(click){
 				output+='<datalist id="datalistOptionss_'+count+'" required>';
 				output+='</datalist>';
 				output+='</td>';
-				output+='<td> <input type="text" name="batch_id[]" id="batch_id_1" class="form-control batch_class text-end"  tabindex="7" placeholder="Batch Id" /></td>';
-				output += '<td> <input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required></td>';
-				output += '<td class="wt">  <input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly></td>';
+				output+='<td> <input type="text" name="batch_id[]" id="batch_id_'+count+'" class="form-control batch_class text-end"  tabindex="7" placeholder="Batch Id" /></td>';
+				output += '<td> <input type="date" name="expeire_date[]" id="expeire_date_'+count+'" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate('+count+')" required></td>';
+				output += '<td class="wt">  <input type="text" id="available_quantity_'+count+'" class="form-control text-end stock_ctn_'+count+'" placeholder="0.00" readonly></td>';
 				output += '<td class="text-end">';
-				output+='<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required"></td>';
-				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="">';
-				output+='<input type="hidden" name="unit_qty[]" id="unit_qty_1"></td>';
-				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" ></td>';
-				output += '<td>    <input type="text" class="form-control valid_number" name="mrp[]" id="mrp_1" required tabindex="12" ></td>';
-				output += '<td class="text-end">    <input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" ></td>';
+				output+='<input type="text" name="box_quantity[]" id="box_quantity_'+count+'" class="form-control text-end store_cal_'+count+' valid_number" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required" readonly></td>';
+				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_'+count+'" class="form-control text-end store_cal_'+count+'" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" placeholder="0.00" value="" min="0" required="required">';
+				output+='<input type="hidden" name="unit_qty[]" id="unit_qty_'+count+'"></td>';
+				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation('+count+'),checkqty('+count+');" onchange="purchase_calculation('+count+');" id="product_rate_'+count+'" class="form-control product_rate_'+count+' text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" ></td>';
+				output += '<td>    <input type="text" class="form-control valid_number" name="mrp[]" id="mrp_'+count+'" required tabindex="12" ></td>';
+				output += '<td class="text-end">    <input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_'+count+'" value="0.00" readonly="readonly" ></td>';
 				output += '<td>    <button type="button" class="btn btn-danger" tabindex="13" id="'+count+'" onclick="deleteRow(this.id)"><i class="far fa-trash-alt"></i></button></td>';
 				output += '</tr>';
 				$('#'+click).append(output);
@@ -466,6 +458,57 @@ function product_list_purchase2(clicked_id){
 	xmlhttp.send();
 }
 
+
+function purchase_calculation(id){
+	let productQty = document.getElementById('quantity_'+id);
+	let productRate = document.getElementById('product_rate_'+id);
+	let totalPerItem = document.getElementById('total_price_'+id);
+	let sub_total = document.getElementById('sub_total');
+	let grandTotal = document.getElementById('grandTotal');
+	productQty = Number(productQty.value);
+	productRate = Number(productRate.value);
+	let total = productQty*productRate;
+	totalPerItem.value = total.toFixed(2);
+
+	let totalPrices = document.getElementsByClassName('total_price')
+	let i =0;
+	let sum =0;
+	for(i; i<totalPrices.length;i++){
+		sum += Number(totalPrices[i].value);
+	}
+	sub_total.value = sum;
+	grandTotal.value = sum;
+	purchase_vatcalculation()	
+}
+
+function purchase_vatcalculation(){
+	let sub_total = document.getElementById('sub_total');
+	let vat = document.getElementById('vat');
+	let grandTotal = document.getElementById('grandTotal');
+	grandTotal.value =Number(sub_total.value)+((Number(sub_total.value)*Number(vat.value))/100);
+	disoucnt_calculation()
+	paid_calculation();
+}
+function disoucnt_calculation(){
+	let sub_total = document.getElementById('sub_total');
+	let vat = document.getElementById('vat');
+	let grandTotal = document.getElementById('grandTotal');
+	let discount = document.getElementById('discount');
+	grandTotal.value = Number(sub_total.value)+((Number(sub_total.value)*Number(vat.value))/100)-Number(discount.value);
+}
+function paid_calculation(){
+	let grandTotal = document.getElementById('grandTotal');
+	let paid_amount = document.getElementById('paid_amount');
+	let due_amount = document.getElementById('due_amount');
+	due_amount.value = Number(grandTotal.value)-Number(paid_amount.value);
+}
+function full_paid_purchase(){
+	let grandTotal = document.getElementById('grandTotal');
+	let paid_amount = document.getElementById('paid_amount');
+	let due_amount = document.getElementById('due_amount');
+	paid_amount.value = Number(grandTotal.value)
+	due_amount.value='0.00';
+}
 
 
 
