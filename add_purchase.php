@@ -11,56 +11,55 @@
 
 	else
 	{
-		if(isset($_REQUEST['del']))
-		{
-			$did=intval($_GET['del']);
-			$sql = "delete from medicine_list WHERE  item_code=:did";
-			$query = $dbh->prepare($sql);
-			$query-> bindParam(':did',$did, PDO::PARAM_STR);
-			$query -> execute();
-			$msg="Record deleted Successfully";
-			header("refresh:3;customer_list.php");
-		}
 		if(isset($_POST['submit']))
 	  		{
+			$M_ID = $_POST['manufacturer_id'];
+			$invoice_no = $_POST['invoice_no'];
+			$payment_type = $_POST['payment_type'];
+			$bank_id = $_POST['bank_id'];
+
+		
+
+			$product_id = $_POST['product_id'];
+			$batch_id = $_POST['batch_id'];
+			$expeire_date = $_POST['expeire_date'];
+			$product_quantity = $_POST['box_quantity'];
+			$product_rate = $_POST['product_rate'];
+			$mrp = $_POST['mrp'];
+			$userid = $_SESSION['alogin'];
+			$userid = 1212;
+			$status = 0;
+
+			$i= count($_POST['batch_id']);
+			$v= $_POST['batch_id'][0];
+			$v= "sdafsadfsdaf";
+
+			foreach($batch_id as $key => $value){
+				$sql = "INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,ExDate,Qty,Mprice,MRP) VALUES 
+				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$expeire_date[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
+				$query = mysqli_query($con,$sql);
+			}
+
+			// $sql="INSERT INTO purchaseslist (InvoiceId,ProductId,BatchId,ExDate,Qty,Mprice,MRP) 
+			// VALUES(:invoice_no,:product_id,:batch_id,:expeire_date,:product_quantity,:product_rate,:mrp)";
+			// foreach ($batch_id as $key => $value)
+			// {
+			// 	$data = array(
+			// 	':invoice_no'	=>	$invoice_no,
+			// 	':product_id'	=>	$_POST['product_id'][$key],
+			// 	':batch_id'	=>	$_POST['batch_id'][$key],
+			// 	':expeire_date'	=>	$_POST['expeire_date'][$key],
+			// 	':product_quantity'	=>	$_POST['product_quantity'][$key],
+			// 	':product_rate'	=>	$_POST['product_rate'][$key],
+			// 	':mrp'	=>	$_POST['mrp'][$key]
+			// 	); 
+			// 	$statement = $dbh->prepare($sql);
+			// 	$statement->execute($data);
+			// }
+			// echo "<script>alert($key)</script>";
 			
-			$c_name=$_POST['c_name'];
-			$c_phone=$_POST['c_phone'];
-			$c_address=$_POST['c_address'];
-			$status=$_POST['radio_value'];
-
-			$sql="INSERT INTO customertable (Name, Phone,Address,Status) 
-			VALUES(:c_name,:c_phone,:c_address,:radio_value)";
-			$query = $dbh->prepare($sql);
-			$query->bindParam(':c_name',$c_name,PDO::PARAM_STR);
-			$query->bindParam(':c_phone',$c_phone,PDO::PARAM_STR);
-			$query->bindParam(':c_address',$c_address,PDO::PARAM_STR);
-			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-
-			$query->execute();
-			$lastInsertId = $dbh->lastInsertId();
 	
 		}
-		if(isset($_GET['close'])){    
-			$cmpid=$_GET['close'];
-			$sts=0;
-			$sql ="update customertable set Status=:status where ID=:cusId";
-			$query = $dbh->prepare($sql);
-			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
-			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
-			$query -> execute();
-			echo "<script>window.location.href='customer_list.php'</script>";
-			}
-		if(isset($_GET['active'])){    
-			$cmpid=$_GET['active'];
-			$sts=1;
-			$sql ="update customertable set Status=:status where ID=:cusId";
-			$query = $dbh->prepare($sql);
-			$query-> bindParam(':status',$sts, PDO::PARAM_STR);
-			$query-> bindParam(':cusId',$cmpid, PDO::PARAM_STR);
-			$query -> execute();
-			echo "<script>window.location.href='customer_list.php'</script>";
-			}
 	?>
 <!doctype html>
 <html lang="en" class="no-js">
@@ -72,7 +71,7 @@
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS-Customer List</title>
+	<title>PMS-Add Purchase</title>
 
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
@@ -80,6 +79,11 @@
 	
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		/* datalist {
+  			display: none;
+		} */
+	</style>
 
 </head>
 <body>
@@ -105,43 +109,40 @@
 								</div>
                             </div>
 							<div class="card-body">
-                                <a href="download-records.php" style="color:red; font-size:16px;">Download Customer list</a>
-								<form action="" id="purchase_form" enctype="" method="post" accept-charset="utf-8">
-									<!-- <input type="hidden" name="app_csrf" value="" />             -->
+								<form  id="purchase_form" action=""  method="post" >
 									<div class="form-group row mb-2">
 										<label for="manufacturer" class="col-md-2 text-end col-form-label">Manufacturer <i class="text-danger"> * </i>:</label>
 										<div class="col-md-4">
+										<?php 
+														$cname="SELECT ID, name, Status from company";
+														$cquery = $dbh -> prepare($cname);
+														$cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+														$cquery->execute();
+														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
+														?>
 											<div class="">
 												<select name="manufacturer_id" class="form-control select2" id="manufacturer_id" tabindex="" >
 														<option value="" selected="selected">Select Manufacturer</option>
-														<option value="1">Beximco</option>
-														<option value="2">Square</option>
-														<option value="3">Healthcare</option>
-														<option value="4">Opsonin</option>
-														<option value="5">Beximco</option>
-														<option value="6">Healthcare </option>
-														<option value="7">opsonin</option>
-														<option value="8">Square</option>
-														<option value="9">Reneta</option>
-														<option value="11">Aristropharma </option>
-														<option value="12">Cosmic</option>
-														<option value="13">Novartis </option>
-														<option value="14">Radiant</option>
-														<option value="15">incepta</option>
-														<option value="16">Nipro </option>
-														<option value="17">Novo</option>
-														<option value="18">Jayson</option>
-														<option value="19">Gaco</option>
-														<option value="20">Eskayef</option>
-														<option value="21">ABC</option>
-														<option value="22">Searle</option>
+														<?php
+														foreach($results as $result)
+																{
+																	if($result->Status==1)
+																	{?>	
+																		<option id="" value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
+																		<?php 
+																	} 
+																}?>
 												</select>
                         					</div>
                     					</div>
                      						<label for="date" class="col-md-2 text-end col-form-label">Date <i class="text-danger"> * </i>:</label>
                     						<div class="col-md-4">
+												<?php 
+												date_default_timezone_set('Asia/Dhaka');
+												$date = date('d/m/Y');
+												?>
                         						<div class="">
-													<input type="text" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="Date" value="" tabindex="2" >
+													<input type="text" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="Date" value="<?php echo $date?>" tabindex="2" >
 												</div>
                        
                     						</div>
@@ -174,12 +175,32 @@
 											<label for="bank" class="col-md-2 text-end bank_div col-form-label">Bank:</label>
 											<div class="col-md-4 bank_div" id="bank_div">
 												<div class="">
+												<?php 
+														$cname="SELECT ID, name, Status from company";
+														$cquery = $dbh -> prepare($cname);
+														$cquery->bindParam(':barcode',$id,PDO::PARAM_STR);
+														$cquery->execute();
+														$results=$cquery->fetchAll(PDO::FETCH_OBJ);							   
+														?>
 													<select name="bank_id" class="form-control p-2 select2" id="bank_id">
 														<option value="" selected="selected">Select Bank</option>
-														<option value="1">City Bank </option>
-														<option value="2">UCB </option>
-														<option value="3">DBBL</option>
-														<option value="4">Prime Asia</option>
+														<?php 
+																foreach($results as $result)
+																{
+																	if($result->Status==1)
+																	{?>	
+																		<!-- <option id="" value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option> -->
+																		<?php 
+																	} 
+																}?>
+														<option value="12">DBBL</option>
+														<option value="13">IBBL </option>
+														<option value="14">Agrani Bank</option>
+														<option value="15">Janata Bank</option>
+														<option value="16">Rupali Bank</option>
+														<option value="17">IFIC Bank</option>
+														<option value="18">NRBC Bank</option>
+														<option value="19">Jamnuna Bank</option>
 													</select>
 												</div>
 											</div>
@@ -188,7 +209,7 @@
                             				<table class="table table-bordered border-muted table-hover" id="purchaseTable">
                                 				<thead>
 													<tr class="">
-														<th class="text-center"><nobr>Medicine Information<i class="text-danger">*</i></nobr></th> 
+														<th class="text-center"><nobr>Medicine name<i class="text-danger">*</i></nobr></th> 
 														<th class="text-center"><nobr>Batch Id<i class="text-danger"></i></nobr></th>
 														<th class="text-center"><nobr>Expiry Date<i class="text-danger">*</i></nobr></th>
 														<th class="text-center"><nobr>Stock Qty</nobr></th>
@@ -201,38 +222,41 @@
                                         			</tr>
                                 				</thead>
 												<tbody id="addPurchaseItem">
-													<tr>
+													<tr id="row_1">
 														<td class="span3 manufacturer">
-															<input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_list_purchase(1);" placeholder="Medicine Name" id="product_name_1" tabindex="6" >
+															<!-- <input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_list_purchase(1);" placeholder="Medicine Name" id="product_name_1" tabindex="6" >
 															<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId"/>
-															<input type="hidden" class="sl" value="1">
+															<input type="hidden" class="sl" value="1"> -->
+															<input name="companyname" value="" class="form-control" onblur="product_list_purchase2(1)" onkeyup="product_list_purchase(1);" list="datalistOptionss_1" id="exampleDataListf_1" >
+															<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" value="">
+															<datalist id="datalistOptionss_1" required></datalist>
 														</td>
 														<td>
-															<input type="text" name="batch_id[]" id="batch_id_1" class="form-control text-end"  tabindex="7" placeholder="Batch Id" />
+															<input type="text" name="batch_id[]" id="batch_id_1" class="batch_class form-control text-end"  tabindex="7" placeholder="Batch Id">
 														</td>
 														<td>
-															<input type="text" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required/>
+															<input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required>
 														</td>
 														<td class="wt">
-															<input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly/>
+															<input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly>
 														</td>
 														<td class="text-end">
-															<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required"/>
+															<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required">
 														</td>
 													
 														<td class="text-end">
-															<input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="" />
+															<input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="" >
 															<input type="hidden" name="unit_qty[]" id="unit_qty_1">
 														</td>
 														<td class="test">
-															<input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" />
+															<input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required">
 														</td>
 														<td>
 															<input type="text" class="form-control valid_number" name="mrp[]" id="mrp_1" required tabindex="12" >
 														</td>
 
 														<td class="text-end">
-															<input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
+															<input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" >
 														</td>
 														<td>
 															
@@ -305,10 +329,11 @@
 										<div class="col-md-6 text-end">
 											<div class="">
 												<input type="button" id="full_paid_purchase_tab" class="btn btn-warning" value="Full Paid" tabindex="17" onClick="full_paid_purchase()"/>
-												<button type="submit"  class="btn btn-success" tabindex="19" id="save_purchase">
+												<button type="submit" name="submit"  class="btn btn-success" tabindex="19" id="save_purchase">
 												Save</button>
 											</div>
 										</div>
+										
 									</div>
 								</form>
 							</div>
@@ -380,34 +405,87 @@
 	</div>
 
 <script>
-	var count = 0;
+var count = 1;
 function add_purchaseRow(click){
 				// var id = click
 				count = count + 1;
 				output = '<tr id="row_'+count+'">';
-
 				output += '<td class="span3 manufacturer">';
-				output+='<input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_list_purchase(1);" placeholder="Medicine Name" id="product_name_1" tabindex="6" >';
-				output+='<input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId"/>';
-				output+='<input type="hidden" class="sl" value="1">';
+				output+='<input name="companyname" value="" class="form-control" onblur="product_list_purchase2('+count+');" onkeyup="product_list_purchase('+count+');" list="datalistOptionss_'+count+'" id="exampleDataListf_'+count+'">';
+				output+='<input type="hidden" class="product_id_'+count+'" name="product_id[]" id="SchoolHiddenId" value="">';
+				output+='<datalist id="datalistOptionss_'+count+'" required>';
+				output+='</datalist>';
 				output+='</td>';
-				output+='<td>    <input type="text" name="batch_id[]" id="batch_id_1" class="form-control text-end"  tabindex="7" placeholder="Batch Id" /></td>';
-				output += '<td>  <input type="text" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required/></td>';
-				output += '<td class="wt">  <input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly/></td>';
+				output+='<td> <input type="text" name="batch_id[]" id="batch_id_1" class="form-control batch_class text-end"  tabindex="7" placeholder="Batch Id" /></td>';
+				output += '<td> <input type="date" name="expeire_date[]" id="expeire_date_1" class="form-control uidatepicker " tabindex="8"    placeholder="Expiry Date" onchange="checkExpiredate(1)" required></td>';
+				output += '<td class="wt">  <input type="text" id="available_quantity_1" class="form-control text-end stock_ctn_1" placeholder="0.00" readonly></td>';
 				output += '<td class="text-end">';
-				output+='<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required"/></td>';
-				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="" />';
+				output+='<input type="text" name="box_quantity[]" id="box_quantity_1" class="form-control text-end store_cal_1 valid_number" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" tabindex="10" required="required"></td>';
+				output += '<td class="text-end">   <input type="text" name="product_quantity[]" id="quantity_1" class="form-control text-end store_cal_1" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" placeholder="0.00" value="" min="0" required="required" readonly="">';
 				output+='<input type="hidden" name="unit_qty[]" id="unit_qty_1"></td>';
-				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" /></td>';
+				output += '<td class="test">    <input type="text" name="product_rate[]" onkeyup="purchase_calculation(1),checkqty(1);" onchange="purchase_calculation(1);" id="product_rate_1" class="form-control product_rate_1 text-end valid_number" placeholder="0.00" value="" min="0" tabindex="11" required="required" ></td>';
 				output += '<td>    <input type="text" class="form-control valid_number" name="mrp[]" id="mrp_1" required tabindex="12" ></td>';
-				output += '<td class="text-end">    <input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" /></td>';
+				output += '<td class="text-end">    <input class="form-control total_price text-end" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" ></td>';
 				output += '<td>    <button type="button" class="btn btn-danger" tabindex="13" id="'+count+'" onclick="deleteRow(this.id)"><i class="far fa-trash-alt"></i></button></td>';
 				output += '</tr>';
 				$('#'+click).append(output);
+				
 }
+
+function product_list_purchase(clicked_id){
+	const inputValue = document.getElementById('exampleDataListf_'+clicked_id).value;
+	const manufacturer_id = document.getElementById('manufacturer_id').value;
+	// alert(manufacturer_id);
+	const xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+				// alert(this.responseText);
+				$('#datalistOptionss_'+clicked_id).html(this.responseText);
+		}
+	};
+
+	xmlhttp.open('GET', `query.php?medicineName=${inputValue}&manufacturer_id=${manufacturer_id}`, true);
+	xmlhttp.send();
+}
+
+function product_list_purchase2(clicked_id){
+	const inputValue = document.getElementById('exampleDataListf_'+clicked_id).value;
+	const manufacturer_id = document.getElementById('manufacturer_id').value;
+	// alert(manufacturer_id);
+	const xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+				var newString = this.responseText.replace(/\s+/g,' ').trim();
+				$('.product_id_'+clicked_id).val(newString);
+				// $('.product_id_'+clicked_id).val(this.responseText);
+				// alert("AAA"+newString+"BBB");
+		}
+	};
+
+	xmlhttp.open('GET', `query.php?medicineName2=${inputValue}&manufacturer_id2=${manufacturer_id}`, true);
+	xmlhttp.send();
+}
+
+
+
+
 function deleteRow(click_id){
 	$('#row_'+click_id+'').remove();
 }
+function bank_payment(value){
+	if(value==2){
+		$('.bank_div').show();
+	}
+	else{
+
+		$('.bank_div').hide();
+	}
+}
+window.onload = function() {
+  bank_payment(1);
+};
+
+
 </script>
 
 

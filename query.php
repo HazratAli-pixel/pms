@@ -2,7 +2,8 @@
 
 	use Dflydev\DotAccessData\Data;
 
-	use function Symfony\Component\VarDumper\Dumper\esc;
+use function PHPUnit\Framework\isEmpty;
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 	session_start();
 	error_reporting(0);
@@ -217,7 +218,7 @@
 			$sql2="INSERT INTO sellingproduct(InvoiceId, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
 			VALUES(:lastInsertId,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
 			
-			$sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:Batch";
+			// $sql3="Update stocktable set SellQty=:SellQty where BatchNumber=:Batch";
 			for($count = 0; $count<$i; $count++)
 			{
 				$T_price = $_SESSION['items'][$count]['SellQty']*$_SESSION['items'][$count]['Price'];
@@ -230,14 +231,14 @@
 				':PursingPrice'	=>	$_SESSION['items'][$count]['Price'],
 				':userid'	=>	$_SESSION['alogin']			
 				); 
-				$data2 = array(
-					':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
-					':Batch'	=>	$_SESSION['items'][$count]['Batch']
-				); 
+				// $data2 = array(
+				// 	':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
+				// 	':Batch'	=>	$_SESSION['items'][$count]['Batch']
+				// ); 
 				$statement = $dbh->prepare($sql2);
 				$statement->execute($data);
-				$statement = $dbh->prepare($sql3);
-				$statement->execute($data2);
+				// $statement = $dbh->prepare($sql3);
+				// $statement->execute($data2);
 			}
 			date_default_timezone_set('Asia/Dhaka');
 			$date = date('d/m/Y H:i');
@@ -450,6 +451,68 @@
 			}
 		}
 		echo $Data;
+	}
+	
+	if(isset($_GET['medicineName'])){
+		$medicineName = $_GET['medicineName'];
+		$value =explode("-",$medicineName);
+		$medicineName = $value[0];
+		$strength = $value[1];
+
+		$manufacturer_id = $_GET['manufacturer_id'];
+
+		$pattern = '%'.$medicineName.'%';
+		$pattern2 = '%'.$strength.'%';
+		$manufacturer_id = '%'.$manufacturer_id.'%';
+		$sql = "SELECT * from  medicine_list WHERE medicine_name like :pattern and menufacturer like  :manufacturer_id";
+		$query = $dbh -> prepare($sql);
+		// $query->bindParam(':pattern',$pattern,PDO::PARAM_STR);
+		// $stmt->execute(['limit' => $limit, 'offset' => $offset]); 
+		$query->execute([':pattern' => $pattern,':manufacturer_id' => $manufacturer_id]);
+		// $query->execute([':pattern' => $pattern, ':pattern2' => $pattern2,':manufacturer_id' => $manufacturer_id]);
+		// $query->execute();
+		$results=$query->fetchAll(PDO::FETCH_OBJ);
+		if($query->rowCount() > 0)
+		{ $cnt=1;
+			foreach($results as $result){
+				$Data.='
+				<option value="'.$result->medicine_name.'-'.$result->strength.'"></option>
+				<option hidden name="product_id[]" value="'.$result->item_code.'"></option>
+				';
+				$cnt++;
+			}
+		}
+		echo $Data;
+	}
+	if(isset($_GET['medicineName2'])){
+		$medicineName = $_GET['medicineName2'];
+		$value =explode("-",$medicineName);
+		$medicineName = $value[0];
+		$strength = $value[1];
+
+		$manufacturer_id = $_GET['manufacturer_id'];
+
+		$pattern = '%'.$medicineName.'%';
+		$pattern2 = '%'.$strength.'%';
+		$manufacturer_id = '%'.$manufacturer_id.'%';
+
+		$sql = "SELECT item_code from  medicine_list WHERE medicine_name like :pattern and strength like :pattern2  and menufacturer like  :manufacturer_id";
+		$query = $dbh -> prepare($sql);
+		$query->execute([':pattern' => $pattern, ':pattern2' => $pattern2,':manufacturer_id' => $manufacturer_id]);
+		// $results=$query->fetchAll(PDO::FETCH_OBJ);
+		$result=$query->fetch(PDO::FETCH_OBJ);
+		$item_code= $result->item_code;
+		echo $item_code;
+
+
+		// if($query->rowCount() > 0)
+		// { $cnt=1;
+		// 	foreach($results as $result){
+		// 		$Data="$result->item_code";
+		// 		$cnt++;
+		// 	}
+		// }
+		// echo $Data;
 	}
 	
 ?>
