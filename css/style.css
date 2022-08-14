@@ -784,12 +784,12 @@ li {
 .bg-style{
 	background-image: linear-gradient(to right, rgba(202, 166, 227,.3), rgba(133, 160, 199,.3), rgba(202, 166, 227,.3));
 }
-.bg-style2{
+/* .bg-style2{
 	background-image: linear-gradient(to right, rgba(147, 139, 221, 0.5), rgba(219, 134, 191, 0.3), rgba(147, 139, 221,.5));
 }
 .bg-style3{
 	background-image: linear-gradient(to right, rgba(114, 103, 212, 0.5), rgba(219, 134, 191, 0.5), rgba(114, 103, 212, 0.5));
-}
+} */
 
 .right-side{
   background-color:  rgba(172, 228, 250,.5);

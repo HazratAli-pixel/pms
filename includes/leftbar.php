@@ -17,7 +17,7 @@
 						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Company Ledger</a></li>
 					</ul>
-				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a>
+				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a> 
 					<ul>
 						<li style="margin-left: 50px;"><a href="./medicine_category_list.php">Categroy List</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_unit_list.php">Unit List</a></li>
@@ -31,7 +31,8 @@
 				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purchase</a>
 					<ul>
 						<li style="margin-left: 50px;"><a href="add_purchase.php">Add Purchase</a></li>
-						<li style="margin-left: 50px;"><a href="purchase_list.php">Purchase List</a></li>
+						<li style="margin-left: 50px;"><a href="purchase_list.php">Purchase invoice List</a></li>
+						<li style="margin-left: 50px;"><a href="purchaseitem_list.php">Purchase item List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-hand-holding-usd mr-2"></i> Invoice</a>

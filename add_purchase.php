@@ -16,9 +16,30 @@
 			$M_ID = $_POST['manufacturer_id'];
 			$invoice_no = $_POST['invoice_no'];
 			$payment_type = $_POST['payment_type'];
-			$bank_id = $_POST['bank_id'];
-
-		
+			$date = $_POST['date'];
+			$sub_total = $_POST['sub_total'];
+			$vat = $_POST['vat'];
+			$discount = $_POST['discount'];
+			$grand_total_price = $_POST['grand_total_price'];
+			$paid_amount = $_POST['paid_amount'];
+			$due_amount = $_POST['due_amount'];
+			$userid = $_SESSION['alogin'];
+			
+			$sql2="INSERT INTO companyinvoice (InvoiceId, CompanyId, Subtotal,Vat,Discount,G_total,Paid,DueAmount,Date,UserId) 
+			VALUES(:invoice_no,:M_ID,:sub_total,:vat,:discount,:grand_total_price,:paid_amount,:due_amount,:date,:userid)";
+			$query = $dbh->prepare($sql2);
+			$query->bindParam(':invoice_no',$invoice_no,PDO::PARAM_STR);
+			$query->bindParam(':M_ID',$M_ID,PDO::PARAM_STR);
+			$query->bindParam(':sub_total',$sub_total,PDO::PARAM_STR);
+			$query->bindParam(':vat',$vat,PDO::PARAM_STR);
+			$query->bindParam(':discount',$discount,PDO::PARAM_STR);
+			$query->bindParam(':grand_total_price',$grand_total_price,PDO::PARAM_STR);
+			$query->bindParam(':paid_amount',$paid_amount,PDO::PARAM_STR);
+			$query->bindParam(':due_amount',$due_amount,PDO::PARAM_STR);
+			$query->bindParam(':date',$date,PDO::PARAM_STR);
+			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+			$query->execute();
+			$lastInsertId = $dbh->lastInsertId();
 
 			$product_id = $_POST['product_id'];
 			$batch_id = $_POST['batch_id'];
@@ -26,9 +47,6 @@
 			$product_quantity = $_POST['product_quantity'];
 			$product_rate = $_POST['product_rate'];
 			$mrp = $_POST['mrp'];
-			$userid = $_SESSION['alogin'];
-			$userid = 1212;
-			$status = 0;
 
 			$i= count($_POST['batch_id']);
 			$v= $_POST['batch_id'][0];
@@ -39,7 +57,7 @@
 				('".$invoice_no."','".$product_id[$key]."','".$batch_id[$key]."','".$expeire_date[$key]."','".$product_quantity[$key]."','".$product_rate[$key]."','".$mrp[$key]."')";
 				$query = mysqli_query($con,$sql);
 			}
-
+			header("refresh:1;add_purchase.php");
 		}
 	?>
 <!doctype html>
@@ -52,7 +70,7 @@
 	<meta name="author" content="">
 	<meta name="theme-color" content="#3e454c">
 	
-	<title>PMS-Add Purchase</title>
+	<title>PMS-Add Purchase info</title>
 
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
@@ -84,7 +102,7 @@
 										Add Purchase Information
 									</div>
 									<div >
-                                        <a href="customer_ledger.php" class="btn btn-warning mr-3"><i class="fa fa-info-circle me-3" aria-hidden="true"></i> Purchase List</a>                                              
+                                        <a href="purchase_list.php" class="btn btn-warning mr-3"><i class="fa fa-info-circle me-3" aria-hidden="true"></i> Purchase List</a>                                              
                                         <!-- <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-plus mr-2" style="margin-right: 10px;"></i> Add Customer</button>                                               -->
 									</div>
 								</div>
@@ -138,7 +156,6 @@
 											<label for="details" class="col-md-2 text-end col-form-label">Details:</label>
 											<div class="col-md-4">
 												<div class="">
-												
 													<input type="text" class="form-control p-2" name="details" id="details" placeholder="Details" value="" tabindex="4">
 												</div>
 											</div>
@@ -188,7 +205,7 @@
 										</div>
                  						<div class="table-responsive pt-2">
                             				<table class="table table-bordered border-muted table-hover" id="purchaseTable">
-                                				<thead>
+                                				<thead class="border border-dark border-2">
 													<tr class="">
 														<th class="text-center"><nobr>Medicine name<i class="text-danger">*</i></nobr></th> 
 														<th class="text-center"><nobr>Batch Id<i class="text-danger"></i></nobr></th>
@@ -386,8 +403,11 @@
 	</div>
 
 <script>
+window.onload = function() {
+	bank_payment(1);
+};
 // $(function() {
-// $( "#date_picker" ).datepicker({
+// $( "#purdate").datepicker({
 //   dateFormat: 'dd-mm-yy'
 // });
 // });
@@ -478,7 +498,6 @@ function purchase_calculation(id){
 	}
 	sub_total.value = sum;
 	grandTotal.value = sum;
-	purchase_vatcalculation()	
 }
 
 function purchase_vatcalculation(){
@@ -486,8 +505,6 @@ function purchase_vatcalculation(){
 	let vat = document.getElementById('vat');
 	let grandTotal = document.getElementById('grandTotal');
 	grandTotal.value =Number(sub_total.value)+((Number(sub_total.value)*Number(vat.value))/100);
-	disoucnt_calculation()
-	paid_calculation();
 }
 function disoucnt_calculation(){
 	let sub_total = document.getElementById('sub_total');
@@ -524,9 +541,7 @@ function bank_payment(value){
 		$('.bank_div').hide();
 	}
 }
-window.onload = function() {
-  bank_payment(1);
-};
+
 
 
 </script>

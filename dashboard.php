@@ -205,16 +205,23 @@ else{
 																$query->bindParam(':date',$date,PDO::PARAM_STR);
 																$query->execute();
 																$result=$query->fetch(PDO::FETCH_OBJ);
+
+																$sql2 ="SELECT sum(G_total) as total from companyinvoice where Date=:date";
+																$query2 = $dbh -> prepare($sql2);
+																$query2->bindParam(':date',$date,PDO::PARAM_STR);
+																$query2->execute();
+																$result2=$query2->fetch(PDO::FETCH_OBJ);
 																// $query=$query->rowCount();
 															?>
 															<tr>
 																<td>Total Sales</td>
-																<td><?php $amount = $result->amount;
+																<td id="tsale"><?php $amount = $result->amount;
 																echo round($amount, 2); ?></td>
 															</tr>
 															<tr>
 																<td>Total Purchase</td>
-																<td>Comming....</td>
+																<td id="totalPurchase"><?php $purchase = $result2->total;
+																echo round($purchase, 2); ?></td>
 															</tr>
 															<tr>
 																<td>Cash Received</td>
@@ -359,13 +366,16 @@ else{
 	<script>
 	google.charts.load('current', {'packages':['corechart']});
 	google.charts.setOnLoadCallback(drawChart);
-
+	let tpurchase = document.getElementById('totalPurchase');
+	let tsale = document.getElementById('tsale');
+	tpurchase = Number(tpurchase.innerText);
+	tsale = Number(tsale.innerText);
 	function drawChart() {
 	var data = google.visualization.arrayToDataTable([
 	['Contry', 'Mhl'],
-	['Total Sale',5014],
+	['Total Sale',tsale],
 	['Total Service',2645],
-	['Total Salary',4542],
+	['Total Purchase',tpurchase],
 	['Total Income',4521]
 	]);
 
