@@ -17,6 +17,7 @@
 						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Company Ledger</a></li>
 					</ul>
+				</li>
 				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a> 
 					<ul>
 						<li style="margin-left: 50px;"><a href="./medicine_category_list.php">Categroy List</a></li>
@@ -26,7 +27,6 @@
 						<li style="margin-left: 50px;"><a href="./medicine_add.php">Add Medicine</a></li>
 						<li style="margin-left: 50px;"><a href="./medicine_list.php">Medicine List</a></li>
 					</ul>
-				
 				</li>
 				<li><a href="#"><i class="typcn typcn-shopping-cart mr-2"></i> Purchase</a>
 					<ul>

@@ -138,10 +138,10 @@
                     						<div class="col-md-4">
 												<?php 
 												date_default_timezone_set('Asia/Dhaka');
-												$date = date('d/m/Y');
+												$date = date('Y-m-d');
 												?>
                         						<div class="">
-													<input type="text" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="Date" value="<?php echo $date?>" tabindex="2" >
+													<input type="text" name="date" class="form-control p-2 datepicker" id="purdate" placeholder="" value="<?php echo $date?>" tabindex="2" >
 												</div>
                        
                     						</div>

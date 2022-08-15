@@ -21,11 +21,9 @@ include('includes/config.php');
 			$shelf=$_POST['shelf'];
 			$medicinedetails=$_POST['medicinedetails'];
 			$category=$_POST['category'];
-			$price=$_POST['price'];
 			$medicinetype=$_POST['medicinetype'];
 			$medicinephoto=$_POST['medicinephoto'];
-			$companyname=$_POST['companyname'];
-			$companyprice=$_POST['companyprice'];
+			$companyID=$_POST['companyID'];;
 			$vat=$_POST['vat'];
 			$igta=$_POST['igta'];
 			$status=$_POST['radio_value'];
@@ -37,7 +35,9 @@ include('includes/config.php');
 			move_uploaded_file($file_tmp_name, $location);
 			//$status=1;
 		
-			$sql="INSERT INTO medicine_list (medicine_name, generic_name, unit, box_size, strength, shelf, medicine_details, category, medicine_type, menufacturer, company_price, item_code, selling_pricce, status) VALUES(:medicinename,:genericname,:unit,:boxsize,:strength,:shelf,:medicinedetails,:category,:medicinetype,:companyname,:companyprice,:barcode,:price,:radio_value)";
+			$sql="INSERT INTO medicine_list (medicine_name, generic_name, unit, box_size, strength, shelf, medicine_details, category, 
+			medicine_type, menufacturer, item_code, status) VALUES(:medicinename,:genericname,:unit,:boxsize,
+			:strength,:shelf,:medicinedetails,:category,:medicinetype,:companyID,:barcode,:radio_value)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':medicinename',$medicinename,PDO::PARAM_STR);
 			$query->bindParam(':genericname',$genericname,PDO::PARAM_STR);
@@ -48,22 +48,15 @@ include('includes/config.php');
 			$query->bindParam(':medicinedetails',$medicinedetails,PDO::PARAM_STR);
 			$query->bindParam(':category',$category,PDO::PARAM_STR);
 			$query->bindParam(':medicinetype',$medicinetype,PDO::PARAM_STR);
-			$query->bindParam(':companyname',$companyname,PDO::PARAM_STR);
-			$query->bindParam(':companyprice',$companyprice,PDO::PARAM_STR);
+			$query->bindParam(':companyID',$companyID,PDO::PARAM_STR);
 			$query->bindParam(':barcode',$barcode,PDO::PARAM_STR);
-			$query->bindParam(':price',$price,PDO::PARAM_STR);
 			$query->bindParam(':radio_value',$status,PDO::PARAM_STR);
-			//$query->bindParam(':medicinephoto',$medicinephoto,PDO::PARAM_STR);
-			//$query->bindParam(':vat',$vat,PDO::PARAM_STR);
-			//$query->bindParam(':igta',$igta,PDO::PARAM_STR);
-			
-
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
 		if($lastInsertId)
 			{
 			$msg=" Your info submitted successfully";
-			header("refresh:3;medicine_add.php"); 
+			header("refresh:2;medicine_add.php"); 
 			}
 		else 
 			{
@@ -104,26 +97,6 @@ include('includes/config.php');
 		<!-- Admin Stye -->
 		<link rel="stylesheet" href="css/style.css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">
-	<style>
-		.errorWrap {
-			padding: 10px;
-			margin: 0 0 20px 0;
-			background: #fff;
-			border-left: 4px solid #dd3d36;
-			-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-			box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-	}
-		.succWrap{
-			padding: 10px;
-			margin: 0 0 20px 0;
-			background: #fff;
-			border-left: 4px solid #5cb85c;
-			-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-			box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-			
-	}
-</style>
-
 	</head>
 	
 	<body>
@@ -190,17 +163,6 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												<!-- <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Box Size <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">														
-															<select name="boxsize" class="form-control form-select form-select-md " >
-																<option value="" Disabled selected class="">Select Box Size</option>
-																<option value="11">11</option>																
-															</select>														
-														</div>
-													</div>
-												</div> -->
 												<?php 
 													$medcinetype ="SELECT * from medicine_unit";
 													$cquery = $dbh -> prepare($medcinetype);
@@ -227,18 +189,6 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-
-												<!-- <div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Unit <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<select name="unit" class="form-control form-select form-select-md ">
-																<option value="" Disabled selected class="">Select Unit</option>
-																<option value="11">11</option>																
-															</select>
-														</div>
-													</div>
-												</div> -->
 												<div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Shelf :</label>
@@ -270,7 +220,7 @@ include('includes/config.php');
 																<option value="" Disabled selected class="">Select category</option>
 																<?php																
 																foreach($results as $result){
-																	if($result->MedicineCategoryStatus==1){
+																	if($result->Status==1){
 																	?>																
 																	<option date-tokens="<?php echo htmlentities($result->MedicineCategory);?>"><?php echo htmlentities($result->MedicineCategory);?></option>
 																<?php } 
@@ -282,15 +232,6 @@ include('includes/config.php');
 														</div>
 													</div>
 												</div>
-												
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Price <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="float" name="price" class="form-control" id="" placeholder="0.00" required>
-														</div>
-													</div>
-												</div>
 												<?php 
 													$medcinetype ="SELECT * from medicine_type";
 													$cquery = $dbh -> prepare($medcinetype);
@@ -299,9 +240,9 @@ include('includes/config.php');
 												?>
 												<div class="col-md-6">
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine type <i class="text-danger">* </i>:</label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Medicine type:</label>
 														<div class="col-sm-8">															
-															<select name="medicinetype" class="form-control form-select form-select-md" required>
+															<select name="medicinetype" class="form-control form-select form-select-md">
 																<option value="" Disabled selected class="">Select type</option>
 																<?php																
 																foreach($results as $result){
@@ -339,43 +280,19 @@ include('includes/config.php');
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Name <i class="text-danger">* </i>:</label>
 														<div class="col-sm-8">
-
-														<input name="companyname" class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Clik or search">
-															<datalist id="datalistOptions" required>
-																<!-- <option value="" Disabled selected class="">Select Company</option> -->
-																
+														<select name="companyID" class="form-control form-select form-select-md" required>
+																<option value="" Disabled selected class="">Select Company</option>
 																<?php																
 																foreach($results as $result){
 																	if($result->status==1){
 																	?>																
-																	<option value="<?php echo htmlentities($result->name);?>">
+																	<option date-tokens="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
 																<?php } 
+																else{  ?>
+																	<option disabled><?php echo htmlentities($result->name)." --Need to active";?></option>
+															 <?php } 
 															 }?>
-															</datalist>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Company Price <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="float" name="companyprice" class="form-control" id="" placeholder="0.00" required>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Vat :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="vat" placeholder="%">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">IGTA :</label>
-														<div class="col-sm-8">
-														<input type="text" class="form-control" name="igta" placeholder="%">
+															</select>
 														</div>
 													</div>
 												</div>

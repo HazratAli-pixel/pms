@@ -205,13 +205,14 @@ else{
 																$query->bindParam(':date',$date,PDO::PARAM_STR);
 																$query->execute();
 																$result=$query->fetch(PDO::FETCH_OBJ);
-
+																
+																date_default_timezone_set('Asia/Dhaka');
+																$date = date('Y-m-d');
 																$sql2 ="SELECT sum(G_total) as total from companyinvoice where Date=:date";
 																$query2 = $dbh -> prepare($sql2);
 																$query2->bindParam(':date',$date,PDO::PARAM_STR);
 																$query2->execute();
 																$result2=$query2->fetch(PDO::FETCH_OBJ);
-																// $query=$query->rowCount();
 															?>
 															<tr>
 																<td>Total Sales</td>
