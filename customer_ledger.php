@@ -218,7 +218,7 @@ input[type=number] {
 											</tfoot>
 										</table>
 									</div>
-									<div class="col-12 col-md-4 col-lg-4 col-xl-3 bg-info rounded p-2 h-75">
+									<div style="top:80px;" class="col-12 col-md-4 col-lg-4 col-xl-3 bg-info rounded p-2 h-75 position-sticky">
 										<form action="" method="POST">
 											<div class="info text-center pt-2">
 												<h4 name="cusName" id="cusName">Name </h4>

@@ -146,31 +146,28 @@ else{
 							<div class="card-body">
                                 <a href="download-records.php" style="color:red; font-size:16px;">Download Purchase list</a>
 								<div class="row ">
-									<div class="col-12 col-md-8 col-lg-8 col-xl-9 d-flex row flex-sm-column table-responsive">
+									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column table-responsive">
 								
 										<table id="zctb" class="display table table-striped table-bordered table-hover" >
 											<thead class="bg-style">
 												<tr>
 													<th>#</th>
 													<th>Name</th>
-													<th>SR</th>
-													<!-- <th class="text-center">Invoie</th> -->
-													<th class="text-end">Subtotal</th>
-													<th class="text-end">Vat</th>
-													<th class="text-end">Discount</th>
-													<th class="text-end">G_total</th>
-													<th class="text-end">Paid</th>
-													<th class="text-end">Due</th>
-													<th class="text-center">Date</th>
+													<th class="">PID</th>
+													<th class="">Batch</th>
+													<th class="">Eday</th>
+													<th class="">Qty</th>
+													<th class="">MPrice</th>
+													<th class="">MRP</th>
 													<th class="text-center">Action</th>
 												</tr>
 											</thead>
 											<tbody>
 
 												<?php 
-												$sql = "SELECT company.name as cname, companyinvoice.ID, companyinvoice.InvoiceId , companyinvoice.Subtotal, companyinvoice.Vat, companyinvoice.Discount, companyinvoice.G_total,companyinvoice.Paid,companyinvoice.DueAmount,
-												companyinvoice.Date,companyinvoice.Status FROM companyinvoice left JOIN company 
-												ON company.ID = companyinvoice.CompanyId ORDER BY companyinvoice.ID DESC";
+												$sql = "SELECT purchaseslist.BatchId,purchaseslist.ProductId,purchaseslist.Qty,purchaseslist.Mprice,purchaseslist.MRP,purchaseslist.date,purchaseslist.Status,
+												medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
+												ORDER BY purchaseslist.Status ASC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -179,34 +176,37 @@ else{
 												{
 												foreach($results as $result)
 												{				?>	
-												<tr id="invoice-<?php echo htmlentities($result->InvoiceId);?>">
+												<tr id="row-<?php echo $cnt;?>">
 													<td><?php echo htmlentities($cnt);?></td>
-													<td id="name-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo htmlentities($result->cname);?>
-														<p hidden><?php echo htmlentities($result->InvoiceId);?></p>
+													<td id="name-<?php echo htmlentities($result->BatchId);?>" ><?php echo htmlentities($result->medicine_name);?>
+														<p hidden><?php echo htmlentities($result->BatchId);?></p>
 													</td>
-													<td id="cusadd-<?php echo htmlentities($result->InvoiceId);?>" >SR</td>
-													<td class="text-end" id="subtotal-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->Subtotal;?></td>
-													<td class="text-end" id="vat-<?php echo htmlentities($result->InvoiceId);?>" > <?php 
-													$vat = ($result->Subtotal*$result->Vat)/100;
-													echo $vat
-													?></td>
-													<td class="text-end" id="discount-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->Discount;?></td>
-													<td class="text-end" id="gtotal-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->G_total;?></td>
-													<td class="text-end" id="paid-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->Paid;?></td>
-													<td class="text-center" id="due-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->DueAmount;?></td>
-													<td class="text-center" id="date-<?php echo htmlentities($result->InvoiceId);?>" ><?php echo $result->Date;?></td>
-													
+													<td class="text-end" id="productID-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->ProductId;?></td>													
+													<td class="text-end" id="Batch-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->BatchId;?></td>
+													<td class="text-end" id="date-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->date;?></td>
+													<td class="text-end" id="Qty-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->Qty;?></td>
+													<td class="text-end" id="Mprice-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->Mprice;?></td>
+													<td class="text-center" id="MRP-<?php echo htmlentities($result->BatchId);?>" ><?php echo $result->MRP;?></td>
 													<td class="text-center">
-													<!-- <a href="custldinfo.php?custId=<?php echo htmlentities($result->InvoiceId);?>" title="<?php echo htmlentities($result->Name);?>" class="text-success mx-1" id="ledger-<?php echo htmlentities($result->InvoiceId);?>" onclick="paydues(event)"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-													<a class="mx-1" href="#" > <i class="fas fa-eye" aria-hidden="true"></i></a>  -->
-													<p class="bg-warning btn p-1" onclick="invodetails(this.id)" id="<?php echo htmlentities($result->InvoiceId);?>">Info</p>
+													<?php 
+														if($result->Status==1){
+															?>
+															<button disabled type="button" class="btn btn-success">Added</button>
+															<?php
+														}
+														else { ?>
+															<button id="<?php echo htmlentities($result->BatchId);?>" type="button" onclick="StatusCng(event)" class="btn btn-warning">add</button>
+															<?php
+														}
+														
+														?>
 													</td>
 												</tr>
 												<?php $cnt=$cnt+1; }} ?>
 											</tbody>
 										</table>
 									</div>
-									<div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
+									<!-- <div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
 											<div class="info text-center pt-2">
 												<h4 >Indivisual Invoice Details </h4>
 												<h4 name="cusName" id="cusName">Name</h4>
@@ -231,7 +231,6 @@ else{
 														</tr>
 													</thead>
 													<tbody id="invoice_details">
-														<!-- show invoice information here using ajax-->
 													</tbody>
 													<tfoot>
 														<tr>
@@ -261,8 +260,7 @@ else{
 													</tfoot>
 												</table>
 											</div>
-												
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
@@ -271,53 +269,109 @@ else{
 			</div>
 		</div>		
 	</div>
-
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">																				
+		<!-- <div class="modal-dialog modal-dialog-centered modal-xl"> -->
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="mbody2">
+					<div class="card-body">
+						<form method="post" class="row">
+						<div class="">
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Name : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_name" placeholder="customer name">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Phone : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_phone" placeholder="phone number">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label for="" class="col-sm-3 col-form-label text-start text-sm-end">Address : </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="c_address" placeholder="address">
+								</div>
+							</div>
+							
+						</div>																
+						<div class="">
+							<div class="row mb-3">
+								<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
+								<div class="col-sm-8 d-flex align-items-center">
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" value="1" name="radio_value" id="inlineRadio1" value="option1">
+										<label class="form-check-label" for="inlineRadio1">Active</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" value="0" name="radio_value" id="inlineRadio2" value="option2">
+										<label class="form-check-label" for="inlineRadio2">Inactive</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="hr-dashed"></div>
+						<div class="col-md-12">
+							<div class="d-grid gap-2 d-md-flex d-sm-flex justify-content-md-end justify-content-sm-end justify-content-lg-end">
+								<button style="min-width: 150px;" class="btn btn-danger me-md-2" type="reset">Reset</button>
+								<button style="min-width: 150px;" class="btn btn-success" onclick="customer_add()" name="submit" >Submit</button>
+							</div>
+						</div>					
+						</form>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script>
-		function invodetails(clicked_id) {
-			let cusname1 =  document.getElementById("name-"+clicked_id).innerText;
-			let subtotal =  document.getElementById("subtotal-"+clicked_id).innerText;
-			let vat =  document.getElementById("vat-"+clicked_id).innerText;
-			let discount =  document.getElementById("discount-"+clicked_id).innerText;
-			let gtotal =  document.getElementById("gtotal-"+clicked_id).innerText;
-			let paid =  document.getElementById("paid-"+clicked_id).innerText;
-			let due =  document.getElementById("due-"+clicked_id).innerText;
-			let date =  document.getElementById("date-"+clicked_id).innerText;
-			// alert(cusname1);
-			
-			let companyName = document.getElementById('cusName');
-			let date2 = document.getElementById('date');
-			let invoids = document.getElementById('invoids');
-			document.getElementById('invo1').innerHTML=subtotal;
-			document.getElementById('invo2').innerHTML=vat;
-			document.getElementById('invo3').innerHTML=discount;
-			document.getElementById('invo4').innerHTML=gtotal;
-			document.getElementById('invo5').innerHTML=paid;
-			document.getElementById('invo6').innerHTML=due;
-			companyName.innerHTML = cusname1;
-			date2.innerHTML = date;
-			invoids.innerHTML = "Invoice : "+clicked_id;
-			var tbody = document.getElementById('invoice_details');
+		const StatusCng = (event)=>{
+			let clickedId = event.target.id
+			// event.target.classList.add('bg-success');
+			// event.target.setAttribute('disabled', true);
+			// event.target.innerText="Added";
+			let ProductId2 = document.getElementById("productID-"+clickedId).innerHTML;
+			let Pdate = document.getElementById("date-"+clickedId).innerHTML
+			let PQty = document.getElementById("Qty-"+clickedId).innerHTML
+			let PMprice = document.getElementById("Mprice-"+clickedId).innerHTML
+			let PMRP = document.getElementById("MRP-"+clickedId).innerHTML
 			const xmlhttp = new XMLHttpRequest();
+			// alert(ProductId);
 			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
-						// alert("Ok 2");
-						tbody.innerHTML = this.responseText;
-						// $('#exampleModal3').modal('show');
+					event.target.classList.add('bg-success');
+					event.target.setAttribute('disabled', true);
+					event.target.innerText="Added";
+					swal({
+						title: 'Stock Medicine',
+						text: this.responseText,
+						icon: 'success',
+						dangerMode: true,
+					});
 				}
 			};
-			xmlhttp.open('GET', `query2.php?invodetails=${clicked_id}`, true);
+			xmlhttp.open('GET', `query2.php?StockManagment=${clickedId}&date=${Pdate}&Qty=${PQty}&Mprice=${PMprice}&MRP=${PMRP}&productid=${ProductId2}`, true);
 			xmlhttp.send();
+
 		}
-		
 	</script>
+
 
 	<!-- Loading Scripts -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-
-	<script src="js/jquery.min.js"></script>
+		<script src="./js/sweetalert.js"></script>
+		<script src="./js/query.js"></script>
+		<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap-select.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>

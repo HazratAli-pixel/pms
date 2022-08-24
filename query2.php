@@ -1,125 +1,91 @@
 <?php
 
+use Dflydev\DotAccessData\Data;
 
-session_start();
-error_reporting(0);
-include('includes/config.php');
-if(isset($_GET['ordersubmit'])){
-	if(isset($_SESSION['items'])){
-		$userid = $_SESSION['alogin'];
-		
-		$customerid =rand(50,500000);      //$_GET['customerid'];
-		$totaldiscount = $_REQUEST['totaldiscount'];
-		$grandtotal = $_REQUEST['grandtotal'];
-		$paidamount = $_REQUEST['paidamount'];
-		$due = $_REQUEST['due'];
-		$vat = $_REQUEST['vat'];
-		$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment,discount, Tax, PaidAmount, DueAmount) 
-		VALUES(:customerid,:userid,:grandtotal,:totaldiscount,:vat,:paidamount,:due)";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':customerid',$customerid,PDO::PARAM_STR);
-		$query->bindParam(':userid',$userid,PDO::PARAM_STR);
-		$query->bindParam(':grandtotal',$grandtotal,PDO::PARAM_STR);
-		$query->bindParam(':totaldiscount',$totaldiscount,PDO::PARAM_STR);
-		$query->bindParam(':vat',$vat,PDO::PARAM_STR);
-		$query->bindParam(':paidamount',$paidamount,PDO::PARAM_STR);			
-		$query->bindParam(':due',$due,PDO::PARAM_STR);
-		$query->execute();
-		$lastInsertId = $dbh->lastInsertId();
-		$total_count= count($_SESSION['items']);
-		$i = 0;
-		$userid	=	$_SESSION['alogin'];
+use function PHPUnit\Framework\isEmpty;
+use function Symfony\Component\VarDumper\Dumper\esc;
 
-		while($i<$total_count)
-		{
-			$ItemId	=	$_SESSION['items'][$i]['ItemId'];
-			$Batch	=	$_SESSION['items'][$i]['Batch'];
-			$SellQty	=	$_SESSION['items'][$i]['SellQty'];
-			$Price	=	$_SESSION['items'][$i]['Price'];
-			$PursingPrice	=	$_SESSION['items'][$i]['PursingPrice'];
-			$sql2="INSERT INTO sellingproduct(InvoiceId, CustomerID, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
-			VALUES('$lastInsertId','$customerid','$ItemId','$Batch','$SellQty','$Price','$PursingPrice','$userid')";
-			mysqli_query($con,$sql2);	
+	session_start();
+	error_reporting(0);
+
+	include('includes/config.php');
+
+if(isset($_GET['invodetails'])){
+	$invoId = $_GET['invodetails'];
+	$sql = "SELECT purchaseslist.BatchId,purchaseslist.Qty,purchaseslist.Mprice,purchaseslist.MRP,purchaseslist.date,
+	medicine_list.medicine_name from purchaseslist LEFT JOIN medicine_list ON purchaseslist.ProductId = medicine_list.item_code 
+	WHERE purchaseslist.InvoiceId =:id";
+	$query = $dbh -> prepare($sql);
+	$query->bindParam(':id',$invoId,PDO::PARAM_STR);
+	$query->execute();
+	$results=$query->fetchAll(PDO::FETCH_OBJ);
+	if($query->rowCount() > 0)
+	{ $cnt=1;
+		foreach($results as $result){
+			$total = $result->Qty*$result->Mprice;
+			$Data.="<tr>						
+				<td class='text-center'>$cnt</td>
+				<td class='text-center'>$result->medicine_name</td>
+				<td class='text-center'>$result->BatchId</td>
+				<td class='text-center'>$result->Qty</td>
+				<td class='text-center'>$result->Mprice</td>
+				<td class='text-center'>$total</td>
+			</tr>";
+			$cnt++;
 		}
-		echo $i;
+	}
+	echo $Data;
+}
+if(isset($_GET['StockManagment'])){
+	$batchNumber = $_GET['StockManagment'];
+	$sql = "SELECT * FROM stocktable WHERE BatchNumber=:batchNumber";
+	$query = $dbh -> prepare($sql);
+	$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+	$query->execute();
+	$result=$query->fetch(PDO::FETCH_OBJ);
+	$date = $_GET['date'];
+	$PQty = $_GET['Qty'];
+	$PQty = $PQty + $result->InQty;
+	$productid = $_GET['productid'];
+	$Mprice = $_GET['Mprice'];
+	$MRP = $_GET['MRP'];
+	// echo "ok this line";
+	if($query->rowCount() > 0)
+	{
+		$sts = 1;
+		$sql = "update stocktable SET InQty=:PQty WHERE BatchNumber=:batchNumber";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':PQty',$PQty,PDO::PARAM_STR);
+		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->execute();
+		$sql = "update purchaseslist SET Status=:sts WHERE BatchId=:batchNumber";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
+		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->execute();
+		echo "Product updated";
+	}
+	else{
+		$sts = 1;
+		$sql = "INSERT INTO stocktable (Item_code, BatchNumber,InQty,PurPrice,SellPrice,Date,Status) 
+		VALUES(:productid,:batchNumber,:PQty,:Mprice,:MRP,:date,:sts)";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':productid',$productid,PDO::PARAM_STR);
+		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->bindParam(':PQty',$PQty,PDO::PARAM_STR);
+		$query->bindParam(':Mprice',$Mprice,PDO::PARAM_STR);
+		$query->bindParam(':MRP',$MRP,PDO::PARAM_STR);
+		$query->bindParam(':date',$date,PDO::PARAM_STR);
+		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
+		$query->execute();
+		$sql = "UPDATE purchaseslist SET Status=:sts WHERE BatchId=:batchNumber";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':sts',$sts,PDO::PARAM_STR);
+		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->execute();
+		echo "Product Newly Inserted";
 	}
 }
-
-
-
-//if(isset($_GET['ordersubmit'])){
-	if(isset($_SESSION['items'])){
-
-		$userid = $_SESSION['alogin'];
-		
-		$customerid =rand(50,500000);      //$_GET['customerid'];
-		$totaldiscount = $_GET['totaldiscount'];
-		$grandtotal = $_GET['grandtotal'];
-		$paidamount = $_GET['paidamount'];
-		$due = $_GET['due'];
-		$vat = $_GET['vat'];
-
-		$sql="INSERT INTO invoice (CustomerID, SellerID, NetPayment,discount, Tax, PaidAmount, DueAmount) 
-		VALUES(:customerid,:userid,:grandtotal,:totaldiscount,:vat,:paidamount,:due)";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':customerid',$customerid,PDO::PARAM_STR);
-		$query->bindParam(':userid',$userid,PDO::PARAM_STR);
-		$query->bindParam(':grandtotal',$grandtotal,PDO::PARAM_STR);
-		$query->bindParam(':totaldiscount',$totaldiscount,PDO::PARAM_STR);
-		$query->bindParam(':vat',$vat,PDO::PARAM_STR);
-		$query->bindParam(':paidamount',$paidamount,PDO::PARAM_STR);			
-		$query->bindParam(':due',$due,PDO::PARAM_STR);
-		$query->execute();
-		$lastInsertId = $dbh->lastInsertId();
-		
-		$i= count($_SESSION['items']);
-		$sql2="INSERT INTO sellingproduct(InvoiceId, CustomerID, ProductId, BatchId, Qty, Price, NetPrice,SellerId) 
-		VALUES(:lastInsertId, :customerid,:ItemId,:Batch,:SellQty,:Price,:PursingPrice,:userid)";
-		for($count = 0; $count<$i; $count++)
-		{
-			$data = array(
-				':lastInsertId'	=>	$lastInsertId,
-				':customerid'	=>	$customerid,
-				':ItemId'	=>	$_SESSION['items'][$count]['ItemId'],
-				':Batch'	=>	$_SESSION['items'][$count]['Batch'],
-				':SellQty'	=>	$_SESSION['items'][$count]['SellQty'],
-				':Price'	=>	$_SESSION['items'][$count]['Price'],
-				':PursingPrice'	=>	$_SESSION['items'][$count]['PursingPrice'],
-				':userid'	=>	$_SESSION['alogin']			
-			);
-			echo $count .":------";
-			?> <pre><?= print_r($data); ?></pre>
-			<?php
-			$statement = $dbh->prepare($sql2);
-			$statement->execute($data);
-		}
-		//unset ($_SESSION['items']);
-		echo $count."  is the last Number";
-		// $query2 = $dbh->prepare($sql2);
-		// $query2->bindParam(':lastInsertId',$lastInsertId,PDO::PARAM_STR);
-		// $query2->bindParam(':customerid',$customerid,PDO::PARAM_STR);
-		// $query2->bindParam(':ItemId',$ItemId,PDO::PARAM_STR);
-		// $query2->bindParam(':Batch',$Batch,PDO::PARAM_STR);
-		// $query2->bindParam(':SellQty',$SellQty,PDO::PARAM_STR);
-		// $query2->bindParam(':Price',$Price,PDO::PARAM_STR);
-		// $query2->bindParam(':PursingPrice',$PursingPrice,PDO::PARAM_STR);
-		}
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ?>

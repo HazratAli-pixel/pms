@@ -170,7 +170,7 @@ else{
 												<?php 
 												$sql = "SELECT customertable.ID, customertable.Name, customertable.Phone, customertable.Address, invoice.ID,invoice.SellerID,invoice.NetPayment,
 												invoice.PreDue,	invoice.Total_with_due,invoice.discount,invoice.PaidAmount,invoice.DueAmount,invoice.date FROM invoice left JOIN customertable 
-												ON invoice.CustomerID = customertable.ID where customertable.ID!= 0 ORDER BY invoice.ID DESC";
+												ON invoice.CustomerID = customertable.ID  ORDER BY invoice.ID DESC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -207,7 +207,7 @@ else{
 											</tbody>
 										</table>
 									</div>
-									<div class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75">
+									<div style="top:80px;" class="col-12 col-md-4 col-lg-4 col-xl-3 right-side rounded p-2 h-75 position-sticky">
 											<div class="info text-center pt-2">
 												<h4 >Indivisual Invoice Details </h4>
 												<h4 name="cusName" id="cusName">Name</h4>
