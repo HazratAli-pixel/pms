@@ -36,6 +36,36 @@ if(isset($_GET['invodetails'])){
 	}
 	echo $Data;
 }
+if(isset($_GET['StatusCng'])){
+	$batchNumber = $_GET['StatusCng'];
+	$status = $_GET['Status'];
+		$sql = "UPDATE stocktable set Status=:status WHERE BatchNumber=:batchNumber";
+		$query = $dbh -> prepare($sql);
+		$query->bindParam(':status',$status,PDO::PARAM_STR);
+		$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+		$query->execute();
+		echo "Update Successful";
+}
+if(isset($_GET['DeleteBatch'])){
+	$batchNumber = $_GET['DeleteBatch'];
+	$sql = "DELETE FROM stocktable WHERE BatchNumber=:batchNumber";
+	$query = $dbh -> prepare($sql);
+	$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+	$query->execute();
+	echo "Record Delete Successful";
+}
+
+if(isset($_GET['updatePrice'])){
+	$batchNumber = $_GET['updatePrice'];
+	$price = $_GET['price'];
+	$sql = "update stocktable SET SellPrice=:price WHERE BatchNumber=:batchNumber";
+	$query = $dbh -> prepare($sql);
+	$query->bindParam(':price',$price,PDO::PARAM_STR);
+	$query->bindParam(':batchNumber',$batchNumber,PDO::PARAM_STR);
+	$query->execute();
+	echo "Record update Successful";
+}
+
 if(isset($_GET['StockManagment'])){
 	$batchNumber = $_GET['StockManagment'];
 	$sql = "SELECT * FROM stocktable WHERE BatchNumber=:batchNumber";
@@ -86,6 +116,7 @@ if(isset($_GET['StockManagment'])){
 		echo "Product Newly Inserted";
 	}
 }
+
 
 
 ?>

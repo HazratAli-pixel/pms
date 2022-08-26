@@ -52,7 +52,7 @@
 				</li>
 				<li><a href="#"><i class="fab fa-linode mr-3"></i> Stock</a>
 					<ul>
-						<li style="margin-left: 50px;"><a href="msg.php">Stock Report</a></li>
+						<li style="margin-left: 50px;"><a href="stocklist.php">Stock Report</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Stoct Report (Batch)</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Available Stock</a></li>
 					</ul>
