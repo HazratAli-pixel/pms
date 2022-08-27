@@ -15,7 +15,7 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="company_add.php">Add Company</a></li>
 						<li style="margin-left: 50px;"><a href="company_list.php">Company List</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Company Ledger</a></li>
+						<li style="margin-left: 50px;"><a href="purchase_list.php">Company Ledger</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-pills"></i> Medicine</a> 
@@ -54,7 +54,9 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="stocklist.php">Stock Report</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Stoct Report (Batch)</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Available Stock</a></li>
+						<li style="margin-left: 50px;"><a href="stockavailable.php">Available Stock</a></li>
+						<li style="margin-left: 50px;"><a href="stockout.php">Stock out list</a></li>
+						<li style="margin-left: 50px;"><a href="stockexpired.php">Experied list</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-landmark mr-2"></i> Bank</a>
@@ -100,8 +102,6 @@
 					<ul>
 						<li style="margin-left: 50px;"><a href="msg.php">Add Service</a></li>
 						<li style="margin-left: 50px;"><a href="msg.php">Service List</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Add Invoice</a></li>
-						<li style="margin-left: 50px;"><a href="msg.php">Invoice List</a></li>
 					</ul>
 				</li>
 				<li><a href="#"><i class="fas fa-search mr-3"></i> Search</a>

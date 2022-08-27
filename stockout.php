@@ -53,18 +53,18 @@ else{
 							<div  class="card-header">
                                 <div class="d-flex justify-content-between align-items-center h-100px">
 		  							<div style="font-size: 20px; " class="bg-primary;">
-										Stock Medicine Information
+										Stock Out Medicine Information
 									</div>
 									<div >
-										<a href="add_purchase.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Add Purchase</a>
-										<a href="stockavailable.php" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Available Stock</a>
+										<a href="stockavailable.php" class="btn btn-info"> <i class="fas fa-align-justify mr-2"></i> Available Stock List</a>
+										<a href="add_purchase.php" class="btn btn-info"> <i class="fa fa-credit-card" aria-hidden="true"></i> Add Purchase</a>
                                         <!-- <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay Due</button> -->
                                         
 									</div>
 								</div>
                             </div>
 							<div class="card-body">
-                                <a href="download-records.php" style="color:red; font-size:16px;">Download Stock Medicine list</a>
+                                <a href="download-records.php" style="color:red; font-size:16px;">Download Stock out Medicine list</a>
 								<div class="row ">
 									<div class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex row flex-sm-column table-responsive">
 								
@@ -87,11 +87,9 @@ else{
 											<tbody>
 
 												<?php 
-												date_default_timezone_set('Asia/Dhaka');
-												$date = date('Y-m-d');	
 												$sql = "SELECT stocktable.BatchNumber, stocktable.InQty,stocktable.OutQty, stocktable.RestQty,stocktable.PurPrice,stocktable.SellPrice,
 												stocktable.Date,stocktable.Status, medicine_list.medicine_name from stocktable LEFT JOIN medicine_list ON stocktable.Item_code = 
-												medicine_list.item_code ORDER BY stocktable.ID DESC";
+												medicine_list.item_code WHERE stocktable.RestQty = 0 ORDER BY stocktable.ID DESC";
 												$query = $dbh -> prepare($sql);
 												$query->execute();
 												$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -102,14 +100,6 @@ else{
 												foreach($results as $result)
 												{				?>	
 												<tr id="row-<?php echo $cnt;?>">
-												<?php
-												if($result->Date <$date){
-													$bg_danger = "bg-danger";
-												}
-												if($result->RestQty ==0){
-													$bg_red= "bg-warning";
-												}
-												?>
 													<td><?php echo htmlentities($cnt);?></td>
 													<td ><p id="name-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo htmlentities($result->medicine_name);?></p>
 														<p hidden><?php echo htmlentities($result->BatchNumber);?></p>
@@ -117,10 +107,10 @@ else{
 													<td class="text-end"><p id="Batch-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->BatchNumber;?></p></td>
 													<td class="text-end"><p id="InQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->InQty;?></p></td>
 													<td class="text-end"><p id="OutQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->OutQty;?></p></td>
-													<td class="text-end"><p id="RestQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control <?php echo $bg_red ?>"><?php echo $result->RestQty;?></p></td>
+													<td class="text-end"><p id="RestQty-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->RestQty;?></p></td>
 													<td class="text-end"><p id="Mprice-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->PurPrice;?></p></td>
-													<td class="text-end"><p id="MRP-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->SellPrice;?></p></td>
-													<td class="text-center"><p id="Date-<?php echo htmlentities($result->BatchNumber);?>" class="form-control <?php echo $bg_danger ?>"><?php echo $result->Date;?></p></td>
+													<td class="text-end" ><p id="MRP-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->SellPrice;?></p></td>
+													<td class="text-center"><p id="Date-<?php echo htmlentities($result->BatchNumber);?>" class="form-control"><?php echo $result->Date;?></p></td>
 													<td class="text-center">
 													<?php 
 														if($result->Status==0){
@@ -132,8 +122,7 @@ else{
 															<button id="<?php echo htmlentities($result->BatchNumber);?>" type="button" onclick="StatusCng(event, '0')" class="btn btn-success btn-sm">Active</button>
 															<?php
 														}
-														$bg_red = "";
-														$bg_danger="";
+														
 														?>
 													</td>
 													<td class="text-center">

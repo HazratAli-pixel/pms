@@ -120,7 +120,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="#" class="btn btn-primary">Full Detail</a>
+											<a href="stockout.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>
@@ -144,7 +144,7 @@ else{
 												<p class="ms-2">items</p>
 											</div>
 											
-											<a href="#" class="btn btn-primary">Full Detail</a>
+											<a href="stockexpired.php" class="btn btn-primary">Full Detail</a>
 										</div>
 									</div>
 								</div>

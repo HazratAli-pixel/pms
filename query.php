@@ -30,7 +30,7 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
 		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.Status  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId ";
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId && stocktable.Status!=0 && stocktable.RestQty!=0";
 		$query= $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $ItemId, PDO::PARAM_STR);
 		$query-> execute();
@@ -114,7 +114,7 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 		$value = $_GET['showinfo'];
 		$sql = "SELECT medicine_list.medicine_name, medicine_list.status, stocktable.BatchNumber, stocktable.InQty, stocktable.OutQty, stocktable.PurPrice, 
 		stocktable.SellPrice, stocktable.SellBoxPrice,stocktable.Date, stocktable.RestQty  FROM medicine_list Right JOIN stocktable ON
-		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status=1";
+		medicine_list.item_code = stocktable.Item_code WHERE stocktable.Item_code=:ItemId AND stocktable.Status=1 AND stocktable.RestQty !=0 ORDER BY stocktable.ID DESC";
 		$query = $dbh -> prepare($sql);
 		$query-> bindParam(':ItemId', $value, PDO::PARAM_STR);
 		$query->execute();
