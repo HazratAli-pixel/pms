@@ -286,7 +286,7 @@ include('includes/config.php');
 																foreach($results as $result){
 																	if($result->status==1){
 																	?>																
-																	<option date-tokens="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
+																	<option  value="<?php echo htmlentities($result->ID);?>"><?php echo htmlentities($result->name);?></option>
 																<?php } 
 																else{  ?>
 																	<option disabled><?php echo htmlentities($result->name)." --Need to active";?></option>
