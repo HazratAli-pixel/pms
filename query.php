@@ -121,14 +121,6 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 		// $results=$query->fetchAll(PDO::FETCH_OBJ);
 		$results=$query->fetch(PDO::FETCH_OBJ);
 		$cnt=1;
-			// foreach($results as $result){
-			// 	$name = $result->medicine_name;
-			// 	$inqty = $result->InQty;
-			// 	$outqty = $result->OutQty;
-			// 	$inStock = $inqty-$outqty;
-			// }
-			// $inStock = $inqty-$outqty;
-			// $Data2="<p style='margin-bottom 0.2px;'>Name : $name</p><p> Product Buy : $inqty</p><p>Product Sale : $outqty</p><p>In Stock : $inStock</p>";
 			$Data2="
 			<p> <span class='fw-bold'>Name : </span> $results->medicine_name</p>
 			<p> <span class='fw-bold'>Product Buy : </span> $results->InQty</p>
@@ -156,14 +148,6 @@ use function Symfony\Component\VarDumper\Dumper\esc;
 			foreach($_SESSION['items'] as $key => $value){
 				if($value['ItemId'] == $_GET['UpItem']){
 					$currentQty = $_SESSION['items'][$key]['SellQty'];
-					// $Instock = $_SESSION['items'][$key]['InStock'];
-					// if($currentQty <= $Instock){
-					// 	echo 1;
-					// 	// $_SESSION['items'][$key]['SellQty'] = $Instock;
-					// }
-					// else{
-					// 	$_SESSION['items'][$key]['SellQty'] = $_GET['itemvalue'];
-					// }
 					$_SESSION['items'][$key]['SellQty'] = $_GET['itemvalue'];
 				}
 			}

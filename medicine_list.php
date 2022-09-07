@@ -2,7 +2,7 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
+if(strlen($_COOKIE['Username'])==0 || strlen($_SESSION['alogin'])==0)
 	{
 	include_once('./includes/address.php');	
 	header('location:index.php');
@@ -32,7 +32,7 @@ else{
 	<meta name="theme-color" content="#3e454c">
 	
 	<title>PMS | Medicine List  </title>
-
+	<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" rel="stylesheet">

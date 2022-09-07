@@ -57,7 +57,7 @@ include('includes/config.php');
 		<meta name="theme-color" content="#3e454c">
 		
 		<title>PMS| Medicine Add</title>
-	
+		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 		<!-- Sandstone Bootstrap CSS -->

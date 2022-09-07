@@ -117,6 +117,37 @@ if(isset($_GET['StockManagment'])){
 	}
 }
 
+if(isset($_GET['otpsend'])){
+	$receiver = $_GET["otpsend"];
+	$userid =$_SESSION['forgetuserid'];
+	$code = rand(1000,9999);
+	$mssg ='Hi, '.$code.' is your password recovery code';
+	$url = "http://gsms.putulhost.com/smsapi";
+	$data = [
+		"api_key" => "C200114562795a9fbdc4e5.87112767",
+		"type" => "text",
+		"contacts" => "$receiver",
+		"senderid" => "8809601001536",
+		"msg" => "$mssg"
+	];
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$response = curl_exec($ch);
+	curl_close($ch);
+	$milliseconds = floor(microtime(true) * 1000+300000);
+	$sql = "INSERT INTO otptable (UserId,Code,time) VALUES(:userid,:code,:milliseconds) ";
+	$query = $dbh -> prepare($sql);
+	$query->bindParam(':userid',$userid,PDO::PARAM_STR);
+	$query->bindParam(':code',$code,PDO::PARAM_STR);
+	$query->bindParam(':milliseconds',$milliseconds,PDO::PARAM_STR);
+	$query->execute();
+	$_SESSION['lastInsertId'] = $dbh->lastInsertId();
+}
+
 
 
 ?>

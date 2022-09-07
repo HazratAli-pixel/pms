@@ -26,16 +26,6 @@ include('includes/config.php');
 
 			$query->execute();
 			$lastInsertId = $dbh->lastInsertId();
-		// if($lastInsertId)
-		// 	{
-		// 	$msg=" Your info submitted successfully";
-		// 	header("refresh:3;medicine_unit_list.php"); 
-		// 	}
-		// else 
-		// 	{
-		// 	$error=" Something went wrong. Please try again";
-		// 	header("refresh:3;medicine_unit_add.php"); 
-		// 	}
 	
 		}
 	?>
@@ -51,7 +41,7 @@ include('includes/config.php');
 		<meta name="theme-color" content="#3e454c">
 			
 		<title>PMS| Message</title>
-		
+		<link rel="shortcut icon" href="./assets/pic/pmslogo.png" type="image/x-icon">
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="includes/style.css">
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
