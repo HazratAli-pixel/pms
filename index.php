@@ -1,11 +1,16 @@
 <?php
 session_start();
-include('includes/config.php');
 error_reporting(0);
-if(strlen($_SESSION['alogin'])!=0 ){	
-		header('location:index.php');
-}else {
-	if(isset($_POST['login']))
+include('includes/config.php');
+	if(strlen($_SESSION['alogin'])!=0){
+		if(strlen($_SESSION['current_link'])==0){
+			header('location:dashboard.php');
+		}
+		else{
+			header("location:".$_SESSION['current_link']);
+		}
+	}
+	else if(isset($_POST['login']))
 	{
 		$userid = $email=$_POST['username'];
 		$password=md5($_POST['password']);
@@ -23,6 +28,7 @@ if(strlen($_SESSION['alogin'])!=0 ){
 		$results=$query->fetch(PDO::FETCH_OBJ);
 		if($query->rowCount() > 0)
 		{
+			$_SESSION[$position]=$position;
 			$_SESSION['alogin']=$results->UserId;
 			setcookie("Username",$email,time()+60*60*24,'/');
 			$_SESSION['positon'] = $position;
@@ -37,7 +43,7 @@ if(strlen($_SESSION['alogin'])!=0 ){
 			echo "<script> alert ('Invalid Details')</script>";
 		}
 	}
-	if(isset($_POST['search'])){
+	else if(isset($_POST['search'])){
 		$userid =$_POST['userid'];
 		$sql ="SELECT admin.UserName,admin.Position,admin.ActiveStatus as sts, user_info.Phone1,user_info.Email1 FROM admin left JOIN user_info ON user_info.UserId=admin.UserId WHERE  admin.UserId=:userid";
 		$query= $dbh -> prepare($sql);
@@ -203,4 +209,4 @@ if(strlen($_SESSION['alogin'])!=0 ){
 
 </body>
 </html>
-<?php } ?>
+

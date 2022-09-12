@@ -121,7 +121,7 @@ if(isset($_GET['otpsend'])){
 	$receiver = $_GET["otpsend"];
 	$userid =$_SESSION['forgetuserid'];
 	$code = rand(1000,9999);
-	$mssg ='Hi, '.$code.' is your password recovery code';
+	$mssg ='PMS, '.$code.' is your password recovery code. Valid for 5 minute';
 	$url = "http://gsms.putulhost.com/smsapi";
 	$data = [
 		"api_key" => "C200114562795a9fbdc4e5.87112767",

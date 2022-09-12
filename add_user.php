@@ -36,8 +36,8 @@ include('includes/config.php');
 
 			//$status=1;
 		
-			$sql="INSERT INTO user_info (UserId, NidNumber,Name, FName, MName, Phone1, Phone2, Email1,Address, Photo, status) 
-			VALUES(:userid,:nid,:name,:fname,:mname,:phone1,:phone2,:email1,:email2,:address,:photo,:status)";
+			$sql="INSERT INTO user_info (UserId, NidNumber,Name, FName, MName, Phone1, Phone2, Email1,Address, Photo, Status) 
+			VALUES(:userid,:nid,:name,:fname,:mname,:phone1,:phone2,:email,:address,:photo,:status)";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 			$query->bindParam(':nid',$nid,PDO::PARAM_STR);
@@ -46,7 +46,7 @@ include('includes/config.php');
 			$query->bindParam(':mname',$mname,PDO::PARAM_STR);
 			$query->bindParam(':phone1',$phone1,PDO::PARAM_STR);
 			$query->bindParam(':phone2',$phone2,PDO::PARAM_STR);
-			$query->bindParam(':email2',$email2,PDO::PARAM_STR);
+			$query->bindParam(':email',$email,PDO::PARAM_STR);
 			$query->bindParam(':address',$address,PDO::PARAM_STR);
 			$query->bindParam(':photo',$file_name,PDO::PARAM_STR);
 			$query->bindParam(':status',$status,PDO::PARAM_STR);

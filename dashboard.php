@@ -59,6 +59,7 @@ else{
 					</div>	
 					<div class="row">
 						<div class="col-12">
+						<?php if(isset($_SESSION['Admin'])) { ?>
 							<div class="row">
 								
 								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
@@ -334,6 +335,383 @@ else{
 									</div>
 								</div>
 							</div>
+							<?php } ?>
+							<?php if(isset($_SESSION['Pharmacist'])) { ?>
+							<div class="row">
+								
+									<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<?php 
+										$sql ="SELECT id from customertable ";
+										$query = $dbh -> prepare($sql);;
+										$query->execute();
+										$results=$query->fetchAll(PDO::FETCH_OBJ);
+										$query=$query->rowCount();
+									?>
+									<div class="card text-center rounded-3">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Total Listed Customer</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $query ?></h1>
+												<p class="ms-2">Person</p>
+											</div>
+											
+											<a href="customer_list.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+										</div>
+										<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+												<?php 
+													$sql ="SELECT id from  medicine_list";
+													$query = $dbh -> prepare($sql);;
+													$query->execute();
+													$results=$query->fetchAll(PDO::FETCH_OBJ);
+													$query=$query->rowCount();
+												?>
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Total Listed Medicine</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $query ?></h1>
+												<p class="ms-2">items</p>
+											</div>
+											
+											<a href="medicine_list.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+										</div>
+										<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+												<?php 
+													$sql ="SELECT ID from stocktable where RestQty=0";
+													$query = $dbh -> prepare($sql);;
+													$query->execute();
+													$query=$query->rowCount();
+												?>
+										<div class="card text-center">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Out of Stock</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $query ?></h1>
+												<p class="ms-2">items</p>
+											</div>
+											
+											<a href="stockout.php" class="btn btn-primary">Full Detail</a>
+										</div>
+										</div>
+										</div>
+										<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+												<?php 
+												date_default_timezone_set('Asia/Dhaka');
+												$date = date('Y-m-d');
+													$sql ="SELECT ID from stocktable where Date<:date";
+													$query = $dbh -> prepare($sql);
+													$query->bindParam(':date',$date,PDO::PARAM_STR);
+													$query->execute();
+													$query=$query->rowCount();
+												?>
+										<div class="card text-center">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Experied Medicine</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $query ?></h1>
+												<p class="ms-2">items</p>
+											</div>
+											
+											<a href="stockexpired.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-2">
+									<div class="panel panel-default">
+										<div class="panel-body bk-white text-black">
+											<div class="stat-panel text-center" style="padding-left: 15px;">
+											<?php 
+													$sql6 ="SELECT medicine_list.medicine_name, sum(sellingproduct.Qty) AS Qty
+													FROM (sellingproduct RIGHT JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code)
+													GROUP BY ProductId ORDER BY COUNT(ProductId) DESC limit 10";
+													$query6 = $dbh -> prepare($sql6);;
+													$query6->execute();
+													$results6=$query6->fetchAll(PDO::FETCH_OBJ);
+													
+													foreach($results6 as $result){
+														$names[] = $result->medicine_name;
+														$price[] = $result->Qty;
+													}
+												?>
+												<div style="overflow: hidden;" >
+													<canvas id="myChart"  style="width:100%;max-width:780px"></canvas>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-2">
+									<div class="card text-center">
+										<div class="card-body bg-style3 p-1">
+											<div style="overflow: hidden;" class="w-100 rounded-3" id="myChart2" >
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
+									<div class="panel panel-default">
+										<div class="panel-body bk-white text-black">
+											<div class="stat-panel text-center">
+													<h1  style="margin:0%; " class="card-text pt-2"> Todays Report </h1>
+													<div class="p-4">
+													<table class="table table-bordered table-hover" style="width:100%; min-width:300px;">
+														<thead  class="table-success">
+															<tr class="">
+																<th>Todays Report</th>
+																<th>Amount</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php
+																date_default_timezone_set('Asia/Dhaka');
+																$date = date('Y-m-d');
+																$sql ="SELECT sum(NetPayment) as amount, sum(PaidAmount) as PAmount from invoice where date=:date";
+																$query = $dbh -> prepare($sql);
+																$query->bindParam(':date',$date,PDO::PARAM_STR);
+																$query->execute();
+																$result=$query->fetch(PDO::FETCH_OBJ);
+																
+																date_default_timezone_set('Asia/Dhaka');
+																$date = date('Y-m-d');
+																$sql2 ="SELECT sum(G_total) as total from companyinvoice where Date=:date";
+																$query2 = $dbh -> prepare($sql2);
+																$query2->bindParam(':date',$date,PDO::PARAM_STR);
+																$query2->execute();
+																$result2=$query2->fetch(PDO::FETCH_OBJ);
+															?>
+															<tr>
+																<td>Total Sales</td>
+																<td id="tsale"><?php $amount = $result->amount;
+																echo round($amount, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Total Purchase</td>
+																<td id="totalPurchase"><?php $purchase = $result2->total;
+																echo round($purchase, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Cash Received</td>
+																<td><?php $amount = $result->PAmount;
+																echo round($amount, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Bank Receive</td>
+																<td>Comming....</td>
+															</tr>
+															<tr>
+																<td>Total Service</td>
+																<td>Comming....</td>
+															</tr>
+														</tbody>
+													</table>
+											</div>
+													</div>
+										</div>
+									</div>
+								</div> -->
+							</div>
+							<?php } ?>
+
+							<?php if(isset($_SESSION['Cashier'])) { ?>
+								<div class="row mt-3">
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-2">
+									<div class="panel panel-default">
+										<div class="panel-body bk-white text-black">
+											<div class="stat-panel text-center" style="padding-left: 15px;">
+											<?php 
+													$sql6 ="SELECT medicine_list.medicine_name, sum(sellingproduct.Qty) AS Qty
+													FROM (sellingproduct RIGHT JOIN medicine_list ON sellingproduct.ProductId = medicine_list.item_code)
+													GROUP BY ProductId ORDER BY COUNT(ProductId) DESC limit 10";
+													$query6 = $dbh -> prepare($sql6);;
+													$query6->execute();
+													$results6=$query6->fetchAll(PDO::FETCH_OBJ);
+													
+													foreach($results6 as $result){
+														$names[] = $result->medicine_name;
+														$price[] = $result->Qty;
+													}
+												?>
+												<div style="overflow: hidden;" >
+													<canvas id="myChart"  style="width:100%;max-width:780px"></canvas>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-body bg-style3 p-1">
+											<div style="overflow: hidden;" class="w-100 rounded-3" id="myChart2" >
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3 mb-2">
+									<div class="panel panel-default">
+										<div class="panel-body bk-white text-black">
+											<div class="stat-panel text-center">
+													<h1  style="margin:0%; " class="card-text pt-2"> Todays Report </h1>
+													<div class="p-4">
+													<table class="table table-bordered table-hover" style="width:100%; min-width:300px;">
+														<thead  class="table-success">
+															<tr class="">
+																<th>Todays Report</th>
+																<th>Amount</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php
+																date_default_timezone_set('Asia/Dhaka');
+																$date = date('Y-m-d');
+																$sql ="SELECT sum(NetPayment) as amount, sum(PaidAmount) as PAmount from invoice where date=:date";
+																$query = $dbh -> prepare($sql);
+																$query->bindParam(':date',$date,PDO::PARAM_STR);
+																$query->execute();
+																$result=$query->fetch(PDO::FETCH_OBJ);
+																
+																date_default_timezone_set('Asia/Dhaka');
+																$date = date('Y-m-d');
+																$sql2 ="SELECT sum(G_total) as total from companyinvoice where Date=:date";
+																$query2 = $dbh -> prepare($sql2);
+																$query2->bindParam(':date',$date,PDO::PARAM_STR);
+																$query2->execute();
+																$result2=$query2->fetch(PDO::FETCH_OBJ);
+															?>
+															<tr>
+																<td>Total Sales</td>
+																<td id="tsale"><?php $amount = $result->amount;
+																echo round($amount, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Total Purchase</td>
+																<td id="totalPurchase"><?php $purchase = $result2->total;
+																echo round($purchase, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Cash Received</td>
+																<td><?php $amount = $result->PAmount;
+																echo round($amount, 2); ?></td>
+															</tr>
+															<tr>
+																<td>Bank Receive</td>
+																<td>Comming....</td>
+															</tr>
+															<tr>
+																<td>Total Service</td>
+																<td>Comming....</td>
+															</tr>
+														</tbody>
+													</table>
+											</div>
+													</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mt-4">
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<?php
+												$sql = "SELECT customertable.ID FROM customertable INNER JOIN customerledger ON customertable.ID =customerledger.CustomerID where customertable.Status= 1	
+												GROUP BY customerledger.CustomerID ORDER BY customertable.Name";
+												$query = $dbh -> prepare($sql);
+												$query->execute();
+												$results=$query->fetchAll(PDO::FETCH_OBJ);
+												if($query->rowCount() > 0)
+												{
+												$dueamount=0;
+												$duePerson =0;
+												foreach($results as $result)
+												{	
+													$sql2 = "SELECT NewDue from customerledger WHERE CustomerID=:id ORDER BY ID DESC limit 1"; 
+													$query2 = $dbh -> prepare($sql2);
+													$query2->bindParam(':id',$result->ID,PDO::PARAM_STR);
+													$query2->execute();
+													$result2=$query2->fetch(PDO::FETCH_OBJ);
+													if($result2->NewDue>0){
+														$duePerson++;
+													}
+													$dueamount += $result2->NewDue;
+													
+												}}	
+												?>
+												
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+										<h5 class="fw-bold">Total Due Customer</h5>
+										</div>
+										<div class="card-body ">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $duePerson; ?></h1>
+												<p class="ms-2">Person</p>
+											</div>
+											
+											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Total Due Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $dueamount ?></h1>
+												<p class="ms-2">Taka</p>
+											</div>
+											
+											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Total Due Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $dueamount ?></h1>
+												<p class="ms-2">Taka</p>
+											</div>
+											
+											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-2">
+									<div class="card text-center">
+										<div class="card-header bg-style2">
+											<h5 class="fw-bold">Total Due Amount</h5>
+										</div>
+										<div class="card-body">
+											<div class="d-flex justify-content-center align-items-center">
+												<h1 class=""><?php echo $dueamount ?></h1>
+												<p class="ms-2">Taka</p>
+											</div>
+											
+											<a href="customer_ledger.php" class="btn btn-primary">Full Detail</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<?php } ?>
 						</div>
 					</div>
 				</div>

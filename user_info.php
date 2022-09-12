@@ -14,16 +14,14 @@ include('includes/config.php');
 			$pass1=$_POST['password'];
 			$pass2=$_POST['cpassword'];
 			$userid=$_POST['userid'];
-			$emailphone=$_POST['EmailPhone'];
 			$position=$_POST['position'];
 			$status=$_POST['radio_value'];
 			if($pass1 == $pass2){
 				$pass = md5($pass1);
 			
-				$sql="INSERT INTO admin (UserName, Password,UserId,Position, ActiveStatus) 
-				VALUES(:emailphone,:pass,:userid,:position,:status)";
+				$sql="INSERT INTO admin (Password,UserId,Position, ActiveStatus) 
+				VALUES(:pass,:userid,:position,:status)";
 				$query = $dbh->prepare($sql);
-				$query->bindParam(':emailphone',$emailphone,PDO::PARAM_STR);
 				$query->bindParam(':pass',$pass,PDO::PARAM_STR);
 				$query->bindParam(':userid',$userid,PDO::PARAM_STR);
 				$query->bindParam(':position',$position,PDO::PARAM_STR);
@@ -34,12 +32,12 @@ include('includes/config.php');
 			if($lastInsertId)
 				{
 				$msg=" Your info submitted successfully";
-				header("refresh:3;user_info.php"); 
+				header("refresh:1;user_info.php"); 
 				}
 			else 
 				{
 				$error=" Something went wrong. Please try again";
-				header("refresh:3;user_info.php"); 
+				header("refresh:1;user_info.php"); 
 				}
 			}
 		}
@@ -125,38 +123,23 @@ include('includes/config.php');
 											<form method="post" class="row" enctype="multipart/form-data" onsubmit="return" >
 												
 												<div class="col-md-6">
+												<?php $sql = "SELECT * from user_info ";
+													$query = $dbh -> prepare($sql);
+													$query->execute();
+													$results=$query->fetchAll(PDO::FETCH_OBJ);
+													$cnt=1;
+													?>	
 													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">User ID <i class="text-danger">* </i>: </label>
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Select Name <i class="text-danger">* </i>: </label>
 														<div class="col-sm-8">
-														<input type="text" class="form-control" name="userid" placeholder="User ID" required>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Phone/Email <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" name="EmailPhone" placeholder="Phone number/email" required>
-														</div>
-													</div>
-												</div>
-			
-											
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Password <i class="text-danger">* </i> :</label>
-														<div class="col-sm-8">
-														<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
-														<input type="checkbox" id="showhidepass" class="mt-2"> Show Password</input>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="row mb-3">
-														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Confirm Password <i class="text-danger">* </i>:</label>
-														<div class="col-sm-8">
-														<input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Enter Password" required>
-														<label for="" id="passcheck" class="mt-2 text-start text-sm-end"></label>
+														<select name="userid" class="form-control form-select form-select-md ">
+															<?php if($query->rowCount() > 0)
+															{
+																foreach($results as $result)
+																{	?>
+																<option value="<?php echo $result->UserId; ?>"><?php echo $result->Name."-".$result->UserId; ?></option>
+																<?php }}?>
+															</select>
 														</div>
 													</div>
 												</div>
@@ -168,12 +151,28 @@ include('includes/config.php');
 																<option value="" Disabled selected class="">Select Posciton</option>
 																<option value="Admin">Admin</option>																
 																<option value="Cashier">Cashier</option>
-																<option value="Manager">Manager</option>
 																<option value="Pharmacist">Pharmacist</option>
 															</select>
 														</div>
 													</div>
-												</div>			
+												</div>
+												<div class="col-md-6">
+													<div class="row mb-3">
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Password <i class="text-danger">* </i> :</label>
+														<div class="col-sm-8">
+														<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="row mb-3">
+														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Confirm Password <i class="text-danger">* </i>:</label>
+														<div class="col-sm-8">
+														<input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Enter Password" required>
+														<input type="checkbox" id="showhidepass" class="mt-2"> Show Password</input>
+														</div>
+													</div>
+												</div>
 												<div class="col-md-6">
 													<div class="row mb-3">
 														<label for="" class="col-sm-4 col-form-label text-start text-sm-end">Status :</label>
